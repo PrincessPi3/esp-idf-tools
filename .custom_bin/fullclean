@@ -1,0 +1,1 @@
+idf.py fullclean  && rmdir build && rm sdkconfig sdkconfig.old

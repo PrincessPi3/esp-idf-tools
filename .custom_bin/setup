@@ -1,0 +1,2 @@
+idf.py set-target $ESPTARGET
+idf.py menuconfig
