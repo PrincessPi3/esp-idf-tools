@@ -18,24 +18,23 @@ echo "\nEnter TTY Number You'd Like:"
 read tty
 ttyselect=$devarr[(($tty+1))]
 
+echo "Set esp target (esp32, esp32s3, esp32c6, esp8266, etc)"
+read esp
+
 ESPPORT="$ttyselect"
-echo "Changing dir to ~/esp"
-cd ~/esp
 
 echo "Setting environment variables"
+echo "Adding Custom bins to PATH:"
+export PATH=~/esp/.custom_bin:$PATH
 echo "ESPPORT = $ESPPORT"
 export ESPPORT
 export ESPBAUD=921600
 echo "ESPBAUD = $ESPBAUD"
-
-echo "Adding Custom bins to PATH:"
-export PATH=~/esp/.custom_bin:$PATH
-
-echo "Set esp target (esp32, esp32s3, esp32c6, esp8266, etc)"
-read $esp
-
 export ESPTARGET=$esp
 echo "ESPTARGET = $ESPTARGET"
+
+echo "Changing dir to ~/esp"
+cd ~/esp
 
 echo "All done :3 Enjoy your esp-idf environment"
 

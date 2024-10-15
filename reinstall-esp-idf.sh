@@ -30,7 +30,7 @@ if [ -d ~/esp/.custom_bin ]; then
 	rm -rf ~/esp/.custom_bin
 fi
 
-echo "\n\nPlacing and enablig custom bins\n\n"
+echo "nPlacing and enablig custom bins\n"
 cp -r .custom_bin ~/esp
 chmod +x ~/esp/.custom_bin/*
 
