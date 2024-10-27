@@ -1,0 +1,39 @@
+#!/bin/bash
+
+idf.py fullclean
+
+if [ -f build ]; then
+	echo -e "\nDeleting build dir\n"
+	rm -rf build
+fi
+
+if [ -f sdkconfig ]; then
+	echo -e "\nDeleting sdkconfig\n"
+	rm sdkconfig
+fi
+
+if [ -f sdkconfig.old ]; then
+	echo -e "\nDeleting sdkconfig.old\n"
+	rm sdkconfig.old
+fi
+
+echo -e "\nSetting up project for $ESPTARGET\n"
+idf.py set-target $ESPTARGET
+
+echo -e "\nErase flash? y/n"
+read wipe
+if [ "$wipe" == "y" ]; then
+	idf.py erase-flash
+	echo -e "\nFlash wiped\n"
+fi
+
+idf.py menuconfig
+
+echo -e "\nBuild now? y/n"
+read build
+if [ "$build" == "y" ]; then
+	idf.py build
+	echo -e "\nBuild complete\n"
+fi
+
+echo -e "\nAll done :3\n"

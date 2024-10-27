@@ -1,1 +1,18 @@
-idf.py fullclean  && rmdir build && rm sdkconfig sdkconfig.old
+idf.py fullclean
+
+if [ -d build ]; then
+	echo "\nDeleting build dir\n"
+	rm -rf build
+fi
+
+if [ -f sdkconfig ]; then
+	echo "\nDeleting sdkconfig\n"
+	rm sdkconfig
+fi
+
+if [ -f sdkconfig.old ]; then
+	echo "\nDeleting sdkconfig.old\n"
+	rm sdkconfig.old
+fi
+
+echo "\nAll done :3\n"

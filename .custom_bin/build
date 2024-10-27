@@ -1,1 +1,3 @@
+echo "\nBuilding\n"
 idf.py build
+echo "\nAll done :3\n"
