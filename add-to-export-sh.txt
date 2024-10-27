@@ -39,7 +39,7 @@ echo "ESPTARGET = $ESPTARGET"
 echo "Changing dir to ~/esp"
 cd ~/esp
 
-echo "All done :3\n\tEnjoy your esp-idf environment"
+echo "\nAll done :3\n"
 
 ###############################################
 # end esp-idf stuffss I made ##################
