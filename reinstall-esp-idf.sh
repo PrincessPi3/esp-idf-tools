@@ -47,7 +47,7 @@ else
 fi
 
 echo -e "\nPlacing and enabeling custom bins\n"
-cp -r .custom_bin $installDir
+cp -r "${installDir}/.custom_bin" $installDir
 chmod +x "${installDir}/.custom_bin/*"
 
 echo -e "\nPulling latest esp-idf code from github\n"
