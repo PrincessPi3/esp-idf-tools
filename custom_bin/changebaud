@@ -1,26 +1,23 @@
-echo "\nChanging ESPBAUD\n\t1: 9600\n\t2: 115200\n\t3: 230400\n\t4: 460800\n\t5: 1152000\n\t6: 1500000\n"
-read -p baud 
-if [[ $baud == "1" ]]; then
-    selection=9600
-elif  [[ $baud == "2" ]]; then
-    selection=115200
-elif  [[ $baud == "3" ]]; then
-    selection=230400
-elif  [[ $baud == "4" ]]; then
-    selection=460800
-elif  [[ $baud == "5" ]]; then
-    selection=1152000
-elif  [[ $baud == "5" ]]; then
-    selection=1152000
-elif  [[ $baud == "6" ]]; then
-    selection=1500000
-else
-    echo "\nBad Selection\n"
-    return
-fi
+subprocess() {
+    echo "\nChanging ESPBAUD\n\t1: 9600\n\t2: 115200\n\t3: 230400\n\t4: 460800\n\t5: 1152000\n\t6: 1500000\n\nEnter Selection: "
+    read baudRate
+    echo "\n"
+    case $baudRate in
+    1) selection=9600 ;;
+    2) selection=115200 ;;
+    3) selection=230400 ;;
+    4) selection=460800 ;;
+    5) selection=1152000 ;;
+    6) selection=1500000 ;;
+    esac
 
-echo "\n$selection\n"
+    return $selection
+}
 
-export ESPBAUD=$selection
+subprocess
+ret=$?
 
+export ESPBAUD=$ret
+
+echo "\nBaudrate set to $ESPBAUD\n"
 echo "\nAll done :3\n"
