@@ -48,7 +48,7 @@ fi
 
 echo -e "\nPlacing and enabeling custom bins\n"
 cp -r "${runningDir}/.custom_bin" $installDir
-chmod +x "${installDir}/.custom_bin/*"
+chmod +x "${installDir}/.custom_bin/"*
 
 echo -e "\nPulling latest esp-idf code from github\n"
 git clone --recursive --jobs 5 https://github.com/espressif/esp-idf.git $idfDir
