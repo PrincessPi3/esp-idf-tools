@@ -41,7 +41,7 @@ binDir="${HOME}/esp/.custom_bin"
 echo "Setting alias"
 alias changeport="source ${binDir}/changeport.sh"
 alias changebaud="source ${binDir}/changebaud.sh"
-alias changesp="source ${binDir}/changeesp.sh"
+alias changeesp="source ${binDir}/changeesp.sh"
 
 echo "Changing dir to ${HOME}/esp"
 cd "${HOME}/esp"
