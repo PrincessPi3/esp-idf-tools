@@ -1,26 +1,26 @@
 #!/bin/bash
-
-runningDir="$( cd "$( dirname "$0" )" && pwd )"
-
 echo -e "\n===== LFGGGGGGGG ======\n"
+
+echo -e "\n"
+read -p "Enter directory to install/reinstall to (default ${HOME}/esp):" installDir
+installDir=${installDir:-$HOME/esp}
 
 echo -e "\nInstalling prerequisites\n"
 sudo apt install -y git wget flex bison gperf python3 python3-pip python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0
 
-echo -e "\n"
-
-read -p "Enter directory to install/reinstall to (default ${HOME}/esp):" installDir
-
-installDir=${installDir:-$HOME/esp}
+runningDir="$( cd "$( dirname "$0" )" && pwd )"
 idfDir="${installDir}/esp-idf"
+espressifLocation="${HOME}/.espressif"
+customBinLocation="${installDir}/.custom_bin"
+customBinFrom="${runningDir}/custom_bin"
 
 echo -e "\nInstalling to ${installDir} esp-idf path will be ${idfDir}\n"
 
 echo -e "\nCleaning up environment\n"
 
-if ! [ -d $installDir ]; then
+if ! [ -d "${installDir}" ]; then
 	echo -e "\n${installDir} not found, creating\n"
-	mkdir $installDir
+	mkdir "${installDir}"
 else
 	echo -e "\n${installDir} found, skipping delete\n"
 fi
@@ -32,23 +32,23 @@ else
 	echo -e "\n${idfDir} not found, skipping delete\n"
 fi
 
-if [ -d "${HOME}/.espressif" ]; then
-	echo -e "\n${HOME}/.espressif found, deleting\n"
-	rm -rf "${HOME}/.espressif"
+if [ -d "${espressifLocation}" ]; then
+	echo -e "\n${espressifLocation} found, deleting\n"
+	rm -rf "${espressifLocation}"
 else
-	echo -e "\n${HOME} not found, skipping delete\n"
+	echo -e "\n${espressifLocation} not found, skipping delete\n"
 fi
 
-if [ -d "${installDir}/.custom_bin" ]; then
-	echo -e "\n${installDir}/.custom_bin found, deleting\n"
-	rm -rf "${installDir}/.custom_bin"
+if [ -d "${customBinLocation}" ]; then
+	echo -e "\n${customBinLocation} found, deleting\n"
+	rm -rf "${customBinLocation}"
 else
-	echo -e "\n${installDir}/.custom_bin not found, skipping delete\n"
+	echo -e "\n${customBinLocation} not found, skipping delete\n"
 fi
 
-echo -e "\nPlacing and enabeling custom bins\n"
-cp -r "${runningDir}/custom_bin" "${installDir}/.custom_bin"
-chmod -R +x "${installDir}/.custom_bin"
+echo -e "\nPlacing and enabeling custom scripts at ${customBinLocation}\n"
+cp -r "${customBinFrom}" "${customBinLocation}"
+chmod -R +x "${customBinLocation}"
 
 echo -e "\nPulling latest esp-idf code from github\n"
 git clone --recursive --jobs 5 https://github.com/espressif/esp-idf.git $idfDir
@@ -80,8 +80,8 @@ cat "${runningDir}/add-to-export-sh.txt" >> "${idfDir}/export.sh"
 echo -e "\nCreating version/commit and date file at ${idfDir}/version-date.txt\n"
 
 datestamp=$(date +"%A, %B %-d %Y at %r %Z (epoch %s)")
-commitHash=$(git -C "${idfDir}" rev-parse HEAD)
-gitBranch=$(git -C "${idfDir}" rev-parse --abbrev-ref HEAD)
+commitHash=$(git -C $idfDir rev-parse HEAD)
+gitBranch=$(git -C $idfDir rev-parse --abbrev-ref HEAD)
 
 echo -e "Installed at:\n\t${datestamp}\n\tat commit ${commitHash}\n\tfrom branch ${gitBranch}\n\tsource: https://github.com/espressif/esp-idf" > "${idfDir}/version-data.txt"
 
