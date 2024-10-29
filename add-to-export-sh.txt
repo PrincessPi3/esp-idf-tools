@@ -24,20 +24,21 @@ ttyselect=$devarr[(($tty+1))]
 echo "Set esp target (esp32, esp32s3, esp32c6, esp8266, etc)"
 read esp
 
-ESPPORT="$ttyselect"
+# ESPPORT="${ttyselect}"
 
 echo "Setting environment variables"
-echo "Adding Custom bins to PATH:"
-export PATH=~/esp/.custom_bin:$PATH
-echo "ESPPORT = $ESPPORT"
-export ESPPORT
-export ESPBAUD=921600
-echo "ESPBAUD = $ESPBAUD"
-export ESPTARGET=$esp
-echo "ESPTARGET = $ESPTARGET"
+echo "Adding Custom bins to PATH"
+export PATH="${HOME}/esp/.custom_bin:${PATH}"
+echo "ESPPORT = ${ESPPORT}"
+export ESPPORT="${ttyselect}"
+export ESPBAUD=460800
 
-echo "Changing dir to ~/esp"
-cd ~/esp
+echo "ESPBAUD = ${ESPBAUD}"
+export ESPTARGET=$esp
+echo "ESPTARGET = ${ESPTARGET}"
+
+echo "Changing dir to ${HOME}/esp"
+cd "${HOME}/esp"
 
 echo "\nAll done :3\n"
 

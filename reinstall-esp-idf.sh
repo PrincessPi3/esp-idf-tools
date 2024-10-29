@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e # exit on any error
 
 runningDir="$( cd "$( dirname "$0" )" && pwd )"
 
@@ -18,6 +17,7 @@ idfDir="${installDir}/esp-idf"
 echo -e "\nInstalling to ${installDir} esp-idf path will be ${idfDir}\n"
 
 echo -e "\nCleaning up environment\n"
+
 if ! [ -d $installDir ]; then
 	echo -e "\n${installDir} not found, creating\n"
 	mkdir $installDir
@@ -47,27 +47,28 @@ else
 fi
 
 echo -e "\nPlacing and enabeling custom bins\n"
-cp -r "${runningDir}/.custom_bin" $installDir
-chmod +x "${installDir}/.custom_bin/"*
+cp -r "${runningDir}/custom_bin" "${installDir}/.custom_bin"
+chmod -R +x "${installDir}/.custom_bin"
 
 echo -e "\nPulling latest esp-idf code from github\n"
 git clone --recursive --jobs 5 https://github.com/espressif/esp-idf.git $idfDir
 
 echo -e "\nRunning install script\n"
-bash "${idfDir}/install.sh all"
+bash $idfDir/install.sh all
 
 echo -e "\nInstalling optional tools\n"
-python "${idfDir}/tools/idf_tools.py install all"
+python $idfDir/tools/idf_tools.py install all
 
 if ! [ -z $(alias | grep get_idf) ]; then
 	echo -e "\nget_idf alias not found, appending to ${HOME}/.zshrc\n"
-	echo "alias get_idf='. ${idfDir}export.sh'" >> ~/.zshrc
+	echo "alias get_idf='. ${idfDir}/export.sh'" >> "${HOME}/.zshrc"
 else
 	echo -e "\nget_idf alias already installed, skipping\n"
 fi
 
 echo -e "\nMaking a backup of ${idfDir}/export.sh to 
 ${idfDir}/export.sh.bak\n"
+
 cp "${idfDir}/export.sh" "${idfDir}/export.sh.bak"
 
 echo -e "\nEditing ${idfDir}/export.sh\n"
@@ -79,8 +80,8 @@ cat "${runningDir}/add-to-export-sh.txt" >> "${idfDir}/export.sh"
 echo -e "\nCreating version/commit and date file at ${idfDir}/version-date.txt\n"
 
 datestamp=$(date +"%A, %B %-d %Y at %r %Z (epoch %s)")
-commitHash=$(git -C "${idfDir} rev-parse HEAD")
-gitBranch=$(git -C "${idfDir} rev-parse --abbrev-ref HEAD")
+commitHash=$(git -C "${idfDir}" rev-parse HEAD)
+gitBranch=$(git -C "${idfDir}" rev-parse --abbrev-ref HEAD)
 
 echo -e "Installed at:\n\t${datestamp}\n\tat commit ${commitHash}\n\tfrom branch ${gitBranch}\n\tsource: https://github.com/espressif/esp-idf" > "${idfDir}/version-data.txt"
 
