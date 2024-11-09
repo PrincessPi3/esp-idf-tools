@@ -13,7 +13,7 @@ startTime=$(date '+%s')
 # 	crontab -e
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
-cronVers=53-rc4.3-dev # version of this script
+cronVers=53-rc4.4-dev # version of this script
 myUser=princesspi
 
 gitJobs=5
@@ -38,9 +38,9 @@ function write_to_log() {
 	echo -e "$1" >> $log
 }
 
-function warn_all_users() {
- 	who | sudo awk '$1 !~ /root/{ cmd="echo '$1' | /usr/bin/write " $1; system(cmd)}'
-}
+# function warn_all_users() {
+# 	who | sudo awk '$1 !~ /root/{ cmd="echo '$1' | /usr/bin/write " $1; system(cmd)}'
+#}
 
 write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new reinstall ==="
 write_to_log "Cron version: ${cronVers}"
@@ -80,8 +80,8 @@ warningString="\nWARNING:\n\tReinstalling esp-idf in ${sleepMins} minutes! You w
 
 write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sending warning message to $myUser"
 write_to_log "$warningString"
-# echo -e "$warningString" | sudo write "$myUser"
-warn_all_users "$warningString"
+echo -e "$warningString" | sudo write "$myUser"
+# warn_all_users "$warningString"
 return_status
 
 write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sleeping ${sleepMins} minutes"
@@ -162,8 +162,8 @@ return_status
 
 rebootMsg="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): rebooting in $sleepMins minutes. save and log out"
 write_to_log "$rebootMsg"
-warn_all_users "$rebootMsg"
-# echo "$rebootMsg" | sudo write "$myUser"
+# warn_all_users "$rebootMsg"
+echo "$rebootMsg" | sudo write "$myUser"
 return_status
 
 write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sleeping ${sleepMins} minutes"
