@@ -2,15 +2,14 @@
 startTime=$(date '+%s')
 
 # testing:
-# 	rm ~/esp/install.log
-# 	bash ~/esp/esp-install-custom/cron-reinstall-esp-idf.sh
+# 	rm ~/esp/install.log; rm ~/esp/version-data.txt; ls ~/esp; bash ~/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 # 	tail -f -n 50 ~/esp/install.log
 
 # cron:
 # 	crontab -e
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
-cronVers=40-live # version of this script
+cronVers=42-live # version of this script
 sleepMins=3 # minutes of warning to wait for user to log out
 log=$HOME/esp/install.log
 
@@ -23,8 +22,8 @@ function return_status() {
 }
 
 function write_to_log() {
-	echo -e "$1\n"
-	echo -e "$1\n" >> $log
+	echo -e "$1"
+	echo -e "$1" >> $log
 }
 
 function logout_all_users() {
