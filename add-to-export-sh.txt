@@ -45,6 +45,7 @@ alias changeesp="source ${binDir}/changeesp.sh"
 alias flash="idf.py flash"
 alias monitor="idf.py monitor"
 alias erase-flash="idf.py erase-flash"
+alias save-defconfig="cp sdkconfig.defaults sdkconfig.defaults.bak; idf.py save-defconfig"
 
 echo "Changing dir to ${HOME}/esp"
 cd "${HOME}/esp"

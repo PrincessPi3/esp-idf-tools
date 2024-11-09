@@ -13,7 +13,7 @@ startTime=$(date '+%s')
 # 	crontab -e
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
-cronVers=54-release.u1.1 # version of this script
+cronVers=54-release.u1.2 # version of this script
 myUser=princesspi
 test=$1
 

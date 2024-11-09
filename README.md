@@ -20,4 +20,5 @@ setup
 flash
 monitor
 erase-flash
+save-defconfig
 ```
