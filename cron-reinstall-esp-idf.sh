@@ -11,7 +11,7 @@
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
 startTime=$(date '+%s')
-cronVers=53-rc2.1 # version of this script
+cronVers=53-rc2.2 # version of this script
 log=$HOME/esp/install.log
 
 function return_status() {
@@ -47,8 +47,8 @@ if [ "$1" == "test" ]; then
 	toolsInstallCmd="echo python $idfDir/tools/idf_tools.py install all"
 	sleepMins=0
 
-	# ls $HOME/esp; echo "install.log"; Cat $HOME/esp/install.log;  echo "version-data.txt"; cat $HOME/esp/version-data.txt
-	# rm  -f $HOME/esp/install.log; rm  -f $HOME/esp/install.log; ls $HOME/esp;
+	# ls $HOME/esp; echo "install.log"; cat $HOME/esp/install.log;  echo "version-data.txt"; cat $HOME/esp/version-data.txt
+	# rm  -f $HOME/esp/install.log; rm  -f $HOME/esp/version-data.txt; ls $HOME/esp;
 	# bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 	ls $HOME/esp
 	rm -f $HOME/esp/install.log
