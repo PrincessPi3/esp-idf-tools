@@ -13,7 +13,7 @@ startTime=$(date '+%s')
 # 	crontab -e
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
-cronVers=53-rc4.4-dev # version of this script
+cronVers=54-prerelease # version of this script
 myUser=princesspi
 
 gitJobs=5
@@ -69,7 +69,7 @@ else
 	toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
 
 	function logout_all_users() {
-		who | sudo awk "\$1 !~ /root/{ cmd'echo ${1} | /usr/bin/write ' \$1; system(cmd)}"
+		who | sudo awk '$1 !~ /root/{ cmd="/usr/bin/loginctl terminate-user " $1; system(cmd)}'
 		return $?
 	}
 fi
