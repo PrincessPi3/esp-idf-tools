@@ -111,8 +111,12 @@ write_to_log $gitDataLog
 echo -e $gitDataLog >> $idfDir/version-data.txt
 return_status
 
-echo "rebooting in ${sleepSecs} seconds. seave and log out" | sudo write princesspi
-echo "sleeping ${sleepSecs} seconds"
+rebootMsg="rebooting in ${sleepSecs} seconds. seave and log out"
+write_to_log $rebootMsg
+echo $rebootMsg | sudo write princesspi
+return_status
+
+write_to_log "sleeping ${sleepSecs} seconds"
 sleep $sleepSecs
 return_status
 
@@ -120,6 +124,6 @@ write_to_log "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): sending final message and re
 echo "rebooting NOW bye bye" | sudo write $myUser
 return_status
 
-echo -e " === finished ===\n"
+write_to_log " === finished ===\n"
 
 echo sudo reboot
