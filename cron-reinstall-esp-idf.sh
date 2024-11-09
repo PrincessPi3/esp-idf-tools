@@ -13,7 +13,7 @@ startTime=$(date '+%s')
 # 	crontab -e
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
-cronVers=53-rc4.1 # version of this script
+cronVers=53-rc4.2 # version of this script
 myUser=princesspi
 
 gitJobs=5
@@ -181,6 +181,8 @@ write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): finished ===\n\n"
 
 if [ "$1" == "test" ]; then
 	echo sudo reboot
+	rm -f $log
+	rm -f $versionData
 else
 	sudo reboot
 fi
