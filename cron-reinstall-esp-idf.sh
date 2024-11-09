@@ -1,6 +1,6 @@
 #!/bin/bash
-cronVers=28 # version of this script
-sleepSecs=3 # seconds of warning to wait for user to log out
+cronVers=29-live # version of this script
+sleepSecs=180 # seconds of warning to wait for user to log out
 log=$HOME/esp/install.log
 
 myUser=$USER
@@ -20,10 +20,12 @@ function write_to_log() {
 	echo -e "$1" >> $log
 }
 
+startTime=$(date '+%s')
+
 write_to_log " === $(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): new reinstall ==="
 write_to_log "Cron version: ${cronVers}"
 
-warningString="$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)')\nReinstalling esp-idf in ${sleepSecs} seconds! Save and log out!\n\tmonitor with \`tail -f $HOME/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`"
+warningString="$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)')\nReinstalling esp-idf in ${sleepSecs} seconds! Save and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`"
 
 write_to_log "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): sending warning message to $myUser"
 write_to_log "$warningString"
@@ -124,6 +126,11 @@ write_to_log "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): sending final message and re
 echo "rebooting NOW bye bye" | sudo write $myUser
 return_status
 
+endTime=$(date '+%s')
+
+timeElapsed=(($endTime-$startTime))
+write_to_log "total install time $timeElapsed seconds"
+
 write_to_log " === finished ===\n"
 
-echo sudo reboot
+sudo reboot
