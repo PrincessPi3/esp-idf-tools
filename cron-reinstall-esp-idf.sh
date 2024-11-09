@@ -1,5 +1,5 @@
 #!/bin/bash
-cronVers=25 # version of this script
+cronVers=27 # version of this script
 sleepSecs=3 # seconds of warning to wait for user to log out
 log=$HOME/esp/install.log
 
@@ -43,7 +43,7 @@ espressifLocation=$HOME/.espressif
 customBinLocation=$installDir/.custom_bin
 customBinFrom=$runningDir/custom_bin
 
-write_to_log "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)')\nvars:\n\tmyUser: $myUser\n\tcronVers: $cronVers\n\tgitJobs: $gitJobs\n\tlog: $log\n\tsleepSecs: $sleepSecs\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom"
+write_to_log "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)')\nvars:\n\tshell running: $SHELL\n\tmyUser: $myUser\n\tcronVers: $cronVers\n\tgitJobs: $gitJobs\n\tlog: $log\n\tsleepSecs: $sleepSecs\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom"
 return_status
 
 if ! [ -d $installDir ]; then
@@ -86,7 +86,7 @@ write_to_log "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): installing with ${idfDir}/in
 eval "${idfDir}/install.sh all"
 return_status
 
-write_to_log "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): installign tools with idf_tools.py"
+write_to_log "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): installing tools with idf_tools.py"
 python $idfDir/tools/idf_tools.py install all
 return_status
 
