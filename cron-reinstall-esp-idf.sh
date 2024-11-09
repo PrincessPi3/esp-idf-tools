@@ -1,5 +1,5 @@
 #!/bin/bash
-cronVers=23 # version of this script
+cronVers=24 # version of this script
 sleepSecs=3 # seconds of warning to wait for user to log out
 log=$HOME/esp/install.log
 
@@ -24,7 +24,7 @@ write_to_log " === $(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): new reinstall ==="
 write_to_log "Cron version: ${cronVers}"
 
 warningString="$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): sending warning message"
-echo "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)')\nReinstalling esp-idf in ${sleepSecs} seconds! Save and log out!\n\tmonitor with \`tail -f $HOME/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`"
+echo -e "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)')\nReinstalling esp-idf in ${sleepSecs} seconds! Save and log out!\n\tmonitor with \`tail -f $HOME/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`"
 
 write_to_log "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): sending warning message"
 write_to_log "$warningString"
