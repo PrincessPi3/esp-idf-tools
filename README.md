@@ -17,4 +17,7 @@ clean
 fullclean
 rebuildfull
 setup
+flash
+monitor
+erase-flash
 ```
