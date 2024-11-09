@@ -1,5 +1,5 @@
 #!/bin/bash
-cronVers=18 # version of this script
+cronVers=19 # version of this script
 sleepSecs=3
 
 # testing:
