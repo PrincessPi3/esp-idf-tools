@@ -9,7 +9,7 @@
 
 startTime=$(date '+%s')
 
-cronVers=47-dev # version of this script
+cronVers=48-dev # version of this script
 
 log=$HOME/esp/install.log
 
@@ -28,19 +28,24 @@ function write_to_log() {
 
 if [ "$1" == "test" ]; then
 	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): test mode"
+	
 	sleepMins=0
+
 	rm  -f $HOME/esp/install.log
 	rm -f $HOME/version-data.txt
 	ls $HOME/esp
 	
 	function logout_all_users() {
-		return 0
+		who | sudo awk '{print $1}'
+		return $?
 	}
 else
+	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): LIVE mode"
+
 	sleepMins=3 # minutes of warning to wait for user to log out
 
 	function logout_all_users() {
-		who | sudo awk '$1 !~ /root/{ cmd="/usr/bin/pkill -KILL -u " $1; system(cmd)}'
+		who | sudo awk '$1 !~ /root/{ cmd="/usr/bin/loginctl terminate-user " $1; system(cmd)}'
 		return $?
 	}
 fi
