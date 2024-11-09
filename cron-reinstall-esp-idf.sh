@@ -13,7 +13,7 @@ startTime=$(date '+%s')
 # 	crontab -e
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
-cronVers=53-rc4.2 # version of this script
+cronVers=53-rc4.3-dev # version of this script
 myUser=princesspi
 
 gitJobs=5
@@ -40,7 +40,7 @@ function write_to_log() {
 
 function warn_all_users() {
  	who | sudo awk '$1 !~ /root/{ cmd="echo '$1' | /usr/bin/write " $1; system(cmd)}'
- }
+}
 
 write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new reinstall ==="
 write_to_log "Cron version: ${cronVers}"
