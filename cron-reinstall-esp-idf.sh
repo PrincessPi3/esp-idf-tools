@@ -9,7 +9,7 @@
 
 startTime=$(date '+%s')
 
-cronVers=48-dev # version of this script
+cronVers=50-dev # version of this script
 
 log=$HOME/esp/install.log
 
@@ -59,7 +59,7 @@ warningString="\nWARNING:\n\tReinstalling esp-idf in ${sleepMins} minutes! You w
 
 write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sending warning message to $myUser"
 write_to_log "$warningString"
-echo -e "$warningString" | sudo write $myUser
+echo -e "$warningString" | sudo write "$myUser"
 return_status
 
 write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sleeping ${sleepMins} minutes"
@@ -78,8 +78,9 @@ idfDir=$installDir/esp-idf
 espressifLocation=$HOME/.espressif
 customBinLocation=$installDir/.custom_bin
 customBinFrom=$runningDir/custom_bin
+versionData=$installDir/version-data.txt
 
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tmyUser: $myUser\n\tcronVers: $cronVers\n\tgitJobs: $gitJobs\n\tlog: $log\n\tsleepMins: $sleepMins\n\tsleepSecs: $sleepSecs\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom"
+write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tmyUser: $myUser\n\tcronVers: $cronVers\n\tgitJobs: $gitJobs\n\tlog: $log\n\tsleepMins: $sleepMins\n\tsleepSecs: $sleepSecs\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tversionData: $versionData"
 return_status
 
 if ! [ -d $installDir ]; then
@@ -134,7 +135,7 @@ write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): editing export.sh"
 sed -i 's/return 0/# return 0/g' $idfDir/export.sh
 return_status
 
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): adding add-to-export-sh.txt to export.ss"
+write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): adding add-to-export-sh.txt to export.sh"
 cat $runningDir/add-to-export-sh.txt >> $idfDir/export.sh
 return_status
 
@@ -143,13 +144,13 @@ commitHash=$(git -C $idfDir rev-parse HEAD)
 return_status
 
 gitDataLog="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installed esp-idf from commit $commitHash from branch $gitBranch using $cronVers"
-write_to_log $gitDataLog
-echo -e $gitDataLog >> $installDir/version-data.txt
+write_to_log "$gitDataLog"
+echo -e "$gitDataLog" >> $versionData
 return_status
 
 rebootMsg="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): rebooting in ${slepMins} minutes. seave and log out"
-write_to_log $rebootMsg
-echo $rebootMsg | sudo write princesspi
+write_to_log "$rebootMsg"
+echo "$rebootMsg" | sudo write "$myUser"
 return_status
 
 write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sleeping ${sleepMins} minutes"
