@@ -1,20 +1,22 @@
 #!/bin/bash
-# lol 15
+cronVers=17 # version of this script
+sleepSecs=3
 
 function return_status() {
 	echo -e "\treturn status: ${?}"
 }
 
-echo " === $(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): new reinstall) ==="
+echo " === $(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): new reinstall ==="
+echo "Cron version: ${cronVers}"
 echo "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): sending warning message"
-echo 'reinstalling esp-idf in three minutes. save and log out.\n\tmonitor with `tail -f /home/princesspi/esp/install.log`\n\tterminate with `sudo killall cron-reinstall-esp-idf.sh`' | sudo write princesspi
+echo "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)')\nReinstalling esp-idf in ${sleepSecs} seconds save and log out.\n\tmonitor with \`tail -f /home/princesspi/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`" | sudo write princesspi
 return_status
 
-sleepSecs=3
 echo "sleeping ${sleepSecs} seconds"
 sleep $sleepSecs
 return_status
 
+gitJobs=4
 installDir="${HOME}/esp"
 gitBranch=master
 runningDir="$( cd "$( dirname "$0" )" && pwd )"
@@ -23,7 +25,7 @@ espressifLocation=$HOME/.espressif
 customBinLocation=$installDir/.custom_bin
 customBinFrom=$runningDir/custom_bin
 
-echo "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): vars: sleepSecs: $sleepSecs, installDir: $installDir, gitBranch: $gitBranch, runningDir: $runningDir, idfDir: $idfDir, espressifLocation: $espressifLocation, customBinLocation: $customBinLocation, customBinFrom: $customBinFrom"
+echo -e "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)')\nvars:\n\tsleepSecs: $sleepSecs\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom"
 return_status
 
 if ! [ -d $installDir ]; then
@@ -59,7 +61,7 @@ chmod -R +x $customBinLocation
 return_status
 
 echo "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): cloning git branch ${gitBranch} with ${gitJobs} jobs to ${idfDir}"
-git clone --recursive --single-branch --branch $gitBranch https://github.com/espressif/esp-idf $idfDir
+git clone --recursive --jobs $gitJob --branch $gitBranch https://github.com/espressif/esp-idf $idfDir
 return_status
 
 echo "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): installing with ${idfDir}/install.sh all"
@@ -86,7 +88,7 @@ echo "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): getting the commit hash"
 commitHash=$(git -C $idfDir rev-parse HEAD)
 return_status
 
-echo -e "Installed at:\n\t$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)')\n\tat commit ${commitHash}\n\tfrom branch ${gitBranch}\n\tsource: https://github.com/espressif/esp-idf"
+echo -e "Installed at:\n\t$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)')\n\tat commit ${commitHash}\n\tfrom branch ${gitBranch}"
 echo -e "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)') installed at commit ${commitHash} from branch ${gitBranch}" >> $idfDir/version-data.txt
 return_status
 
