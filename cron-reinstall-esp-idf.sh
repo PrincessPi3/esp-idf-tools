@@ -1,18 +1,31 @@
 #!/bin/bash
+startTime=$(date '+%s')
+
 # testing:
 # 	bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh test
 # 	tail -f -n 50 $HOME/esp/install.log
-# 	ls $HOME/esp
-# 	cat $HOME/esp/install.log
-# 	cat $HOME/esp/version-data.txt
+# 	ls $HOME/esp; echo "install.log"; cat $HOME/esp/install.log;  echo "version-data.txt"; cat $HOME/esp/version-data.txt
+
+# delete logs:
+#	 rm  -f $HOME/esp/install.log; rm -f $HOME/esp/version-data.txt
 
 # cron:
 # 	crontab -e
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
-startTime=$(date '+%s')
-cronVers=53-rc2.2 # version of this script
-log=$HOME/esp/install.log
+cronVers=53-rc3 # version of this script
+myUser=princesspi
+
+gitJobs=5
+installDir=$HOME/esp
+log=$installDir/esp/install.log
+versionData=$installDir/version-data.txt
+gitBranch=master
+runningDir="$( cd "$( dirname "$0" )" && pwd )"
+idfDir=$installDir/esp-idf
+espressifLocation=$HOME/.espressif
+customBinLocation=$installDir/.custom_bin
+customBinFrom=$runningDir/custom_bin
 
 function return_status() {
 	strii="\treturn status: ${?}"
@@ -25,20 +38,12 @@ function write_to_log() {
 	echo -e "$1" >> $log
 }
 
+# function warn_all_users() {
+# 	who | sudo awk '$1 !~ /root/{ cmd="echo '$1' | /usr/bin/write " $1; system(cmd)}'
+# }
+
 write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new reinstall ==="
 write_to_log "Cron version: ${cronVers}"
-
-myUser=$USER
-
-gitJobs=5
-installDir=$HOME/esp
-gitBranch=master
-runningDir="$( cd "$( dirname "$0" )" && pwd )"
-idfDir=$installDir/esp-idf
-espressifLocation=$HOME/.espressif
-customBinLocation=$installDir/.custom_bin
-customBinFrom=$runningDir/custom_bin
-versionData=$installDir/version-data.txt
 
 if [ "$1" == "test" ]; then
 	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): test mode"
@@ -47,9 +52,6 @@ if [ "$1" == "test" ]; then
 	toolsInstallCmd="echo python $idfDir/tools/idf_tools.py install all"
 	sleepMins=0
 
-	# ls $HOME/esp; echo "install.log"; cat $HOME/esp/install.log;  echo "version-data.txt"; cat $HOME/esp/version-data.txt
-	# rm  -f $HOME/esp/install.log; rm  -f $HOME/esp/version-data.txt; ls $HOME/esp;
-	# bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 	ls $HOME/esp
 	rm -f $HOME/esp/install.log
 	rm -f $HOME/esp/version-data.txt
@@ -68,7 +70,7 @@ else
 	toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
 
 	function logout_all_users() {
-		who | sudo awk '$1 !~ /root/{ cmd="/usr/bin/loginctl terminate-user " $1; system(cmd)}'
+		who | sudo awk "\$1 !~ /root/{ cmd'echo ${1} | /usr/bin/write ' \$1; system(cmd)}"
 		return $?
 	}
 fi
@@ -182,4 +184,3 @@ if [ "$1" == "test" ]; then
 else
 	sudo reboot
 fi
-
