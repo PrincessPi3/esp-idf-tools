@@ -8,7 +8,7 @@
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
 startTime=$(date '+%s')
-cronVers=53.2-rc # version of this script
+cronVers=53-rc1 # version of this script
 log=$HOME/esp/install.log
 
 function return_status() {
@@ -40,8 +40,8 @@ versionData=$installDir/version-data.txt
 if [ "$1" == "test" ]; then
 	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): test mode"
 	gitCmd="git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
-	installCmd="echo ${idfDir}/install.sh all"
-	toolsInstallCmd="echo python ${idfDir}/tools/idf_tools.py install all"
+	installCmd="echo $idfDir/install.sh all"
+	toolsInstallCmd="echo python $idfDir/tools/idf_tools.py install all"
 	sleepMins=0
 
 	# rm  -f $HOME/esp/install.log; rm  -f $HOME/esp/install.log; ls $HOME/esp; bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
@@ -59,8 +59,8 @@ else
 	sleepMins=3 # minutes of warning to wait for user to log out
 
 	gitCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
-	installCmd="${idfDir}/install.sh all"
-	toolsInstallCmd="python ${idfDir}/tools/idf_tools.py install all"
+	installCmd="$idfDir/install.sh all"
+	toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
 
 	function logout_all_users() {
 		who | sudo awk '$1 !~ /root/{ cmd="/usr/bin/loginctl terminate-user " $1; system(cmd)}'
@@ -85,7 +85,7 @@ write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): force logging out all users"
 logout_all_users
 return_status
 
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tmyUser: $myUser\n\tcronVers: $cronVers\n\tgitJobs: $gitJobs\n\tlog: $log\n\tsleepMins: $sleepMins\n\tsleepSecs: $sleepSecs\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tversionData: $versionData"
+write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tmyUser: $myUser\n\tcronVers: $cronVers\n\tgitJobs: $gitJobs\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tsleepSecs: $sleepSecs\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd"
 return_status
 
 if ! [ -d $installDir ]; then
@@ -121,7 +121,6 @@ chmod -R +x $customBinLocation
 return_status
 
 write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): cloning git branch ${gitBranch} with ${gitJobs} jobs to ${idfDir}"
-# git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir
 eval "$gitCmd"
 return_status
 
@@ -130,7 +129,6 @@ eval "$installCmd"
 return_status
 
 write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installing tools with python ${idfDir}/tools/idf_tools.py install all"
-# python $idfDir/tools/idf_tools.py install all
 eval "$toolsInstallCmd"
 return_status
 
@@ -155,7 +153,7 @@ write_to_log "$gitDataLog"
 echo -e "$gitDataLog" >> $versionData
 return_status
 
-rebootMsg="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): rebooting in ${sleepMins} minutes. save and log out"
+rebootMsg="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): rebooting in $sleepMins minutes. save and log out"
 write_to_log "$rebootMsg"
 echo "$rebootMsg" | sudo write "$myUser"
 return_status
