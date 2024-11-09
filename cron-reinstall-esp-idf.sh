@@ -1,18 +1,27 @@
 #!/bin/bash
-cronVers=20 # version of this script
-sleepSecs=3
+cronVers=21 # version of this script
+sleepSecs=3 # seconds of warning to wait for user to log out
+log=$HOME/esp/install.log
+
+myUser=$USER
 
 # testing:
-# 	rm /home/princesspi/esp/install.log && bash /home/princesspi/esp/esp-install-custom/cron-reinstall-esp-idf.sh >> /home/princesspi/esp/install.log
+# 	rm ~/esp/install.log && \
+# 	bash ~/esp/esp-install-custom/cron-reinstall-esp-idf.sh >> ~/esp/install.log
 
 function return_status() {
 	echo -e "\treturn status: ${?}"
 }
 
+function write_to_log() {
+	echo -e "$1"
+	echo -e "$1" >> $log
+}
+
 echo " === $(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): new reinstall ==="
 echo "Cron version: ${cronVers}"
 echo "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): sending warning message"
-echo "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)')\nReinstalling esp-idf in ${sleepSecs} seconds save and log out.\n\tmonitor with \`tail -f /home/princesspi/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`" | sudo write princesspi
+echo "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)')\nReinstalling esp-idf in ${sleepSecs} seconds! Save and log out!\n\tmonitor with \`tail -f $HOME/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`" | sudo write $myUser
 return_status
 
 echo "sleeping ${sleepSecs} seconds"
@@ -20,7 +29,7 @@ sleep $sleepSecs
 return_status
 
 gitJobs=4
-installDir="${HOME}/esp"
+installDir=$HOME/esp
 gitBranch=master
 runningDir="$( cd "$( dirname "$0" )" && pwd )"
 idfDir=$installDir/esp-idf
@@ -101,7 +110,7 @@ sleep $sleepSecs
 return_status
 
 echo "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): sending final message and rebooting";
-echo "rebooting NOW bye bye" | sudo write princesspi
+echo "rebooting NOW bye bye" | sudo write $myUser
 return_status
 
 echo -e " === finished ===\n"

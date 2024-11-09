@@ -6,3 +6,15 @@ built for debian-like systems
 
 `git clone https://github.com/PrincessPi3/esp-install-custom.git ~`
 `bash ~/reinstall-esp-idf.sh`
+
+scripts added:
+```
+build
+changebaud
+changeesp
+changeport
+clean
+fullclean
+rebuildfull
+setup
+```
