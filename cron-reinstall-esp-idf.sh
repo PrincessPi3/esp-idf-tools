@@ -145,7 +145,7 @@ write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): editing ${idfDir}/export.sh"
 sed -i 's/return 0/# return 0/g' $idfDir/export.sh
 return_status
 
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): adding add-to-export-sh.txt to ${idfDir}/export.sh"
+write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): adding ${runningDir}/add-to-export-sh.txt to ${idfDir}/export.sh"
 cat $runningDir/add-to-export-sh.txt >> $idfDir/export.sh
 return_status
 
