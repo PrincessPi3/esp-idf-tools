@@ -23,10 +23,9 @@ function write_to_log() {
 write_to_log " === $(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): new reinstall ==="
 write_to_log "Cron version: ${cronVers}"
 
-warningString="$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): sending warning message"
-echo -e "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)')\nReinstalling esp-idf in ${sleepSecs} seconds! Save and log out!\n\tmonitor with \`tail -f $HOME/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`"
+warningString="$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)')\nReinstalling esp-idf in ${sleepSecs} seconds! Save and log out!\n\tmonitor with \`tail -f $HOME/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`"
 
-write_to_log "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): sending warning message"
+write_to_log "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): sending warning message to $myUser"
 write_to_log "$warningString"
 echo -e "$warningString" | sudo write $myUser
 return_status
@@ -44,7 +43,7 @@ espressifLocation=$HOME/.espressif
 customBinLocation=$installDir/.custom_bin
 customBinFrom=$runningDir/custom_bin
 
-write_to_log "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)')\nvars:\n\tsleepSecs: $sleepSecs\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom"
+write_to_log "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)')\nvars:\n\tmyUser: $myUser\n\tcronVers: $cronVers\n\tgitJobs: $gitJobs\n\tlog: $log\n\tsleepSecs: $sleepSecs\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom"
 return_status
 
 if ! [ -d $installDir ]; then
