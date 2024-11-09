@@ -13,11 +13,11 @@ startTime=$(date '+%s')
 # 	crontab -e
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
-cronVers=53-rc3.1 # version of this script
+cronVers=53-rc3.2 # version of this script
 myUser=princesspi
 
 gitJobs=5
-installDir=$HOME/esp
+installDir=/home/$myUser/esp
 log=$installDir/esp/install.log
 versionData=$installDir/version-data.txt
 gitBranch=master
