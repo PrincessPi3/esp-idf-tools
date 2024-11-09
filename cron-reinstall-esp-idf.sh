@@ -1,5 +1,5 @@
 #!/bin/bash
-cronVers=34-live # version of this script
+cronVers=35-live # version of this script
 sleepSecs=180 # seconds of warning to wait for user to log out
 log=$HOME/esp/install.log
 
@@ -21,8 +21,6 @@ function write_to_log() {
 	echo -e "$1" >> $log
 }
 
-startTime=$(date '+%s')
-
 write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new reinstall ==="
 write_to_log "Cron version: ${cronVers}"
 
@@ -36,6 +34,8 @@ return_status
 write_to_log "sleeping ${sleepSecs} seconds"
 sleep $sleepSecs
 return_status
+
+startTime=$(date '+%s')
 
 gitJobs=4
 installDir=$HOME/esp
@@ -119,6 +119,10 @@ write_to_log $rebootMsg
 echo $rebootMsg | sudo write princesspi
 return_status
 
+endTime=$(date '+%s')
+timeElapsed=(($endTime-$startTime))
+write_to_log "reinstall completed in $timeElapsed seconds"
+
 write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sleeping ${sleepSecs} seconds"
 sleep $sleepSecs
 return_status
@@ -126,11 +130,6 @@ return_status
 write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sending final message and rebooting";
 echo "rebooting NOW bye bye" | sudo write $myUser
 return_status
-
-endTime=$(date '+%s')
-
-timeElapsed=(($endTime-$startTime))
-write_to_log "reinstall completed in $timeElapsed seconds"
 
 write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): finished ===\n"
 
