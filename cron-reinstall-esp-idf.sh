@@ -8,12 +8,8 @@
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
 startTime=$(date '+%s')
-
-cronVers=50-dev # version of this script
-
+cronVers=53-dev # version of this script
 log=$HOME/esp/install.log
-
-myUser=$USER
 
 function return_status() {
 	strii="\treturn status: ${?}"
@@ -26,9 +22,26 @@ function write_to_log() {
 	echo -e "$1" >> $log
 }
 
+write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new reinstall ==="
+write_to_log "Cron version: ${cronVers}"
+
+myUser=$USER
+
+gitJobs=5
+installDir=$HOME/esp
+gitBranch=master
+runningDir="$( cd "$( dirname "$0" )" && pwd )"
+idfDir=$installDir/esp-idf
+espressifLocation=$HOME/.espressif
+customBinLocation=$installDir/.custom_bin
+customBinFrom=$runningDir/custom_bin
+versionData=$installDir/version-data.txt
+
 if [ "$1" == "test" ]; then
 	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): test mode"
-	
+	gitCmd="git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
+	installCmd="echo ${idfDir}/install.sh all"
+	toolsInstallCmd="echo python ${idfDir}/tools/idf_tools.py install all"
 	sleepMins=0
 
 	rm  -f $HOME/esp/install.log
@@ -36,13 +49,17 @@ if [ "$1" == "test" ]; then
 	ls $HOME/esp
 	
 	function logout_all_users() {
-		who | sudo awk '{print $1}'
+		who | awk '{print $1}'
 		return $?
 	}
 else
 	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): LIVE mode"
 
 	sleepMins=3 # minutes of warning to wait for user to log out
+
+	gitCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
+	installCmd="${idfDir}/install.sh all"
+	toolsInstallCmd="python ${idfDir}/tools/idf_tools.py install all"
 
 	function logout_all_users() {
 		who | sudo awk '$1 !~ /root/{ cmd="/usr/bin/loginctl terminate-user " $1; system(cmd)}'
@@ -51,9 +68,6 @@ else
 fi
 
 sleepSecs=$((sleepMins*60)) # calculated seconds of warning to wait for user to log out
-
-write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new reinstall ==="
-write_to_log "Cron version: ${cronVers}"
 
 warningString="\nWARNING:\n\tReinstalling esp-idf in ${sleepMins} minutes! You will be force logged out in ${sleepMins} minutes! Save and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`\n\t$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\n"
 
@@ -69,16 +83,6 @@ return_status
 write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): force logging out all users"
 logout_all_users
 return_status
-
-gitJobs=4
-installDir=$HOME/esp
-gitBranch=master
-runningDir="$( cd "$( dirname "$0" )" && pwd )"
-idfDir=$installDir/esp-idf
-espressifLocation=$HOME/.espressif
-customBinLocation=$installDir/.custom_bin
-customBinFrom=$runningDir/custom_bin
-versionData=$installDir/version-data.txt
 
 write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tmyUser: $myUser\n\tcronVers: $cronVers\n\tgitJobs: $gitJobs\n\tlog: $log\n\tsleepMins: $sleepMins\n\tsleepSecs: $sleepSecs\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tversionData: $versionData"
 return_status
@@ -116,15 +120,17 @@ chmod -R +x $customBinLocation
 return_status
 
 write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): cloning git branch ${gitBranch} with ${gitJobs} jobs to ${idfDir}"
-git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir
+# git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir
+eval "$gitCmd"
 return_status
 
 write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installing with ${idfDir}/install.sh all"
-eval "${idfDir}/install.sh all"
+eval "$installCmd"
 return_status
 
 write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installing tools with idf_tools.py"
-python $idfDir/tools/idf_tools.py install all
+# python $idfDir/tools/idf_tools.py install all
+eval "$toolsInstallCmd"
 return_status
 
 write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): backing up export.sh"
