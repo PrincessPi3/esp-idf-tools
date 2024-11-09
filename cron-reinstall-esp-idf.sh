@@ -10,7 +10,7 @@ startTime=$(date '+%s')
 # 	crontab -e
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
-cronVers=39-live # version of this script
+cronVers=40-live # version of this script
 sleepMins=3 # minutes of warning to wait for user to log out
 log=$HOME/esp/install.log
 
@@ -37,14 +37,14 @@ sleepSecs=$((sleepMins*60)) # calculated seconds of warning to wait for user to 
 write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new reinstall ==="
 write_to_log "Cron version: ${cronVers}"
 
-warningString="\nWARNING:\n\tReinstalling esp-idf in ${sleepSecs} minutes! You will be force logged out in ${sleepSecs} minutes! Save and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`\n\t$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\n"
+warningString="\nWARNING:\n\tReinstalling esp-idf in ${sleepMins} minutes! You will be force logged out in ${sleepMins} minutes! Save and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`\n\t$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\n"
 
 write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sending warning message to $myUser"
 write_to_log "$warningString"
 echo -e "$warningString" | sudo write $myUser
 return_status
 
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sleeping ${sleepSecs} minutes"
+write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sleeping ${sleepMins} minutes"
 sleep $sleepSecs
 return_status
 
@@ -61,7 +61,7 @@ espressifLocation=$HOME/.espressif
 customBinLocation=$installDir/.custom_bin
 customBinFrom=$runningDir/custom_bin
 
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tmyUser: $myUser\n\tcronVers: $cronVers\n\tgitJobs: $gitJobs\n\tlog: $log\n\tsleepSecs: $sleepSecs\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom"
+write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tmyUser: $myUser\n\tcronVers: $cronVers\n\tgitJobs: $gitJobs\n\tlog: $log\n\tsleepMins: $sleepMins\n\tsleepSecs: $sleepSecs\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom"
 return_status
 
 if ! [ -d $installDir ]; then
@@ -129,12 +129,12 @@ write_to_log $gitDataLog
 echo -e $gitDataLog >> $installDir/version-data.txt
 return_status
 
-rebootMsg="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): rebooting in ${sleepSecs} minutes. seave and log out"
+rebootMsg="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): rebooting in ${slepMins} minutes. seave and log out"
 write_to_log $rebootMsg
 echo $rebootMsg | sudo write princesspi
 return_status
 
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sleeping ${sleepSecs} minutes"
+write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sleeping ${sleepMins} minutes"
 sleep $sleepSecs
 return_status
 
