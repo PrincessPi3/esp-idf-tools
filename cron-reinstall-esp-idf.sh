@@ -10,7 +10,7 @@ startTime=$(date '+%s')
 # 	crontab -e
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
-cronVers=38-live # version of this script
+cronVers=39-live # version of this script
 sleepMins=3 # minutes of warning to wait for user to log out
 log=$HOME/esp/install.log
 
