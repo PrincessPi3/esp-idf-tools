@@ -8,7 +8,7 @@
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
 startTime=$(date '+%s')
-cronVers=53-live # version of this script
+cronVers=53.2-rc # version of this script
 log=$HOME/esp/install.log
 
 function return_status() {
@@ -70,7 +70,7 @@ fi
 
 sleepSecs=$((sleepMins*60)) # calculated seconds of warning to wait for user to log out
 
-warningString="\nWARNING:\n\tReinstalling esp-idf in ${sleepMins} minutes! You will be force logged out in ${sleepMins} minutes! Save and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`\n\t$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\n"
+warningString="\nWARNING:\n\tReinstalling esp-idf in ${sleepMins} minutes! You will be force logged out in ${sleepMins} minutes! Save and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`\n\t$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')"
 
 write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sending warning message to $myUser"
 write_to_log "$warningString"
@@ -129,20 +129,20 @@ write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installing with ${idfDir}/in
 eval "$installCmd"
 return_status
 
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installing tools with idf_tools.py"
+write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installing tools with python ${idfDir}/tools/idf_tools.py install all"
 # python $idfDir/tools/idf_tools.py install all
 eval "$toolsInstallCmd"
 return_status
 
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): backing up export.sh"
+write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): backing up ${idfDir}/export.sh to ${idfDir}/export.sh.bak"
 cp $idfDir/export.sh $idfDir/export.sh.bak
 return_status
 
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): editing export.sh"
+write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): editing ${idfDir}/export.sh"
 sed -i 's/return 0/# return 0/g' $idfDir/export.sh
 return_status
 
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): adding add-to-export-sh.txt to export.sh"
+write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): adding add-to-export-sh.txt to ${idfDir}/export.sh"
 cat $runningDir/add-to-export-sh.txt >> $idfDir/export.sh
 return_status
 
