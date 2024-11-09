@@ -1,14 +1,20 @@
 #!/bin/bash
-cronVers=35-live # version of this script
+cronVers=36-live # version of this script
 sleepSecs=180 # seconds of warning to wait for user to log out
 log=$HOME/esp/install.log
 
 myUser=$USER
 
+startTime=$(date '+%s')
+
 # testing:
 # 	rm ~/esp/install.log
 # 	bash ~/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 # 	tail -f -n 50 ~/esp/install.log
+
+# cron:
+# 	crontab -e
+# 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
 function return_status() {
 	strii="\treturn status: ${?}"
@@ -17,25 +23,32 @@ function return_status() {
 }
 
 function write_to_log() {
-	echo -e "$1"
-	echo -e "$1" >> $log
+	echo -e "$1\n"
+	echo -e "$1\n" >> $log
+}
+
+function logout_all_users() {
+	who | sudo awk '$1 !~ /root/{ cmd="/usr/bin/pkill -KILL -u " $1; system(cmd)}'
+	return $?
 }
 
 write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new reinstall ==="
 write_to_log "Cron version: ${cronVers}"
 
-warningString="WARNING:\n\tReinstalling esp-idf in ${sleepSecs} seconds! Save and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`\n\t$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')"
+warningString="\nWARNING:\n\tReinstalling esp-idf in ${sleepSecs} seconds! You will be logged out in ${sleepSecs}! Save and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`\n\t$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\n"
 
 write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sending warning message to $myUser"
 write_to_log "$warningString"
 echo -e "$warningString" | sudo write $myUser
 return_status
 
-write_to_log "sleeping ${sleepSecs} seconds"
+write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sleeping ${sleepSecs} seconds"
 sleep $sleepSecs
 return_status
 
-startTime=$(date '+%s')
+write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): force logging out all users"
+logout_all_users
+return_status
 
 gitJobs=4
 installDir=$HOME/esp
@@ -119,17 +132,17 @@ write_to_log $rebootMsg
 echo $rebootMsg | sudo write princesspi
 return_status
 
-endTime=$(date '+%s')
-timeElapsed=(($endTime-$startTime))
-write_to_log "reinstall completed in $timeElapsed seconds"
-
 write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sleeping ${sleepSecs} seconds"
 sleep $sleepSecs
 return_status
 
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sending final message and rebooting";
-echo "rebooting NOW bye bye" | sudo write $myUser
+write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): force logging out all users"
+logout_all_users
 return_status
+
+endTime=$(date '+%s')
+timeElapsed=(($endTime-$startTime))
+write_to_log "reinstall completed in $timeElapsed seconds"
 
 write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): finished ===\n"
 
