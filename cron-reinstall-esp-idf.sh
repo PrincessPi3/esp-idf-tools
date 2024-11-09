@@ -1,6 +1,9 @@
 #!/bin/bash
-cronVers=17 # version of this script
+cronVers=18 # version of this script
 sleepSecs=3
+
+# testing:
+# 	rm /home/princesspi/esp/install.log && bash /home/princesspi/esp/esp-install-custom/cron-reinstall-esp-idf.sh >> /home/princesspi/esp/install.log
 
 function return_status() {
 	echo -e "\treturn status: ${?}"
