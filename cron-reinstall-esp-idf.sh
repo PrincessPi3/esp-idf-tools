@@ -13,8 +13,9 @@ startTime=$(date '+%s')
 # 	crontab -e
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
-cronVers=54-prerelease.b # version of this script
+cronVers=54-prerelease.b-test # version of this script
 myUser=princesspi
+test=$1
 
 gitJobs=5
 installDir=/home/$myUser/esp
@@ -45,7 +46,7 @@ function write_to_log() {
 write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new reinstall ==="
 write_to_log "Cron version: ${cronVers}"
 
-if [ "$1" == "test" ]; then
+if [ ! -z $test ]; then
 	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): test mode"
 	gitCmd="git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
 	installCmd="echo $idfDir/install.sh all"
@@ -179,7 +180,7 @@ timeElapsed=$(($endTime-$startTime))
 write_to_log "reinstall completed in $timeElapsed seconds"
 write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): finished ===\n\n"
 
-if [ "$1" == "test" ]; then
+if [ ! -z $test ]; then
 	echo sudo reboot
 
 	rm -f $log
