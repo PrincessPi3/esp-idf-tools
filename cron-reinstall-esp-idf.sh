@@ -1,5 +1,5 @@
 #!/bin/bash
-cronVers=19 # version of this script
+cronVers=20 # version of this script
 sleepSecs=3
 
 # testing:
@@ -64,7 +64,7 @@ chmod -R +x $customBinLocation
 return_status
 
 echo "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): cloning git branch ${gitBranch} with ${gitJobs} jobs to ${idfDir}"
-git clone --recursive --jobs $gitJob --branch $gitBranch https://github.com/espressif/esp-idf $idfDir
+git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir
 return_status
 
 echo "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): installing with ${idfDir}/install.sh all"
