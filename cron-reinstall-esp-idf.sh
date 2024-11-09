@@ -9,8 +9,8 @@ startTime=$(date '+%s')
 # 	crontab -e
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
-cronVers=42-live # version of this script
-sleepMins=3 # minutes of warning to wait for user to log out
+cronVers=45-major # version of this script
+
 log=$HOME/esp/install.log
 
 myUser=$USER
@@ -26,10 +26,22 @@ function write_to_log() {
 	echo -e "$1" >> $log
 }
 
-function logout_all_users() {
-	who | sudo awk '$1 !~ /root/{ cmd="/usr/bin/pkill -KILL -u " $1; system(cmd)}'
-	return $?
-}
+if [ "$1" == "test" ]; then
+	sleepMins=0;
+	rm ~/esp/install.log
+	rm ~/esp/version-data.txt
+	ls ~/esp
+	
+	function logout_all_users() {
+		return 0
+	}
+else
+	sleepMins=3 # minutes of warning to wait for user to log out
+	function logout_all_users() {
+		who | sudo awk '$1 !~ /root/{ cmd="/usr/bin/pkill -KILL -u " $1; system(cmd)}'
+		return $?
+	}
+fi
 
 sleepSecs=$((sleepMins*60)) # calculated seconds of warning to wait for user to log out
 
