@@ -9,7 +9,7 @@
 
 startTime=$(date '+%s')
 
-cronVers=46-major # version of this script
+cronVers=47-dev # version of this script
 
 log=$HOME/esp/install.log
 
@@ -161,4 +161,9 @@ write_to_log "reinstall completed in $timeElapsed seconds"
 
 write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): finished ===\n"
 
-sudo reboot
+if [ "$1" == "test" ]; then
+	echo sudo reboot
+else
+	sudo reboot
+fi
+
