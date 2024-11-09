@@ -1,13 +1,14 @@
 #!/bin/bash
-cronVers=29-live # version of this script
+cronVers=30-live # version of this script
 sleepSecs=180 # seconds of warning to wait for user to log out
 log=$HOME/esp/install.log
 
 myUser=$USER
 
 # testing:
-# 	rm ~/esp/install.log && \
-# 	bash ~/esp/esp-install-custom/cron-reinstall-esp-idf.sh >> ~/esp/install.log
+# 	rm ~/esp/install.log
+# 	bash ~/esp/esp-install-custom/cron-reinstall-esp-idf.sh
+# 	tail -f -n 50 ~/esp/install.log
 
 function return_status() {
 	strii="\treturn status: ${?}"
@@ -25,7 +26,7 @@ startTime=$(date '+%s')
 write_to_log " === $(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): new reinstall ==="
 write_to_log "Cron version: ${cronVers}"
 
-warningString="$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)')\nReinstalling esp-idf in ${sleepSecs} seconds! Save and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`"
+warningString="WARNING:\n\tReinstalling esp-idf in ${sleepSecs} seconds! Save and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`\n\t$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)')"
 
 write_to_log "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): sending warning message to $myUser"
 write_to_log "$warningString"
