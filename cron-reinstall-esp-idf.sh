@@ -1,6 +1,6 @@
 #!/bin/bash
 # testing:
-# 	rm ~/esp/install.log; rm ~/esp/version-data.txt; ls ~/esp; bash ~/esp/esp-install-custom/cron-reinstall-esp-idf.sh
+# 	bash ~/esp/esp-install-custom/cron-reinstall-esp-idf.sh test
 # 	tail -f -n 50 ~/esp/install.log
 
 # cron:
