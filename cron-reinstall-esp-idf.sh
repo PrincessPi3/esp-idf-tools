@@ -141,7 +141,7 @@ logout_all_users
 return_status
 
 endTime=$(date '+%s')
-timeElapsed=(($endTime-$startTime))
+timeElapsed=$(($endTime-$startTime))
 write_to_log "reinstall completed in $timeElapsed seconds"
 
 write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): finished ===\n"
