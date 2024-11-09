@@ -1,5 +1,5 @@
 #!/bin/bash
-cronVers=24 # version of this script
+cronVers=25 # version of this script
 sleepSecs=3 # seconds of warning to wait for user to log out
 log=$HOME/esp/install.log
 
