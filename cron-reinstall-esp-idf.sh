@@ -1,6 +1,4 @@
 #!/bin/bash
-startTime=$(date '+%s')
-
 # testing:
 # 	rm ~/esp/install.log; rm ~/esp/version-data.txt; ls ~/esp; bash ~/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 # 	tail -f -n 50 ~/esp/install.log
@@ -9,7 +7,9 @@ startTime=$(date '+%s')
 # 	crontab -e
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
-cronVers=45-major # version of this script
+startTime=$(date '+%s')
+
+cronVers=46-major # version of this script
 
 log=$HOME/esp/install.log
 
@@ -27,16 +27,18 @@ function write_to_log() {
 }
 
 if [ "$1" == "test" ]; then
-	sleepMins=0;
-	rm ~/esp/install.log
-	rm ~/esp/version-data.txt
-	ls ~/esp
+	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): test mode"
+	sleepMins=0
+	rm  -f $HOME/esp/install.log
+	rm -f $HOME/version-data.txt
+	ls $HOME/esp
 	
 	function logout_all_users() {
 		return 0
 	}
 else
 	sleepMins=3 # minutes of warning to wait for user to log out
+
 	function logout_all_users() {
 		who | sudo awk '$1 !~ /root/{ cmd="/usr/bin/pkill -KILL -u " $1; system(cmd)}'
 		return $?
