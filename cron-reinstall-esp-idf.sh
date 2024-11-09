@@ -8,7 +8,7 @@
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
 startTime=$(date '+%s')
-cronVers=53-rc1 # version of this script
+cronVers=53-rc1.1 # version of this script
 log=$HOME/esp/install.log
 
 function return_status() {
@@ -45,7 +45,7 @@ if [ "$1" == "test" ]; then
 	sleepMins=0
 
 	# rm  -f $HOME/esp/install.log; rm  -f $HOME/esp/install.log; ls $HOME/esp; bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
-	rm  -f $HOME/esp/install.log
+	rm -f $HOME/esp/install.log
 	rm -f $HOME/version-data.txt
 	ls $HOME/esp
 	
