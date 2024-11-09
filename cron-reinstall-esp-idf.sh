@@ -18,8 +18,8 @@ myUser=$USER
 
 function return_status() {
 	strii="\treturn status: ${?}"
-	echo -e $strii
-	echo -e $strii >> $log
+	echo -e "$strii\n"
+	echo -e "$strii\n" >> $log
 }
 
 function write_to_log() {
