@@ -108,17 +108,17 @@ write_to_log "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): getting the commit hash"
 commitHash=$(git -C $idfDir rev-parse HEAD)
 return_status
 
-gitDataLog="Installed at:\n\t$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)')\n\tat commit ${commitHash}\n\tfrom branch ${gitBranch}"
+gitDataLog="Installed at:\n\t$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)')\n\tat commit $commitHash\n\tfrom branch $gitBranch"
 write_to_log $gitDataLog
 echo -e $gitDataLog >> $idfDir/version-data.txt
 return_status
 
-rebootMsg="rebooting in ${sleepSecs} seconds. seave and log out"
+rebootMsg="$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): rebooting in ${sleepSecs} seconds. seave and log out"
 write_to_log $rebootMsg
 echo $rebootMsg | sudo write princesspi
 return_status
 
-write_to_log "sleeping ${sleepSecs} seconds"
+write_to_log "$(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): sleeping ${sleepSecs} seconds"
 sleep $sleepSecs
 return_status
 
@@ -131,6 +131,6 @@ endTime=$(date '+%s')
 timeElapsed=(($endTime-$startTime))
 write_to_log "total install time $timeElapsed seconds"
 
-write_to_log " === finished ===\n"
+write_to_log " === $(date '+%d/%m/%Y-%H.%M.%S %Z (%s)'): finished ===\n"
 
 sudo reboot
