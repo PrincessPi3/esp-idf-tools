@@ -13,7 +13,7 @@ startTime=$(date '+%s')
 # 	crontab -e
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
-cronVers=54-prerelease # version of this script
+cronVers=54-prerelease.2 # version of this script
 myUser=princesspi
 
 gitJobs=5
@@ -183,6 +183,7 @@ if [ "$1" == "test" ]; then
 	echo sudo reboot
 	rm -f $log
 	rm -f $versionData
+	ls $installDir
 else
 	sudo reboot
 fi
