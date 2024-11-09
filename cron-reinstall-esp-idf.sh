@@ -13,7 +13,7 @@ startTime=$(date '+%s')
 # 	crontab -e
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
-cronVers=53-rc3 # version of this script
+cronVers=53-rc3.1 # version of this script
 myUser=princesspi
 
 gitJobs=5
@@ -52,9 +52,8 @@ if [ "$1" == "test" ]; then
 	toolsInstallCmd="echo python $idfDir/tools/idf_tools.py install all"
 	sleepMins=0
 
-	ls $HOME/esp
-	rm -f $HOME/esp/install.log
-	rm -f $HOME/esp/version-data.txt
+	rm -f $log
+	rm -f $versionData
 	
 	function logout_all_users() {
 		who | awk '{print $1}'
