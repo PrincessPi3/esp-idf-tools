@@ -1,5 +1,5 @@
 #!/bin/bash
-cronVers=32-live # version of this script
+cronVers=33-live # version of this script
 sleepSecs=180 # seconds of warning to wait for user to log out
 log=$HOME/esp/install.log
 
@@ -109,9 +109,9 @@ write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): getting the commit hash"
 commitHash=$(git -C $idfDir rev-parse HEAD)
 return_status
 
-gitDataLog="Installed at:\n\t$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\n\tat commit $commitHash\n\tfrom branch $gitBranch"
+gitDataLog="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installed esp-idf from commit $commitHash from branch $gitBranch using $cronVers"
 write_to_log $gitDataLog
-echo -e $gitDataLog >> $idfDir/version-data.txt
+echo -e $gitDataLog >> $installDir/version-data.txt
 return_status
 
 rebootMsg="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): rebooting in ${sleepSecs} seconds. seave and log out"
