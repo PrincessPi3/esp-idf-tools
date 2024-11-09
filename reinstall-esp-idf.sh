@@ -2,11 +2,17 @@
 echo -e "\n===== LFGGGGGGGG ======\n"
 
 echo -e "\n"
-read -p "Enter directory to install/reinstall to (default ${HOME}/esp):" installDir
-installDir=${installDir:-$HOME/esp}
+# read -p "Enter directory to install/reinstall to (default ${HOME}/esp):" installDir
+# installDir=${installDir:-$HOME/esp}
 
-echo -e "\nInstalling prerequisites\n"
-sudo apt install -y git wget flex bison gperf python3 python3-pip python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0
+installDir="${HOME}/esp"
+
+gitBranch=master
+
+gitJobs=5
+
+# echo -e "\nInstalling prerequisites\n"
+# sudo apt install -y git wget flex bison gperf python3 python3-pip python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0
 
 runningDir="$( cd "$( dirname "$0" )" && pwd )"
 idfDir="${installDir}/esp-idf"
@@ -51,7 +57,7 @@ cp -r "${customBinFrom}" "${customBinLocation}"
 chmod -R +x "${customBinLocation}"
 
 echo -e "\nPulling latest esp-idf code from github\n"
-git clone --recursive --jobs 5 https://github.com/espressif/esp-idf.git $idfDir
+git clone --recursive --jobs $gitJobs --single-branch --branch $gitBranch https://github.com/espressif/esp-idf.git $idfDir
 
 echo -e "\nRunning install script\n"
 bash $idfDir/install.sh all
@@ -66,8 +72,7 @@ else
 	echo -e "\nget_idf alias already installed, skipping\n"
 fi
 
-echo -e "\nMaking a backup of ${idfDir}/export.sh to 
-${idfDir}/export.sh.bak\n"
+echo -e "\nMaking a backup of ${idfDir}/export.sh to ${idfDir}/export.sh.bak\n"
 
 cp "${idfDir}/export.sh" "${idfDir}/export.sh.bak"
 
@@ -81,7 +86,7 @@ echo -e "\nCreating version/commit and date file at ${idfDir}/version-date.txt\n
 
 datestamp=$(date +"%A, %B %-d %Y at %r %Z (epoch %s)")
 commitHash=$(git -C $idfDir rev-parse HEAD)
-gitBranch=$(git -C $idfDir rev-parse --abbrev-ref HEAD)
+# gitBranch=$(git -C $idfDir rev-parse --abbrev-ref HEAD)
 
 echo -e "Installed at:\n\t${datestamp}\n\tat commit ${commitHash}\n\tfrom branch ${gitBranch}\n\tsource: https://github.com/espressif/esp-idf" > "${idfDir}/version-data.txt"
 

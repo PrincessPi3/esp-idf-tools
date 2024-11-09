@@ -1,0 +1,31 @@
+#!/bin/bash
+
+echo -e "\nChanging ESPBAUD\n"
+read -p "Select New Baudrate:\n\t1: 9600\n\t2: 115200\n\t3: 230400\n\t4: 460800\n\t5: 1152000\n\t6: 1500000\nDefault: ${ESPBAUD}" baud
+
+baud=${baud:-$ESPBAUD}
+
+echo "Select New Baudrate:\n\t1: 9600\n\t2: 115200\n\t3: 230400\n\t4: 460800\n\t5: 1152000\n\t6: 1500000"
+read baud
+if [ "${baud}" == 1 ]; then
+    selection=9600
+elif  [ "${baud}" == 2 ]; then
+    selection=115200
+elif  [ "${baud}" == 3 ]; then
+    selection=230400
+elif  [ "${baud}" == 4 ]; then
+    selection=460800
+elif  [ "${baud}" == 5 ]; then
+    selection=1152000
+elif  [ "${baud}" == 5 ]; then
+    selection=1152000
+elif  [ "${baud}" == 6 ]; then
+    selection=1500000
+else
+    echo "\nBad Selection\n"
+    return
+fi
+
+export ESPBAUD=$selection
+
+echo "\nAll done :3\n"
