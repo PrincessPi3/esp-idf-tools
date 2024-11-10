@@ -13,7 +13,7 @@ startTime=$(date '+%s')
 # 	crontab -e
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
-cronVers=55-dev # version of this script
+cronVers=55-dev.1 # version of this script
 myUser=princesspi
 test=$1
 
@@ -62,7 +62,7 @@ if [ "$test" == "test" ]; then
 elif [ "$test" == "nologout" ]; then
 	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): NOLOGOUT mode"
 
-	sleepMins=3 # minutes of warning to wait for user to log out
+	sleepMins=0 # minutes of warning to wait for user to log out
 
 	gitCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
 	installCmd="$idfDir/install.sh all"
@@ -74,7 +74,7 @@ elif [ "$test" == "nologout" ]; then
 else
 	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): LIVE mode"
 
-	sleepMins=0 # minutes of warning to wait for user to log out
+	sleepMins=3 # minutes of warning to wait for user to log out
 
 	gitCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
 	installCmd="$idfDir/install.sh all"
