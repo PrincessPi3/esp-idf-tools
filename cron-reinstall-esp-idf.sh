@@ -13,7 +13,7 @@ startTime=$(date '+%s')
 # 	crontab -e
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
-cronVers=54-release.u1.3 # version of this script
+cronVers=55-dev # version of this script
 myUser=princesspi
 test=$1
 
@@ -46,8 +46,8 @@ function write_to_log() {
 write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new reinstall ==="
 write_to_log "Cron version: ${cronVers}"
 
-if [ ! -z $test ]; then
-	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): test mode"
+if [ "$test" == "test" ]; then
+	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): TEST mode"
 	gitCmd="git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
 	installCmd="echo $idfDir/install.sh all"
 	toolsInstallCmd="echo python $idfDir/tools/idf_tools.py install all"
@@ -57,13 +57,24 @@ if [ ! -z $test ]; then
 	rm -f $versionData
 	
 	function logout_all_users() {
-		who | awk '{print $1}'
-		return $?
+		return 0;
+	}
+elif [ "$test" == "nologout" ]; then
+	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): NOLOGOUT mode"
+
+	sleepMins=3 # minutes of warning to wait for user to log out
+
+	gitCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
+	installCmd="$idfDir/install.sh all"
+	toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
+
+	function logout_all_users() {
+		return 0;
 	}
 else
 	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): LIVE mode"
 
-	sleepMins=3 # minutes of warning to wait for user to log out
+	sleepMins=0 # minutes of warning to wait for user to log out
 
 	gitCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
 	installCmd="$idfDir/install.sh all"
@@ -180,7 +191,7 @@ timeElapsed=$(($endTime-$startTime))
 write_to_log "reinstall completed in $timeElapsed seconds"
 write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): finished ===\n\n"
 
-if [ ! -z $test ]; then
+if [ "$test" == "test" ]; then
 	echo sudo reboot
 
 	rm -f $log
