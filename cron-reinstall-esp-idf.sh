@@ -205,7 +205,7 @@ function handleStart() {
 }
 
 function handleEmptyLogs() {
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Emptying logs (function ran)"
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Emptying and touching logs (function ran)"
 
  	rm -f $log
  	touch $log

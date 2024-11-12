@@ -35,7 +35,11 @@ echo "ESPBAUD = ${ESPBAUD}"
 export ESPTARGET=$esp
 echo "ESPTARGET = ${ESPTARGET}"
 
+echo "ESPIDF_INSTALLDR=${ESPIDF_INSTALLDIR}"
+
 binDir="${ESPIDF_INSTALLDIR}/.custom_bin"
+
+echo "binDir=${binDir}"
 
 echo "Setting alias"
 alias changeport="source ${binDir}/changeport.sh"
