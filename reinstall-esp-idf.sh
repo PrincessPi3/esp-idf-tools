@@ -75,11 +75,7 @@ function handleCheckInstallPackages() {
 	packages=(git wget flex bison gperf python3 python3-pip python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0)
 
 	for package in "${packages[@]}"; do
-		which $package
-		ret=$?
-		
-		echo $ret
-		if [ $ret == 1 ]; then
+		if [ -z $(apt list git --installed) ]; then
 			echo "$package not installed, addded to list"
 			inastallPackagees+=" $package"
 		fi
