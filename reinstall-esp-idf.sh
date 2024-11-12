@@ -70,22 +70,27 @@ function handleSleep() {
 }
 
 function handleCheckInstallPackages() {
-	inastallPackagees=""
+	writeToLog "Handling check and install packages (function ran)"
 
 	packages=(git wget flex bison gperf python3 python3-pip python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0)
 
 	for package in "${packages[@]}"; do
-		dpkg-query --show --showformat='${db:Status-Status}\n' $package >/dev/null
+		dpkg-query --show --showformat="$package \${db:Status-Status}" $package 2>/dev/null
 		ret=$?
 
-		echo $ret
 		if [ $ret -ne 0 ]; then
 			echo "$package not installed, addded to list"
-			inastallPackagees+=" $package"
+			installPackagees+=" $package"
 		fi
 	done
 
-	echo $inastallPackagees
+	if [ ! -z $installPackagees ];
+		writeToLog "Missing packages found! Installing: $installPackagees"
+		sudo apt install -y "$installPackagees"
+		returnStatus
+	else
+		writeToLog "No pissing packages found, continuing"
+	fi
 }
 
 function handleCustomBins() {
@@ -311,8 +316,9 @@ function handleStart() {
 		writeToLog "\tVersion: ${scriptVers}\n"
 	fi
 
-	# run environment sanity check
+	# run environment sanity checks
 	handleCheckEspIdf
+	handleCheckInstallPackages
 
 	writeToLog "\nvars:\n\tuser: $USER\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd\n\trcFile: $rcFile\n\t(envvar) ESPIDF_INSTALLDIR: $installDirEnvvar\n"
 }
