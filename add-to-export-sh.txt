@@ -7,9 +7,9 @@
 
 echo "\n=======CUSTOM=======\n"
 
-versionData="versionTAG"
-commitHash="commitTagTAG"
-installDate="installDateTAG"
+versionData=versionTAG
+commitHash=commitTAG
+installDate=installDateTAG
 
 if [ -z $ESPIDF_INSTALLDIR ]; then
     echo "\nFAIL: ESPIDF_INSTALLDIR environment variable not found!\nReinstall via script or manually add to ~/.zshrc\n"

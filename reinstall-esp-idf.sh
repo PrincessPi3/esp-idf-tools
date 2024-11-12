@@ -28,7 +28,7 @@ gitCmd="git clone --jobs $gitJobs --branch $gitBranch --single-branch https://gi
 
 installCmd="$idfDir/install.sh all"
 
-toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
+toolsInstallCmd="$idfDir/tools/idf_tools.py install all"
 
 # full order:
 # set action string variable
@@ -91,23 +91,25 @@ function handleExport() {
 	writeToLog "Handling export.sh (function ran)"
 
 	writeToLog "backing up ${idfDir}/export.sh to ${idfDir}/export.sh.bak"
-	cp $idfDir/export.sh $idfDir/export.sh.bakno
-	returnStatus
-	
-	writeToLog "editing ${idfDir}/export.sh"
-	sed -i 's/return 0/# return 0/g' $idfDir/export.sh
+	cp $idfDir/export.sh $idfDir/export.sh.bak
 	returnStatus
 	
 	writeToLog "adding ${runningDir}/add-to-export-sh.txt to ${idfDir}/export.sh"
 	cat $runningDir/add-to-export-sh.txt >> $idfDir/export.sh
 	returnStatus
 
-	writeToLog "editing $idfDir/export.sh with version information"
-	sed -i "s/versionTAG/${versionData}/g" $idfDir/export.sh
+	writeToLog "editing ${idfDir}/export.sh"
+	sed -i 's/return 0/# return 0/g' $idfDir/export.sh
 	returnStatus
 
+	writeToLog "editing $idfDir/export.sh with version information"
+	sed -i "s/versionTAG/'$versionData'/g" $idfDir/export.sh
+	returnStatus
+
+	dateStampInstall=$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')
+
 	writeToLog "editing $idfDir/export.sh with install date information"
-	sed -i "s/versionTAG/$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')/g" $idfDir/export.sh
+	sed -i "s/installDateTAG/'$dateStampInstall'/g" $idfDir/export.sh
 	returnStatus
 }
 
@@ -158,7 +160,7 @@ function handleDownloadInstall() {
 	eval "$gitCmd"
 	returnStatus
 
-	writeToLog "installing with ${idfDir}/install.sh all"
+	writeToLog "installing with \`eval \"${idfDir}/install.sh all\"\`"
 	eval "$installCmd"
 	returnStatus
 
@@ -168,12 +170,13 @@ function handleDownloadInstall() {
 		return
 	else
 		writeToLog "IDF_PYTHON_ENV_PATH: $IDF_PYTHON_ENV_PATH"
-		ls -lah $IDF_PYTHON_ENV_PATH/bin/python
+		idfPython=$IDF_PYTHON_ENV_PATH/bin/python
+		ls $idfPython
 		returnStatus
 	fi
 
-	writeToLog "installing tools with python ${idfDir}/tools/idf_tools.py install all"
-	eval "$toolsInstallCmd"
+	writeToLog "installing tools with \`eval \"$idfPython $toolsInstallCmd\"\`"
+	eval "$idfPython $toolsInstallCmd"
 	returnStatus
 
 	writeToLog "getting the commit hash"
@@ -181,7 +184,7 @@ function handleDownloadInstall() {
 	returnStatus
 
 	writeToLog "editing $idfDir/export.sh with git commit hash data"
-	sed -i "s/commitTagTAG/${commitHash}/g" $idfDir/export.sh
+	sed -i "s/commitTAG/'commitHash'/g" $idfDir/export.sh
 	returnStatus	
 
 	gitDataLog="installed esp-idf from commit $commitHash from branch $gitBranch using $scriptVers"
@@ -294,7 +297,7 @@ elif [ "$arg" == "test" -o "$arg" == "t" ]; then # minimal actions taken, echo t
 
  	installCmd="echo $idfDir/install.sh all"
  	
-	toolsInstallCmd="echo python $idfDir/tools/idf_tools.py install all"
+	toolsInstallCmd="echo $idfDir/tools/idf_tools.py install all"
 
 	sleepMins=0
 
