@@ -6,26 +6,35 @@ Modes:
 	test:
 		tests the script. very fast. minimal actions taken. no reinstall is done
 			`bash reinstall-esp-idf.sh test`
+			`bash reinstall-esp-idf.sh t`
 
 	retool:
 	    reinstalls bins and export.sh, nothing else
 		    `bash reinstall-esp-idf.sh retool`
+			`bash reinstall-esp-idf.sh rt`
 
 	cron:
 		runs noninteractively with forced user logout and automatic reboot, plus delays
 		    `bash reinstall-esp-idf.sh cron`
+			`bash reinstall-esp-idf.sh c`
 
 	interactive:
 		interactively installs/reinstalls esp-idf
 		    `bash reinstall-esp-idf.sh interactive`
+			`bash reinstall-esp-idf.sh i`
 
 	clearlogs:
 		clear logs
 			`bash reinstall-esp-idf.sh clearlogs`
+			`bash reinstall-esp-idf.sh clear`
+			`bash reinstall-esp-idf.sh cl`
 
     help:
         display this help text
             `bash reinstall-esp-idf.sh help`
+			`bash reinstall-esp-idf.sh h`
+			`bash reinstall-esp-idf.sh -h`
+			`bash reinstall-esp-idf.sh --help`
 
 
 Usage:

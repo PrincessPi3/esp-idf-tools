@@ -262,7 +262,7 @@ if [ "$arg" == "--help" -o "$arg" == "help" -o "$arg" == "-h" -o "$arg" == "h" ]
 
 	exit
 
-elif [ "$arg" == "test" ]; then # minimal actions taken, echo the given commands and such
+elif [ "$arg" == "test" -o "$arg" == "t" ]; then # minimal actions taken, echo the given commands and such
  	action="TEST"
  
  	gitCmd="echo git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
@@ -283,7 +283,7 @@ elif [ "$arg" == "test" ]; then # minimal actions taken, echo the given commands
 
 	exit
 
-elif [ "$arg" == "retool" ]; then # just reinstall bins and export
+elif [ "$arg" == "retool" -o "$arg" == "rt" ]; then # just reinstall bins and export
 	action="RETOOL"
 
 	handleStart
@@ -293,7 +293,7 @@ elif [ "$arg" == "retool" ]; then # just reinstall bins and export
 
 	exit
 
-elif [ "$arg" == "interactive" ]; then
+elif [ "$arg" == "interactive" -o "$arg" == "i" ]; then
 	action="REINSTALL (INTERACTIVE)"
 
 	echo "Enter full path to install dir, default: $installDir"
@@ -336,7 +336,7 @@ elif [ "$arg" == "interactive" ]; then
 
 	exit
 
-elif [ "$arg" == "cron" ]; then # full install with warn, sleep, and reboot
+elif [ "$arg" == "cron" -o "$arg" == "c" ]; then # full install with warn, sleep, and reboot
 	action="REINSTALL (CRON)"
 
 	handleStart
@@ -351,7 +351,7 @@ elif [ "$arg" == "cron" ]; then # full install with warn, sleep, and reboot
 
 	exit
 
-elif [ "$arg" == "clearlogs" ]; then # clear logs
+elif [ "$arg" == "clearlogs" -o "$arg" == "cl" -o "$arg" == "clear" ]; then # clear logs
 	handleEmptyLogs
 
 	exit
