@@ -43,7 +43,7 @@ export ESPTARGET=$esp
 echo "ESPBAUD = ${ESPBAUD}"
 echo "ESPTARGET = ${ESPTARGET}"
 echo "ESPPORT = ${ESPPORT}"
-echo "ESPIDF_INSTALLDR = ${ESPIDF_INSTALLDIR}"
+echo "ESPIDF_INSTALLDIR = ${ESPIDF_INSTALLDIR}"
 echo "binDir = ${binDir}"
 
 echo "Setting alias"

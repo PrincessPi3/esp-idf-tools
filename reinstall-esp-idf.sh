@@ -31,6 +31,9 @@ installCmd="$idfDir/install.sh all"
 toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
 
 # full order:
+# set action string variable
+# set sleepMins int variable
+# redefine any other vars needed
 # handleStart
 # handleLogoutAllUsers
 # handleSetupEnvironment
@@ -280,7 +283,6 @@ elif [ "$arg" == "test" -o "$arg" == "t" ]; then # minimal actions taken, echo t
 	handleDownloadInstall
 	handleExport
 	handleAliasEnviron
-	# handleEmptyLogs
 	handleEnd
 
 	exit
