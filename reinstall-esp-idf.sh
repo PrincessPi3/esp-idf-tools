@@ -166,8 +166,9 @@ function handleDownloadInstall() {
 
 	# silly python envvar workans testant
 	if [ -z $IDF_PYTHON_ENV_PATH ]; then
-		writeToLog "IDF_PYTHON_ENV_PATH not set"
-		return
+		writeToLog "IDF_PYTHON_ENV_PATH not set, setting to default ($(which python))"
+		idfPython=$(which python)
+		returnStatus
 	else
 		writeToLog "IDF_PYTHON_ENV_PATH: $IDF_PYTHON_ENV_PATH"
 		idfPython=$IDF_PYTHON_ENV_PATH/bin/python
