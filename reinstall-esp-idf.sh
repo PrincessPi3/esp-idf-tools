@@ -70,13 +70,18 @@ function handleSleep() {
 }
 
 function handleCheckInstallPackages() {
+	inastallPackagees=""
+
 	packages=(git wget flex bison gperf python3 python3-pip python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0)
 
 	for package in "${packages[@]}"; do
 		if [ $(which $package) ]; then
-			echo "$package addded to list?"
+			echo "$package not installed, addded to list"
+			inastallPackagees+=" $package"
 		fi
 	done
+
+	echo $inastallPackagees
 }
 
 function handleCustomBins() {
