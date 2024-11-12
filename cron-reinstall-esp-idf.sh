@@ -13,7 +13,6 @@ startTime=$(date '+%s')
 # 	crontab -e
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
-# cronVers=55-dev.3 # version of this script
 myUser=princesspi
 test=$1
 
@@ -27,7 +26,8 @@ idfDir=$installDir/esp-idf
 espressifLocation=$HOME/.espressif
 customBinLocation=$installDir/.custom_bin
 customBinFrom=$runningDir/custom_bin
-cronVers=$(cat $runningDir/version.txt)
+# cronVers=55-dev.3 # version of this script
+scriptVers=$(cat $runningDir/version.txt) # make sure versiion.txt does NOT have newline
 
 function return_status() {
 	strii="\treturn status: ${?}"
@@ -45,7 +45,7 @@ function write_to_log() {
 #}
 
 write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new reinstall ==="
-write_to_log "Cron version: ${cronVers}"
+write_to_log "Version: ${scriptVers}"
 
 if [ "$test" == "test" ]; then
 	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): TEST mode"
@@ -105,7 +105,7 @@ write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): force logging out all users"
 logout_all_users
 return_status
 
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tmyUser: $myUser\n\tcronVers: $cronVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tsleepSecs: $sleepSecs\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd"
+write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tmyUser: $myUser\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tsleepSecs: $sleepSecs\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd"
 return_status
 
 if ! [ -d $installDir ]; then
@@ -168,7 +168,7 @@ write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): getting the commit hash"
 commitHash=$(git -C $idfDir rev-parse HEAD)
 return_status
 
-gitDataLog="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installed esp-idf from commit $commitHash from branch $gitBranch using $cronVers"
+gitDataLog="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installed esp-idf from commit $commitHash from branch $gitBranch using $scriptVers"
 write_to_log "$gitDataLog"
 echo -e "$gitDataLog" >> $versionData
 return_status
