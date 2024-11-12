@@ -69,6 +69,14 @@ function handleSleep() {
 	returnStatus
 }
 
+function handleCheckInstallPackages() {
+	packages=(git wget flex bison gperf python3 python3-pip python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0)
+	i=0
+	for package in "${packages[@]}"; do
+		which $package
+	done
+}
+
 function handleCustomBins() {
 	writeToLog "Handling custon bins (function ran)"
 
@@ -188,30 +196,16 @@ function handleDownloadInstall() {
 		writeToLog "python found at $(which python), using"
 		idfPython="python"
 	else
-		writeToLog "no python found, aborting python tools install"
+		writeToLog "no python found, skipping python tools install"
 	fi
 
 	writeToLog "installing with \`eval \"${idfDir}/install.sh all\"\`"
 	eval "$installCmd"
 	returnStatus
 
-	# not totes sure this is a worthwhile or helpful thing at all idk lmfao
-	# silly python envvar workans testant
-	#
-	# if [ -z $IDF_PYTHON_ENV_PATH ]; then
-	# 	writeToLog "IDF_PYTHON_ENV_PATH not set, setting to default ($(which python))"
-	# 	idfPython=$(which python)
-	# 	returnStatus
-	# else
-	# 	writeToLog "IDF_PYTHON_ENV_PATH: $IDF_PYTHON_ENV_PATH"
-	# 	idfPython=$IDF_PYTHON_ENV_PATH/bin/python
-	# 	ls $idfPython
-	# 	returnStatus
-	# fi
-
 	if [ -z $idfPython ]; then
 		writeToLog "installing tools with \`eval \"$idfPython $toolsInstallCmd\"\`"
-		# eval "$idfPython $toolsInstallCmd"
+
 		eval "$idfPython $toolsInstallCmd"
 		returnStatus
 	else
@@ -286,13 +280,11 @@ function handleCheckEspIdf() {
 		writeToLog "FAIL: esp-idf environment varibles found!\nPelase run from a fresh termnal that has not had get_idf ran! Exiting"
 		exit
 	else
-		writeToLog "Environment correct: no esp-idf evnironment variables found, proceeding"
+		writeToLog "Santiy check: environment correct: no esp-idf evnironment variables found, proceeding"
 	fi
 }
 
 function handleStart() {
-	handleCheckEspIdf
-
 	if [ -z $sleepMins ]; then 
 		sleepMins="disabled"
 	fi
@@ -304,11 +296,14 @@ function handleStart() {
 	fi
 
 	if [ "$arg" != "interactive" -a "$arg" != "i" ]; then
-		writeToLog " === new ${action} ==="
+		writeToLog " === NEW ${action} ==="
 		writeToLog "\tVersion: ${scriptVers}\n"
 	fi
 
-	writeToLog "vars:\n\tuser: $USER\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd\n\trcFile: $rcFile\n\t(envvar) ESPIDF_INSTALLDIR: $installDirEnvvar"
+	# run environment sanity check
+	handleCheckEspIdf
+
+	writeToLog "\nvars:\n\tuser: $USER\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd\n\trcFile: $rcFile\n\t(envvar) ESPIDF_INSTALLDIR: $installDirEnvvar\n"
 }
 
 function handleEmptyLogs() {
@@ -348,6 +343,7 @@ elif [ "$arg" == "test" -o "$arg" == "t" ]; then # minimal actions taken, echo t
 	testExport=1
 
 	handleStart
+	handleCheckInstallPackages
 	handleCustomBins
 	handleDownloadInstall
 	handleExport
