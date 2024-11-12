@@ -4,7 +4,7 @@
 runningDir="$( cd "$( dirname "$0" )" && pwd )"
 scriptVers=$(cat $runningDir/version.txt) # make sure version.txt does NOT have newline
 
-echo -e "Retoolan~ Version: "
+echo -e "Retoolan~ Version: ${scriptVers}"
 
 echo -e "\ndeleting old export.sh\n"
 rm $HOME/esp/esp-idf/export.sh # ~/esp/esp-idf/export.sh.bak.2
