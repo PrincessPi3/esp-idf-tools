@@ -8,6 +8,14 @@
 
 echo "\n=======CUSTOM=======\n"
 
+if [ -z $ESPIDF_INSTALLDIR ]; then
+    echo "\nFAIL: ESPIDF_INSTALLDIR environment variable not found!\nReinstall via script or manually add to ~/.zshrc\n"
+    exit
+fi
+
+binDir="${ESPIDF_INSTALLDIR}/.custom_bin"
+
+
 echo "TTY devices found in dmesg:"
 COUNTER=0
 devarr=()
@@ -37,9 +45,7 @@ echo "ESPTARGET = ${ESPTARGET}"
 
 echo "ESPIDF_INSTALLDR=${ESPIDF_INSTALLDIR}"
 
-binDir="${ESPIDF_INSTALLDIR}/.custom_bin"
-
-echo "binDir=${binDir}"
+echo "binDir = ${binDir}"
 
 echo "Setting alias"
 alias changeport="source ${binDir}/changeport.sh"
