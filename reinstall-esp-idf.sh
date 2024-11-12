@@ -287,9 +287,9 @@ function handleStart() {
 	fi
 
 	if [ -z $ESPIDF_INSTALLDIR ]; then
-		installdirEnvvar="not set"
+		installDirEnvvar="not set"
 	else
-		installdirEnvvar=$ESPIDF_INSTALLDIR
+		installDirEnvvar=$ESPIDF_INSTALLDIR
 	fi
 
 	if [ "$arg" != "interactive" -a "$arg" != "i" ]; then
@@ -297,12 +297,10 @@ function handleStart() {
 		writeToLog "\tVersion: ${scriptVers}\n"
 	fi
 
-	writeToLog "\nvars:\n\tuser: $USER\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd\n\trcFile: $rcFile\n\t(envvar) ESPIDF_INSTALLDIR: $installdirEnvvar"
+	writeToLog "\nvars:\n\tuser: $USER\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd\n\trcFile: $rcFile\n\t(envvar) ESPIDF_INSTALLDIR: $installDirEnvvar"
 }
 
 function handleEmptyLogs() {
-	writeToLog "Emptying and touching logs (function ran)"
-
  	rm -f $log
  	touch $log
  
