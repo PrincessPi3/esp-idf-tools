@@ -234,7 +234,7 @@ function handleEnd() {
 	writeToLog " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): finished ===\n\n"
 }
 
-if [ "$arg" == "--help" || "$arg" == "help" || "$arg" == "-h" || "$arg" == "h" ]; then
+if [ "$arg" == "--help" -o "$arg" == "help" -o "$arg" == "-h" -o "$arg" == "h" ]; then
 	cat $helpText;
 
 	exit
