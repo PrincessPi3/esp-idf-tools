@@ -125,7 +125,7 @@ function handleAliasEnviron() {
 
 	if [ -z $ESPIDF_INSTALLDIR ]; then
 		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): ESPIDF_INSTALLDIR environment variable not found, appending to ${rcFile}" 
-		echo -e "export ESPIDF_INSTALLDIR=\"${installDir}\"\n"
+		echo -e "export ESPIDF_INSTALLDIR=\"${installDir}\"\n" >> $rcFile
 		returnStatus
 	else
 		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): ESPIDF_INSTALLDIR environment variable already installed, skipping"
@@ -285,6 +285,11 @@ elif [ "$arg" == "retool" ]; then # just reinstall bins and export
 	handleCustomBins
 	handleExport
 	handleEnd
+	exit
+
+elif [ "$arg" == "interactive" ]; then
+	action="REINSTALL (INTERACTIVE)"
+	# something here lmfao
 	exit
 
 else # full install with warn, sleep, and reboot
