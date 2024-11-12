@@ -30,7 +30,7 @@ only currently tested on zsh
 ```
 Modes:
 	default: 
-		reinstalls non-interactively with no delays, logouts, or reboots
+		reinstalls non-interactively with no delays, logouts, or reboots. run without any argument
 			bash reinstall-esp-idf.sh
 
 	test:
@@ -49,6 +49,10 @@ Modes:
 		interactively installs/reinstalls esp-idf
 		    bash reinstall-esp-idf.sh interactive
     
+	clearlogs:
+		clear logs
+			bash reinstall-esp-idf.sh clearlogs
+
     help:
         display this help text
             bash reinstall-esp-idf.sh help

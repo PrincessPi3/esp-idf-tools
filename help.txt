@@ -18,7 +18,11 @@ Modes:
 	interactive:
 		interactively installs/reinstalls esp-idf
 		    `bash reinstall-esp-idf.sh interactive`
-    
+
+	clearlogs:
+		clear logs
+			`bash reinstall-esp-idf.sh clearlogs`
+
     help:
         display this help text
             `bash reinstall-esp-idf.sh help`

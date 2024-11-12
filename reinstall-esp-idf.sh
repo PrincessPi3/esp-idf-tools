@@ -23,6 +23,13 @@ helpText=$runningDir/help.txt
 scriptVers=$(cat $runningDir/version.txt) # make sure version.txt does NOT have newline
 arg=$1 # just rename the argument var for clarity with the functions
 
+# commands
+gitCmd="git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
+
+installCmd="$idfDir/install.sh all"
+
+toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
+
 # full order:
 # handleStart
 # handleLogoutAllUsers
@@ -189,6 +196,8 @@ handleWarnAllUsers() {
 
 	loggedIn=$(who | awk '{print $1}' | uniq)
 
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Warning all logged in users:\n$lggedIn" # make sure dis workan
+
 	echo $loggedIn | while read line; do
 		echo -e "$warningString" | sudo write
 	done
@@ -201,6 +210,8 @@ function handleLogoutAllUsers() {
 	handleWarnAllUsers
 
 	loggedIn=$(who | awk '{print $1}' | uniq)
+
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): logging out all logged in users:\n$lggedIn" # make sure dis workan
 
 	echo $loggedIn | while read line; do
 		sudo loginctl terminate-user $line
@@ -315,12 +326,6 @@ elif [ "$arg" == "interactive" ]; then
 
 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Interactive vars set:\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trcFile: $rcFile\n\tgitJobs: $gitJobs"
 
- 	gitCmd="git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
-
- 	installCmd="$idfDir/install.sh all"
- 	
-	toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
-
 	handleStart
 	handleSetupEnvironment
 	handleCustomBins
@@ -333,12 +338,6 @@ elif [ "$arg" == "interactive" ]; then
 
 elif [ "$arg" == "cron" ]; then # full install with warn, sleep, and reboot
 	action="REINSTALL (CRON)"
-	
- 	gitCmd="git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
-
- 	installCmd="$idfDir/install.sh all"
- 	
-	toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
 
 	handleStart
 	handleLogoutAllUsers
@@ -352,14 +351,13 @@ elif [ "$arg" == "cron" ]; then # full install with warn, sleep, and reboot
 
 	exit
 
+elif [ "$arg" == "clearlogs" ]; then # clear logs
+	handleEmptyLogs
+
+	exit
+
 else # full noninteractive (re)install without logout, reboot, or sleeps
 	action="REINSTALL (DEFAULT)"
-	
- 	gitCmd="git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
-
- 	installCmd="$idfDir/install.sh all"
- 	
-	toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
 
 	handleStart
 	handleSetupEnvironment
