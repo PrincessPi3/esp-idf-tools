@@ -49,6 +49,8 @@ function sleepHold() {
 }
 
 function handleCustomBins() {
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Handling custon bins (function ran)"
+
 	if [ -d $customBinLocation ]; then
 		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): deleting ${customBinLocation}"
 		rm -rf $customBinLocation
@@ -65,6 +67,8 @@ function handleCustomBins() {
 }
 
 function handleExport() {
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Handling export.sh (function ran)"
+
 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): backing up ${idfDir}/export.sh to ${idfDir}/export.sh.bak"
 	cp $idfDir/export.sh $idfDir/export.sh.bak
 	returnStatus
@@ -79,6 +83,8 @@ function handleExport() {
 }
 
 function handleSetupEnvironment() {
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Handling setup environment (function ran)"
+
 	if ! [ -d $installDir ]; then
 		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): creating ${installDir}"
 		mkdir $installDir
@@ -99,6 +105,8 @@ function handleSetupEnvironment() {
 }
 
 function handleDownloadInstall() {
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Handling download and install (function ran)"
+
 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): cloning git branch ${gitBranch} with ${gitJobs} jobs to ${idfDir}"
 	eval "$gitCmd"
 	returnStatus
@@ -123,6 +131,8 @@ function handleDownloadInstall() {
 }
 
 handleReboot() {
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)') Handling reboot: (function ran)"
+
 	rebootMsg="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): rebooting in $sleepMins minutes. save and log out"
 	writeToLog "$rebootMsg"
 	# warn_all_users "$rebootMsg"
@@ -131,6 +141,8 @@ handleReboot() {
 }
 
 function handleWarn() {
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Handling warn (function ran)"
+ 
 	warningString="WARNING:\n\tReinstalling esp-idf in ${sleepMins} minutes! You will be force logged out in ${sleepMins} minutes! Save and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`\n\t$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')"
 	writeToLog $warningString
 
@@ -143,6 +155,8 @@ function handleWarn() {
 }
 
 function handleLogoutAllUsers() {
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Handling user logout (function ran)"
+
 	handleWarn
 
 	# logout all users
@@ -160,6 +174,8 @@ function handleStart() {
 }
 
 function handleEmptyLogs() {
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Emptying logs (function ran)"
+
  	rm -f $log
  	touch $log
  
@@ -203,10 +219,11 @@ if [ "$arg" == "test" ]; then
 	sleepMins=0
 
 	handleStart
-	handleLogoutAllUsers
+	# handleLogoutAllUsers
 	handleCustomBins
 	handleDownloadInstall
 	handleExport
+	# handleEmptyLogs
 	handleEnd
 	exit
 
