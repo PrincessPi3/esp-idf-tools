@@ -53,6 +53,11 @@ Modes:
 		interactively installs/reinstalls esp-idf
 		    bash reinstall-esp-idf.sh interactive
 			bash reinstall-esp-idf.sh i
+
+	nuke:
+		full delete and re-download and install
+			bash reinstall-esp-idf.sh nuke
+			bash reinstall-esp-idf.sh n
     
 	clearlogs:
 		clear logs

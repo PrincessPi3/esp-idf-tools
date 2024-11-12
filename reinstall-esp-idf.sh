@@ -26,8 +26,10 @@ scriptVers=$(cat $runningDir/version.txt) # make sure version.txt does NOT have 
 arg=$1 # just rename the argument var for clarity with the functions
 
 # commands
-# gitCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir" # no --single-branch
-gitCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
+gitCloneCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir" # no --single-branch
+# gitCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
+
+gitUpdateCmd="git reset --hard $idfDir; git clean -df $idfDir; git pull $idfDir" # mayhapsnasst?
 
 installCmd="$idfDir/install.sh all"
 
@@ -162,21 +164,19 @@ function handleSetupEnvironment() {
 	writeToLog "Handling setup environment (function ran)"
 
 	if ! [ -d $installDir ]; then
-		writeToLog "creating ${installDir}"
+		writeToLog "creating $installDir"
 		mkdir $installDir
 		returnStatus
-	fi
-
-	if [ -d $idfDir ]; then
-		writeToLog "deleting ${idfDir}"
-		rm -rf $idfDir
-		returnStatus
+	else
+		writeToLog "$installDir exisits, skiping creation"
 	fi
 
 	if [ -d $espressifLocation ]; then
-		writeToLog "deleting ${espressifLocation}"
-		rm -rf "${espressifLocation}"
+		writeToLog "deleting $espressifLocation"
+		rm -rf $espressifLocation
 		returnStatus
+	else
+		writeToLog "$espressifLocation not found, skipping delete"
 	fi
 }
 
@@ -201,9 +201,23 @@ function handleAliasEnviron() {
 function handleDownloadInstall() {
 	writeToLog "Handling download and install (function ran)"
 
-	writeToLog "cloning git branch $gitBranch with $gitJobs jobs to $idfDir"
-	eval "$gitCmd"
-	returnStatus
+	if [ "$idfGet" == "download" ]; then
+	 	if [ -d $fullWipe ]; then
+ 			writeToLog "deleting $idfDir"
+ 			rm -rf $idfDir
+ 			returnStatus
+		else
+			writeToLog "$idfDir not found, skipping delete"
+		fi
+
+		writeToLog "CLONING git branch $gitBranch with $gitJobs jobs to $idfDir"
+		eval "$gitCloneCmd"
+		returnStatus
+	else
+		writeToLog "UPDATING git branch $gitBranch with $gitJobs jobs to $idfDir"
+		eval "$gitUpdateCmd"
+		returnStatus
+	fi
 
 	# is this helpful in teh slightest? idk lel
 	if [ ! -z $(which python3) ]; then
@@ -216,9 +230,9 @@ function handleDownloadInstall() {
 		writeToLog "no python found, skipping python tools install"
 	fi
 
-	writeToLog "installing with \`eval \"${idfDir}/install.sh all\"\`"
-	eval "$installCmd"
-	returnStatus
+	# writeToLog "installing with \`eval \"${idfDir}/install.sh all\"\`"
+	# eval "$installCmd"
+	# returnStatus
 
 	if [ -z $idfPython ]; then
 		writeToLog "installing tools with \`eval \"$idfPython $toolsInstallCmd\"\`"
@@ -349,16 +363,19 @@ if [ "$arg" == "--help" -o "$arg" == "help" -o "$arg" == "-h" -o "$arg" == "h" ]
 
 elif [ "$arg" == "test" -o "$arg" == "t" ]; then # minimal actions taken, echo the given commands and such
  	action="TEST"
- 
- 	gitCmd="echo git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
-
- 	installCmd="echo $idfDir/install.sh all"
- 	
-	toolsInstallCmd="echo $idfDir/tools/idf_tools.py install all"
-
 	sleepMins=0
-
 	testExport=1
+	idfGet="update"
+
+  	installCmdTemp="echo $installCmd"
+	toolsInstallCmdTemp="echo $toolsInstallCmd"
+	gitCloneCmdTemp="echo $gitCloneCmd"
+	updateCmdTemp="echo $gitUpdateCmd"
+
+	installCmd=$installCmdTemp
+	toolsInstallCmd=$toolsInstallCmdTemp
+	gitCloneCmd=$gitcloneCmdTemp
+	gitUpdateCmd=$updateCmdTemp
 
 	handleStart
 	handleCheckInstallPackages
@@ -396,6 +413,9 @@ elif [ "$arg" == "interactive" -o "$arg" == "i" ]; then
 	echo "Enter numeber of jobs to download from github with, default: $gitJobs"
 	read readgitJobs
 
+	echo "Enter mode: update or download, deafult: update"
+	read readIdfGet
+
 	if [ ! -z $readInstallDir ]; then
 		installDir=$readInstallDir
 	fi
@@ -412,10 +432,16 @@ elif [ "$arg" == "interactive" -o "$arg" == "i" ]; then
 		gitJobs=$readGitJobs
 	fi
 
+	if [ -z $readIdfGet ]; then
+		idfGet=$readIdfGet
+	else
+		idfGet="update"
+	fi
+
 	writeToLog "\n === new ${action} ==="
 	writeToLog "\tVersion: ${scriptVers}\n"
 
-	writeToLog "Interactive vars set:\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trcFile: $rcFile\n\tgitJobs: $gitJobs"
+	writeToLog "Interactive vars set:\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trcFile: $rcFile\n\tgitJobs: $gitJobs\n\tidfGet: $idfGet"
 
 	handleStart
 	handleSetupEnvironment
@@ -429,7 +455,7 @@ elif [ "$arg" == "interactive" -o "$arg" == "i" ]; then
 
 elif [ "$arg" == "cron" -o "$arg" == "c" ]; then # full install with warn, sleep, and reboot
 	action="REINSTALL (CRON)"
-
+	idfGet="update"
 	sleepMins=3
 
 	handleStart
@@ -449,8 +475,23 @@ elif [ "$arg" == "clearlogs" -o "$arg" == "cl" -o "$arg" == "clear" ]; then # cl
 
 	exit
 
+elif [ "$arg" == "nuke" -o "$arg" == "n" ]; then # clear logs
+	action="REINSTALL (NUKE)"
+	idfGet="download"
+
+	handleStart
+	handleSetupEnvironment
+	handleCustomBins
+	handleDownloadInstall
+	handleExport
+	handleAliasEnviron
+	handleEnd
+
+	exit
+
 else # full noninteractive (re)install without logout, reboot, or sleeps
 	action="REINSTALL (DEFAULT)"
+	idfGet="update"
 
 	handleStart
 	handleSetupEnvironment
