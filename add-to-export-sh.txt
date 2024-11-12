@@ -34,17 +34,16 @@ read esp
 
 echo "Setting environment variables"
 echo "Adding Custom bins to PATH"
+
 export PATH="${ESPIDF_INSTALLDIR}/.custom_bin:${PATH}"
-echo "ESPPORT = ${ESPPORT}"
 export ESPPORT="${ttyselect}"
 export ESPBAUD=460800
+export ESPTARGET=$esp
 
 echo "ESPBAUD = ${ESPBAUD}"
-export ESPTARGET=$esp
 echo "ESPTARGET = ${ESPTARGET}"
-
-echo "ESPIDF_INSTALLDR=${ESPIDF_INSTALLDIR}"
-
+echo "ESPPORT = ${ESPPORT}"
+echo "ESPIDF_INSTALLDR = ${ESPIDF_INSTALLDIR}"
 echo "binDir = ${binDir}"
 
 echo "Setting alias"
