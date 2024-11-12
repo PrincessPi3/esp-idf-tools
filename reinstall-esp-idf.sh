@@ -98,18 +98,18 @@ function handleExport() {
 	cat $runningDir/add-to-export-sh.txt >> $idfDir/export.sh
 	returnStatus
 
-	writeToLog "editing ${idfDir}/export.sh"
+	writeToLog "editing ${idfDir}/export.sh to remove ending \`return 0\`"
 	sed -i 's/return 0/# return 0/g' $idfDir/export.sh
 	returnStatus
 
-	writeToLog "editing $idfDir/export.sh with version information"
-	sed -i "s/versionTAG/'$versionData'/g" $idfDir/export.sh
+	writeToLog "editing $idfDir/export.sh with version information: $versionData"
+	sed -i "s/versionTAG/\'$versionData\'/g" $idfDir/export.sh
 	returnStatus
 
-	dateStampInstall=$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')
+	dateStampInstall=$(date '+%d-%m-%Y %H:%M:%S %Z (%s)')
 
-	writeToLog "editing $idfDir/export.sh with install date information"
-	sed -i "s/installDateTAG/'$dateStampInstall'/g" $idfDir/export.sh
+	writeToLog "editing $idfDir/export.sh with install date information: $dateStampInstall"
+	sed -i "s/installDateTAG/\'$dateStampInstall\'/g" $idfDir/export.sh
 	returnStatus
 }
 
@@ -160,32 +160,50 @@ function handleDownloadInstall() {
 	eval "$gitCmd"
 	returnStatus
 
+	# is this helpful in teh slightest? idk lel
+	if [ ! -z $(which python3) ]; then
+		writeToLog "python3 found at $(which python3), using"
+		idfPython="python3"
+	elif [! -z $(which python) ]; then
+		writeToLog "python found at $(which python), using"
+		idfPython="python"
+	else
+		writeToLog "no python found, aborting python tools install"
+	fi
+
 	writeToLog "installing with \`eval \"${idfDir}/install.sh all\"\`"
 	eval "$installCmd"
 	returnStatus
 
+	# not totes sure this is a worthwhile or helpful thing at all idk lmfao
 	# silly python envvar workans testant
-	if [ -z $IDF_PYTHON_ENV_PATH ]; then
-		writeToLog "IDF_PYTHON_ENV_PATH not set, setting to default ($(which python))"
-		idfPython=$(which python)
+	#
+	# if [ -z $IDF_PYTHON_ENV_PATH ]; then
+	# 	writeToLog "IDF_PYTHON_ENV_PATH not set, setting to default ($(which python))"
+	# 	idfPython=$(which python)
+	# 	returnStatus
+	# else
+	# 	writeToLog "IDF_PYTHON_ENV_PATH: $IDF_PYTHON_ENV_PATH"
+	# 	idfPython=$IDF_PYTHON_ENV_PATH/bin/python
+	# 	ls $idfPython
+	# 	returnStatus
+	# fi
+
+	if [ -z $idfPython ]; then
+		writeToLog "installing tools with \`eval \"$idfPython $toolsInstallCmd\"\`"
+		# eval "$idfPython $toolsInstallCmd"
+		eval "$idfPython $toolsInstallCmd"
 		returnStatus
 	else
-		writeToLog "IDF_PYTHON_ENV_PATH: $IDF_PYTHON_ENV_PATH"
-		idfPython=$IDF_PYTHON_ENV_PATH/bin/python
-		ls $idfPython
-		returnStatus
+		writeToLog "No python found on system, skipping python tools install"
 	fi
-
-	writeToLog "installing tools with \`eval \"$idfPython $toolsInstallCmd\"\`"
-	eval "$idfPython $toolsInstallCmd"
-	returnStatus
 
 	writeToLog "getting the commit hash"
 	commitHash=$(git -C $idfDir rev-parse HEAD)
 	returnStatus
 
-	writeToLog "editing $idfDir/export.sh with git commit hash data"
-	sed -i "s/commitTAG/'commitHash'/g" $idfDir/export.sh
+	writeToLog "editing $idfDir/export.sh with git commit hash data: $commitHash"
+	sed -i "s/commitTAG/\'$commitHash\'/g" $idfDir/export.sh
 	returnStatus	
 
 	gitDataLog="installed esp-idf from commit $commitHash from branch $gitBranch using $scriptVers"
