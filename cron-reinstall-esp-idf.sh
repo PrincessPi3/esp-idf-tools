@@ -75,6 +75,9 @@ elif [ "$arg" == "nologout" ]; then
 elif [ "$arg" == "retool" ]; then
 	action="RETOOL"
 
+	write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new ${action} ==="
+	write_to_log "Version: ${scriptVers}"
+
 	write_to_log "deleting old export.sh"
 	rm $idfDir/export.sh
 
@@ -90,9 +93,6 @@ elif [ "$arg" == "retool" ]; then
 	write_to_log "Coppying new custom_bin and making them executable"
 	cp -r $customBinFrom $customBinLocation
 	chmod +x $customBinLocation/*
-
-	write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new ${action} ==="
-	write_to_log "Version: ${scriptVers}"
 
 	exit
 else
