@@ -7,7 +7,7 @@ rcFile=$HOME/.zshrc # shell rc file
 gitJobs=5 # number of jobs to download from github with
 
 if [ -z $ESPIDF_INSTALLDIR ]; then
-	installDir=$HOME/esp
+	installDir=$HOME/esp # path to install to. $HOME/esp by default
 else
 	installDir=$ESPIDF_INSTALLDIR
 fi
@@ -154,6 +154,16 @@ function handleDownloadInstall() {
 	eval "$installCmd"
 	returnStatus
 
+	# silly python envvar workans testant
+	if [ -z $IDF_PYTHON_ENV_PATH ]; then
+		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): IDF_PYTHON_ENV_PATH not set"
+		return
+	else
+		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): IDF_PYTHON_ENV_PATH: $IDF_PYTHON_ENV_PATH"
+		ls -lah $IDF_PYTHON_ENV_PATH/bin/python
+		returnStatus
+	fi
+
 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installing tools with python ${idfDir}/tools/idf_tools.py install all"
 	eval "$toolsInstallCmd"
 	returnStatus
@@ -174,20 +184,6 @@ handleReboot() {
 	sudo reboot
 }
 
-# function handleWarn() {
-# 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Handling warn (function ran)"
-#  
-# 	warningString="WARNING:\n\tReinstalling esp-idf:\n\tForce logut in ${sleepMins} minutes!!\n\tSave and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall reinstall-esp-idf.sh\`\n\t$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')"
-# 	writeToLog $warningString
-# 
-# 	sleepHold
-# 
-# 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Force logging out all users"
-# 
-# 	echo -e "$warningString" | sudo write "$myUser"
-# 	returnStatus
-# }
-
 handleWarnAllUsers() {
 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Warning all users of impending logout (function called)"
 
@@ -199,12 +195,19 @@ handleWarnAllUsers() {
 
 	loggedIn=$(who | awk '{print $1}' | uniq)
 
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Warning all logged in users:\n$lggedIn" # make sure dis workan
+	if [ -z $loggedIn ]; then
+		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): no users logged in to warn"
+		return
+	else
+		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Warning all logged in users:" # make sure dis workan
 
-	echo $loggedIn | while read line; do
-		echo -e "$warningString" | sudo write
-	done
-	returnStatus
+		echo $loggedIn | while read line; do
+			writeToLog "\tWarning $line"
+			echo -e "$warningString" | sudo write
+			returnStatus
+		done
+		returnStatus
+	fi
 }
 
 function handleLogoutAllUsers() {
@@ -214,12 +217,18 @@ function handleLogoutAllUsers() {
 
 	loggedIn=$(who | awk '{print $1}' | uniq)
 
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): logging out all logged in users:\n$lggedIn" # make sure dis workan
-
-	echo $loggedIn | while read line; do
-		sudo loginctl terminate-user $line
-	done
-	returnStatus
+	if [ -z $loggedIn ]; then
+		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): no logged in users to log out"
+		return
+	else
+		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): logging out all logged in users:"
+		echo $loggedIn | while read line; do
+		writeToLog "\tlogging out $line"
+			sudo loginctl terminate-user $line
+			returnStatus
+		done
+		returnStatus
+	fi
 }
 
 function handleStart() {
@@ -239,7 +248,6 @@ function handleStart() {
 	fi
 
 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tuser: $USER\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd\n\trcFile: $rcFile\n\t(envvar) ESPIDF_INSTALLDIR: $installdirEnvvar"
-
 }
 
 function handleEmptyLogs() {
@@ -346,8 +354,7 @@ elif [ "$arg" == "interactive" -o "$arg" == "i" ]; then
 elif [ "$arg" == "cron" -o "$arg" == "c" ]; then # full install with warn, sleep, and reboot
 	action="REINSTALL (CRON)"
 
-	sleepMins=1
-	# sleepMins=3
+	sleepMins=3
 
 	handleStart
 	handleLogoutAllUsers

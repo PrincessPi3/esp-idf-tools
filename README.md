@@ -72,9 +72,9 @@ Modes:
 ## Helpful stuff
 ```
 cron:
-    reinstall from master everyday at 8pm, logging out users with warn delays and rebooting after
+    reinstall from master everyday at 4am, logging out users with warn delays and rebooting after
 	    crontab -e
-	    0 8 * * * bash $HOME/esp/esp-install-custom/reinstall-esp-idf.sh cron
+	    0 4 * * * bash $HOME/esp/esp-install-custom/reinstall-esp-idf.sh cron
 
 monitor log file during install:
 	tail -n 75 -f $ESPIDF_INSTALLDIR/install.log;
