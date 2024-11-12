@@ -26,14 +26,11 @@ scriptVers=$(cat $runningDir/version.txt) # make sure version.txt does NOT have 
 arg=$1 # just rename the argument var for clarity with the functions
 
 # commands
-gitCloneCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir" # no --single-branch
-# gitCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
-
+gitCloneCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
 gitUpdateCmd="git -C $idfDir reset --hard; git -C $idfDir clean -df; git -C $idfDir pull $idfDir" # mayhapsnasst?
-
 installCmd="$idfDir/install.sh all"
-
 toolsInstallCmd="$idfDir/tools/idf_tools.py install all"
+idfGet="update" # default method
 
 # full order:
 # set action string variable
@@ -201,20 +198,20 @@ function handleAliasEnviron() {
 function handleDownloadInstall() {
 	writeToLog "Handling download and install (function ran)"
 
-	if [ "$idfGet" == "download" ]; then
-	 	if [ -d $fullWipe ]; then
- 			writeToLog "deleting $idfDir"
- 			rm -rf $idfDir
- 			returnStatus
+	if [ "$idfGet" == "download" -o ! -d "$idfDir" ]; then
+		if [ ! -d "$idfDir" ]; then
+			writeToLog "deleting $idfDir"
+			rm -rf $idfDir
+			returnStatus
 		else
 			writeToLog "$idfDir not found, skipping delete"
 		fi
 
-		writeToLog "CLONING git branch $gitBranch with $gitJobs jobs to $idfDir"
+		writeToLog "CLONING esp-idf, branch $gitBranch with $gitJobs jobs to $idfDir"
 		eval "$gitCloneCmd"
 		returnStatus
 	else
-		writeToLog "UPDATING git branch $gitBranch with $gitJobs jobs to $idfDir"
+		writeToLog "UPDATING esp-idf, branch $gitBranch with $gitJobs jobs to $idfDir"
 		eval "$gitUpdateCmd"
 		returnStatus
 	fi
@@ -335,11 +332,21 @@ function handleStart() {
 }
 
 function handleEmptyLogs() {
+	echo "Deleting $log"
  	rm -f $log
- 	touch $log
+	echo -e "\treturn status: ${?}\n"
  
+	echo "Deleting $versionData"
  	rm -f $versionData
+	echo -e "\treturn status: ${?}\n"
+
+	echo "Creating empty file at $log"
+ 	touch $log
+	echo "\treturn status: ${?}\n"
+
+	echo "Creating empty file at $versionData"
  	touch $versionData
+	echo -e "\treturn status: ${?}\n"
 }
 
 function handleEnd() {
@@ -361,7 +368,6 @@ elif [ "$arg" == "test" -o "$arg" == "t" ]; then # minimal actions taken, echo t
  	action="TEST"
 	sleepMins=0
 	testExport=1
-	idfGet="update"
 
   	installCmdTemp="echo $installCmd"
 	toolsInstallCmdTemp="echo $toolsInstallCmd"
@@ -451,7 +457,6 @@ elif [ "$arg" == "interactive" -o "$arg" == "i" ]; then
 
 elif [ "$arg" == "cron" -o "$arg" == "c" ]; then # full install with warn, sleep, and reboot
 	action="REINSTALL (CRON)"
-	idfGet="update"
 	sleepMins=3
 
 	handleStart
@@ -487,7 +492,6 @@ elif [ "$arg" == "nuke" -o "$arg" == "n" ]; then # clear logs
 
 else # full noninteractive (re)install without logout, reboot, or sleeps
 	action="REINSTALL (DEFAULT)"
-	idfGet="update"
 
 	handleStart
 	handleSetupEnvironment
