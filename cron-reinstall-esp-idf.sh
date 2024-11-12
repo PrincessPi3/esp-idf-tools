@@ -19,9 +19,9 @@ versionData=$installDir/version-data.txt # version data log file
 idfDir=$installDir/esp-idf # esp-idf path
 espressifLocation=$HOME/.espressif # espressif tools install location
 customBinLocation=$installDir/.custom_bin # where custom bin scripts are placed
-helpText=$runningDir/help.txt
 runningDir="$( cd "$( dirname "$0" )" && pwd )"
 customBinFrom=$runningDir/custom_bin # dir where custom scripts are coming FROM
+helpText=$runningDir/help.txt
 scriptVers=$(cat $runningDir/version.txt) # make sure version.txt does NOT have newline
 arg=$1 # just rename the argument var for clarity with the functions
 
