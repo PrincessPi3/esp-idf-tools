@@ -75,7 +75,7 @@ function handleCheckInstallPackages() {
 	packages=(git wget flex bison gperf python3 python3-pip python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0)
 
 	for package in "${packages[@]}"; do
-		dpkg-query --show --showformat='${db:Status-Status}\n' $package 2>/dev/null
+		dpkg-query --show --showformat='${db:Status-Status}\n' $package >/dev/null
 		ret=$?
 
 		echo $ret
