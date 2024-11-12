@@ -230,10 +230,6 @@ function handleDownloadInstall() {
 		writeToLog "no python found, skipping python tools install"
 	fi
 
-	# writeToLog "installing with \`eval \"${idfDir}/install.sh all\"\`"
-	# eval "$installCmd"
-	# returnStatus
-
 	if [ -z $idfPython ]; then
 		writeToLog "installing tools with \`eval \"$idfPython $toolsInstallCmd\"\`"
 
@@ -308,10 +304,10 @@ function handleLogoutAllUsers() {
 
 function handleCheckEspIdf() {
 	if [ ! -z $IDF_PYTHON_ENV_PATH ]; then
-		writeToLog "FAIL: esp-idf environment varibles found!\nPelase run from a fresh termnal that has not had get_idf ran! Exiting"
+		writeToLog "FAIL: Sanity check failed!\n\tesp-idf environment varibles found!\n\tPelase run from a fresh termnal that has not had get_idf ran!\n\tExiting"
 		exit
 	else
-		writeToLog "Santiy check: environment correct: no esp-idf evnironment variables found, proceeding"
+		writeToLog "Sanity check: Environment correct\n\tNo esp-idf environment variables found, proceeding"
 	fi
 }
 
