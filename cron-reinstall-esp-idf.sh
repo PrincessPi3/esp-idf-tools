@@ -299,7 +299,7 @@ elif [ "$arg" == "interactive" ]; then
 	# something here lmfao
 	exit
 
-elif [ "$arg" == "cron" ] # full install with warn, sleep, and reboot
+elif [ "$arg" == "cron" ]; then # full install with warn, sleep, and reboot
 	action="REINSTALL (CRON)"
 	
  	gitCmd="git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
