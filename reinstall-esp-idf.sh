@@ -51,7 +51,7 @@ toolsInstallCmd="$idfDir/tools/idf_tools.py install all"
 function returnStatus() {
 	strii="\treturn status: ${?}"
 	echo -e "$strii\n"
-	echo -e "$strii\n" >> $log
+	echo -e "$strii" >> $log
 }
 
 function writeToLog() {
@@ -110,8 +110,8 @@ function handleExport() {
 		returnStatus
 	fi
 
-	writeToLog "adding ${runningDir}/add-to-export-sh.txt to ${idfDir}/export.sh"
-	cat $runningDir/add-to-export-sh.txt >> $idfDir/export.sh
+	writeToLog "adding $runningDir/add-to-export-sh.txt to $exportScript"
+	cat $runningDir/add-to-export-sh.txt >> $exportScript
 	returnStatus
 
 	writeToLog "editing $exportScript to remove ending \`return 0\`"
@@ -126,6 +126,10 @@ function handleExport() {
 
 	writeToLog "editing $exportScript with install date information: $dateStampInstall"
 	sed -i "s/installDateTAG/\'$dateStampInstall\'/g" $exportScript
+	returnStatus
+
+	writeToLog "editing $exportScript with git commit hash data: $commitHash"
+	sed -i "s/commitTAG/\'$commitHash\'/g" $exportScript
 	returnStatus
 }
 
@@ -172,7 +176,7 @@ function handleAliasEnviron() {
 function handleDownloadInstall() {
 	writeToLog "Handling download and install (function ran)"
 
-	writeToLog "cloning git branch ${gitBranch} with ${gitJobs} jobs to ${idfDir}"
+	writeToLog "cloning git branch $gitBranch with $gitJobs jobs to $idfDir"
 	eval "$gitCmd"
 	returnStatus
 
@@ -216,10 +220,6 @@ function handleDownloadInstall() {
 
 	writeToLog "getting the commit hash"
 	commitHash=$(git -C $idfDir rev-parse HEAD)
-	returnStatus
-
-	writeToLog "editing $exportScript with git commit hash data: $commitHash"
-	sed -i "s/commitTAG/\'$commitHash\'/g" $exportScript
 	returnStatus
 
 	gitDataLog="installed esp-idf from commit $commitHash from branch $gitBranch using $scriptVers"
@@ -293,11 +293,11 @@ function handleStart() {
 	fi
 
 	if [ "$arg" != "interactive" -a "$arg" != "i" ]; then
-		writeToLog "\n === new ${action} ==="
+		writeToLog " === new ${action} ==="
 		writeToLog "\tVersion: ${scriptVers}\n"
 	fi
 
-	writeToLog "\nvars:\n\tuser: $USER\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd\n\trcFile: $rcFile\n\t(envvar) ESPIDF_INSTALLDIR: $installDirEnvvar"
+	writeToLog "vars:\n\tuser: $USER\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd\n\trcFile: $rcFile\n\t(envvar) ESPIDF_INSTALLDIR: $installDirEnvvar"
 }
 
 function handleEmptyLogs() {
