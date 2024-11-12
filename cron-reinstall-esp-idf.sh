@@ -80,19 +80,28 @@ elif [ "$arg" == "retool" ]; then
 
 	write_to_log "deleting old export.sh"
 	rm $idfDir/export.sh
+	return_status
 
 	write_to_log "Replacing original export.sh from export.sh.bak"
 	cp $idfDir/export.sh.bak $idfDir/export.sh
+	return_status
+
+	write_to_log "Editing ${idfDir}/export.sh"
+	sed -i 's/return 0/# return 0/g' $idfDir/export.sh
+	return_status
 
 	write_to_log "Appending new add-to-export-sh.txt to export.sh"
 	cat $runningDir/add-to-export-sh.txt >> $idfDir/export.sh
+	return_status
 
 	write_to_log "Deleting .custom_bin dir"
 	rm -rf $customBinLocation
+	return_status
 
 	write_to_log "Coppying new custom_bin and making them executable"
 	cp -r $customBinFrom $customBinLocation
 	chmod +x $customBinLocation/*
+	return_status
 
 	exit
 else
