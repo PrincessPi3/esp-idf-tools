@@ -17,11 +17,11 @@ versionData=$installDir/version-data.txt # version data log file
 idfDir=$installDir/esp-idf # esp-idf path
 espressifLocation=$HOME/.espressif # espressif tools install location
 customBinLocation=$installDir/.custom_bin # where custom bin scripts are placed
-exportScript=$idfDir/export.sh # export script
-exportBackupScript="${exportScript}.bak"
 runningDir="$( cd "$( dirname "$0" )" && pwd )"
 customBinFrom=$runningDir/custom_bin # dir where custom scripts are coming FROM
 helpText=$runningDir/help.txt
+exportScript=$idfDir/export.sh # export script
+exportBackupScript=$runningDir/export.sh.bak # back up to running dir
 scriptVers=$(cat $runningDir/version.txt) # make sure version.txt does NOT have newline
 arg=$1 # just rename the argument var for clarity with the functions
 
@@ -120,10 +120,10 @@ function handleExport() {
 		writeToLog "testExport not set"
 
 		writeToLog "backing up $exportScript to $exportBackupScript"
-		cp $exportScript $exportBackupScript
+		cp -f $exportScript $exportBackupScript
 		returnStatus
 	else
-		writeToLog "testExport enabled"
+		writeToLog "testExport export"
 
 		writeToLog "deleting $exportScript"
 		rm -f $exportScript
