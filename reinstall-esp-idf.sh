@@ -26,7 +26,8 @@ scriptVers=$(cat $runningDir/version.txt) # make sure version.txt does NOT have 
 arg=$1 # just rename the argument var for clarity with the functions
 
 # commands
-gitCmd="git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
+# gitCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir" # no --single-branch
+gitCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
 
 installCmd="$idfDir/install.sh all"
 
