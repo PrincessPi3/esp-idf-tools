@@ -2,38 +2,71 @@
 # set -e # for testan, die on error
 startTime=$(date '+%s')
 
-# testing:
-
-
-# redo these notes:
-# testing:
-# 	bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh test
-# 	tail -f -n 50 $HOME/esp/install.log
-# 	ls $HOME/esp; echo "install.log"; cat $HOME/esp/install.log;  echo "version-data.txt"; cat $HOME/esp/version-data.txt
-
-# delete logs:
-#	 rm  -f $HOME/esp/install.log; rm -f $HOME/esp/version-data.txt
-
+# modes:
+# 	default: 
+# 		reinstalls non-interactively with no delays, logouts, or reboots
+# 			bash cron-reinstall-esp-idf.sh
+#
+# 	test:
+# 		tests the script. very fast. minimal actions taken. no reinstall is done
+# 			bash cron-reinstall-esp-idf.sh test
+#
+# 	retool:
+#		reinstalls bins and export.sh, nothing else
+#			bash cron-reinstall-esp-idf.sh retool
+#
+# 	cron:
+# 		runs noninteractively with forced user logout and automatic reboot, plus delays
+#			bash cron-reinstall-esp-idf.sh cron
+#
+# 	interactive:
+# 		interactively installs/reinstalls esp-idf
+#			bash cron-reinstall-esp-idf.sh interactive
 # cron:
 # 	crontab -e
-# 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
+# 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh cron
+# manually wipe logs: 
+# 	rm $ESPIDF_INSTALLDIR/install.log; rm $ESPIDF_INSTALLDIR/version-data.txt; touch $ESPIDF_INSTALLDIR/install.log; touch $ESPIDF_INSTALLDIR/version-data.txt;
+#
+# monitor log file during install
+# 	tail -n 75 $ESPIDF_INSTALLDIR/install.log;
 
-myUser=princesspi
-gitJobs=5
-installDir=/home/$myUser/esp
-log=$installDir/install.log
-versionData=$installDir/version-data.txt
-gitBranch=master
-idfDir=$installDir/esp-idf
-espressifLocation=$HOME/.espressif
-customBinLocation=$installDir/.custom_bin
+myUser=princesspi # user installing esp-ids
+gitJobs=5 # number of jobs to download from github with
+gitBranch=master # branch from github
+rcFile=$HOME/.zshrc # shell rc file
+
+if [ -z ESPIDF_INSTALLDIR ]; then
+	installDir=$HOME/esp
+else
+	installDir=$ESPIDF_INSTALLDIR
+fi
+
+# installDir=/home/$myUser/esp # install dir
+log=$installDir/install.log # log file
+versionData=$installDir/version-data.txt # version data log file
+idfDir=$installDir/esp-idf # esp-idf path
+espressifLocation=$HOME/.espressif # espressif tools install location
+customBinLocation=$installDir/.custom_bin # where custom bin scripts are placed
 runningDir="$( cd "$( dirname "$0" )" && pwd )"
-customBinFrom=$runningDir/custom_bin
-rcFile=${HOME}/.zshrc
-# cronVers=55-dev.3 # version of this script
+customBinFrom=$runningDir/custom_bin # dir where custom scripts are coming FROM
 scriptVers=$(cat $runningDir/version.txt) # make sure version.txt does NOT have newline
+arg=$1 # just rename the argument var for clarity with the functions
 
-arg=$1
+# full order:
+# handleStart
+# handleLogoutAllUsers
+# sleepHold
+# handleLogoutAllUsers
+# handleSetupEnvironment
+# handleCustomBins
+# handleDownloadInstall
+# handleExport
+# handleAliasEnviron
+# handleLogoutAllUsers
+# handleEnd
+# handleReboot
+# exit
 
 function returnStatus() {
 	strii="\treturn status: ${?}"
@@ -80,7 +113,7 @@ function handleExport() {
 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Handling export.sh (function ran)"
 
 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): backing up ${idfDir}/export.sh to ${idfDir}/export.sh.bak"
-	cp $idfDir/export.sh $idfDir/export.sh.bak
+	cp $idfDir/export.sh $idfDir/export.sh.bakno
 	returnStatus
 	
 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): editing ${idfDir}/export.sh"
@@ -196,11 +229,17 @@ function handleStart() {
 		sleepMins="disabled"
 	fi
 
+	if [ -z $ESPIDF_INSTALLDIR ];
+		installdirEnvvar="not set"
+	else
+		installdirEnvvar=$ESPIDF_INSTALLDIR
+	fi
+
 	writeToLog "\n === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new ${action} ==="
 	writeToLog "Version: ${scriptVers}"
 
 	returnStatus
-	writeToLog "\n$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tmyUser: $myUser\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd\n\trcFile: $rcFile"
+	writeToLog "\n$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tmyUser: $myUser\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd\n\trcFile: $rcFile\n\t(envvar) ESPIDF_INSTALLDIR: $installdirEnvvar"
 
 }
 
@@ -224,22 +263,6 @@ function handleEnd() {
 	writeToLog " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): finished ===\n\n"
 }
 
-# full order:
-# handleStart
-# handleWarn
-# sleepHold
-# handleLogoutAllUsers
-# handleSetupEnvironment
-# handleCustomBins
-# handleDownloadInstall
-# handleExport
-# handleAliasEnviron
-# handleLogoutAllUsers
-# handleEnd
-# handleReboot
-# exit
-
-
 if [ "$arg" == "test" ]; then # minimal actions taken, echo the given commands and such
  	action="TEST"
  
@@ -256,26 +279,9 @@ if [ "$arg" == "test" ]; then # minimal actions taken, echo the given commands a
 	handleDownloadInstall
 	handleExport
 	handleAliasEnviron
-	handleEmptyLogs
+	# handleEmptyLogs
 	handleEnd
-	exit
 
-elif [ "$arg" == "nologout" ]; then # full reinstall without logout, reboot, or sleeps
-	action="REINSTALL (NOLOGOUT)"
-	
- 	gitCmd="git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
-
- 	installCmd="$idfDir/install.sh all"
- 	
-	toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
-
-	handleStart
-	handleSetupEnvironment
-	handleCustomBins
-	handleDownloadInstall
-	handleExport
-	handleAliasEnviron
-	handleEnd
 	exit
 
 elif [ "$arg" == "retool" ]; then # just reinstall bins and export
@@ -285,6 +291,7 @@ elif [ "$arg" == "retool" ]; then # just reinstall bins and export
 	handleCustomBins
 	handleExport
 	handleEnd
+
 	exit
 
 elif [ "$arg" == "interactive" ]; then
@@ -292,8 +299,8 @@ elif [ "$arg" == "interactive" ]; then
 	# something here lmfao
 	exit
 
-else # full install with warn, sleep, and reboot
-	action="REINSTALL (DEFAULT)"
+elif [ "$arg" == "cron" ] # full install with warn, sleep, and reboot
+	action="REINSTALL (CRON)"
 	
  	gitCmd="git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
 
@@ -310,5 +317,26 @@ else # full install with warn, sleep, and reboot
 	handleLogoutAllUsers
 	handleEnd
 	handleReboot
+
+	exit
+
+else # full noninteractive (re)install without logout, reboot, or sleeps
+	action="REINSTALL (DEFAULT)"
+	
+ 	gitCmd="git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
+
+ 	installCmd="$idfDir/install.sh all"
+ 	
+	toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
+
+	handleStart
+	handleSetupEnvironment
+	handleCustomBins
+	handleDownloadInstall
+	handleExport
+	handleAliasEnviron
+	handleEnd
+
 	exit
 fi
+
