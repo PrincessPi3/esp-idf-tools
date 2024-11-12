@@ -1,0 +1,4 @@
+#!/bin/bash
+echo -e "\nErasing flash on ${ESPPORT}\n"
+idf.py erase-flash
+echo -e "\nAll done :3\n"

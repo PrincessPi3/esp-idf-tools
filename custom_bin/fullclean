@@ -1,18 +1,29 @@
+#!/bin/bash
+echo -e "\nCleaning up Fully\n"
+
+echo -e "\nRunning fullclean\n"
+
 idf.py fullclean
 
 if [ -d build ]; then
-	echo "\nDeleting build dir\n"
+	echo -e "\nDeleting build dir\n"
 	rm -rf build
+else
+	echo -e "\nNo build dir, skipping delete\n"
 fi
 
 if [ -f sdkconfig ]; then
-	echo "\nDeleting sdkconfig\n"
+	echo -e "\nDeleting sdkconfig\n"
 	rm sdkconfig
+else
+	echo -e "\nNo sdkconfig, skipping delete\n"
 fi
 
 if [ -f sdkconfig.old ]; then
 	echo "\nDeleting sdkconfig.old\n"
 	rm sdkconfig.old
+else
+	echo -e "\nNo sdkconfig.old, skipping delete\n"
 fi
 
 echo "\nAll done :3\n"

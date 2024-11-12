@@ -2,3 +2,5 @@ test-scratch.sh
 notes.txt
 *.bak
 next-*
+old
+.vscode

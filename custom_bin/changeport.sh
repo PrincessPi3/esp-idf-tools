@@ -24,4 +24,4 @@ subprocess ret
 export ESPPORT=$ret
 
 echo "\nESPPORT set to ${ESPPORT}\n"
-echo "\nall done :3\n"
+echo "\nAll done :3\n"

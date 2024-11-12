@@ -12,4 +12,4 @@ subprocess ret
 export ESPTARGET="${ret}"
 
 echo "\nESPTARGET set to ${ESPTARGET}\n"
-echo "\nall done :3\n"
+echo "\nAll done :3\n"

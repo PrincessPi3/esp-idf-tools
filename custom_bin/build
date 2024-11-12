@@ -1,3 +1,4 @@
-echo "\nBuilding\n"
+#!/bin/bash
+echo -e "\nBuilding\n"
 idf.py build
-echo "\nAll done :3\n"
+echo -e "\nAll done :3\n"

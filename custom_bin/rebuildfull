@@ -1,20 +1,31 @@
 #!/bin/bash
+echo -e "\nFully Rebuildan~\n"
+
+echo -e "\nRunning fullclean\n"
 
 idf.py fullclean
+
+echo -e "\nRunning manual delete tasks\n"
 
 if [ -f build ]; then
 	echo -e "\nDeleting build dir\n"
 	rm -rf build
+else
+	echo -e "\nNo build dir, skipping delete\n"
 fi
 
 if [ -f sdkconfig ]; then
 	echo -e "\nDeleting sdkconfig\n"
 	rm sdkconfig
+else
+	echo -e "\nNo sdkconfig, skipping delete\n"
 fi
 
 if [ -f sdkconfig.old ]; then
 	echo -e "\nDeleting sdkconfig.old\n"
 	rm sdkconfig.old
+else
+	echo -e "\nNo sdkconfig.old, skipping delete\n"
 fi
 
 echo -e "\nSetting up project for $ESPTARGET\n"

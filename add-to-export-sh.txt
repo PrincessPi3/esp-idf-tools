@@ -24,8 +24,6 @@ ttyselect=$devarr[(($tty+1))]
 echo "Set esp target (esp32, esp32s3, esp32c6, esp8266, etc)"
 read esp
 
-# ESPPORT="${ttyselect}"
-
 echo "Setting environment variables"
 echo "Adding Custom bins to PATH"
 export PATH="${HOME}/esp/.custom_bin:${PATH}"
@@ -42,10 +40,12 @@ echo "Setting alias"
 alias changeport="source ${binDir}/changeport.sh"
 alias changebaud="source ${binDir}/changebaud.sh"
 alias changeesp="source ${binDir}/changeesp.sh"
-alias flash="idf.py flash"
 alias monitor="idf.py monitor"
-alias erase-flash="idf.py erase-flash"
-alias save-defconfig="cp sdkconfig.defaults sdkconfig.defaults.bak; idf.py save-defconfig"
+alias flashmonitor="idf.py flash monitor"
+alias menuconfig="idf.py menuconfig"
+alias step-flash-monitor="idf.py flash; idf.py monitor"
+alias clean-build="idf.py clean; idf.py build"
+alias fullclean-build="idf.py fullclean; idf.py build"
 
 echo "Changing dir to ${HOME}/esp"
 cd "${HOME}/esp"
