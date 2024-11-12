@@ -27,6 +27,7 @@ runningDir="$( cd "$( dirname "$0" )" && pwd )"
 customBinFrom=$runningDir/custom_bin
 # cronVers=55-dev.3 # version of this script
 scriptVers=$(cat $runningDir/version.txt) # make sure version.txt does NOT have newline
+
 arg=$1
 
 function returnStatus() {
@@ -41,7 +42,9 @@ function writeToLog() {
 }
 
 function sleepHold() {
-	sleepSecs=$((sleepMins*60)) # calculated seconds of warning to wait for user to log out
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Handling sleep hold (function ran)"
+
+	sleepSecs=$(($sleepMins*60)) # calculated seconds of warning to wait for user to log out
 
 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sleeping ${sleepMins} minutes"
 	sleep $sleepSecs
@@ -200,8 +203,7 @@ function handleEnd() {
 # handleCustomBins
 # handleDownloadInstall
 # handleExport
-# handleWarn
-# sleepHold
+# handleLogoutAllUsers
 # handleEnd
 # handleReboot
 # exit
@@ -236,6 +238,8 @@ elif [ "$arg" == "nologout" ]; then
  	
 	toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
 
+	sleepMins=0
+
 	handleStart
 	handleSetupEnvironment
 	handleCustomBins
@@ -246,6 +250,8 @@ elif [ "$arg" == "nologout" ]; then
 
 elif [ "$arg" == "retool" ]; then
 	action="RETOOL"
+
+	sleepMins=0
 
 	handleStart
 	handleCustomBins
@@ -261,6 +267,8 @@ else # full install with warn, sleep, and reboot
  	installCmd="$idfDir/install.sh all"
  	
 	toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
+
+	sleepMins=0
 
 	handleStart
 	handleLogoutAllUsers
