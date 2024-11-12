@@ -1,5 +1,5 @@
 #!/bin/bash
-startTime=$(date '+%s')
+set -e # for testan, die on error
 
 # testing:
 # 	bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh test
@@ -14,227 +14,438 @@ startTime=$(date '+%s')
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
 myUser=princesspi
-arg=$1
-
 gitJobs=5
 installDir=/home/$myUser/esp
 log=$installDir/install.log
 versionData=$installDir/version-data.txt
 gitBranch=master
-runningDir="$( cd "$( dirname "$0" )" && pwd )"
 idfDir=$installDir/esp-idf
 espressifLocation=$HOME/.espressif
 customBinLocation=$installDir/.custom_bin
+runningDir="$( cd "$( dirname "$0" )" && pwd )"
 customBinFrom=$runningDir/custom_bin
 # cronVers=55-dev.3 # version of this script
-scriptVers=$(cat $runningDir/version.txt) # make sure versiion.txt does NOT have newline
+scriptVers=$(cat $runningDir/version.txt) # make sure version.txt does NOT have newline
+arg=$1
 
-function return_status() {
+function returnStatus() {
 	strii="\treturn status: ${?}"
 	echo -e "$strii\n"
 	echo -e "$strii\n" >> $log
 }
 
-function write_to_log() {
+function writeToLog() {
 	echo -e "$1"
 	echo -e "$1" >> $log
 }
+
+function sleepHold() {
+	sleepSecs=$((sleepMins*60)) # calculated seconds of warning to wait for user to log out
+
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sleeping ${sleepMins} minutes"
+	sleep $sleepSecs
+	returnStatus
+}
+
+function handleCustomBins() {
+	if [ -d $customBinLocation ]; then
+		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): deleting ${customBinLocation}"
+		rm -rf $customBinLocation
+		returnStatus
+	fi
+
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): copying scripts from ${customBinFrom} to ${customBinLocation}"
+	cp -r $customBinFrom $customBinLocation
+	returnStatus
+
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): making scripts executable at ${customBinLocation}"
+	chmod -R +x $customBinLocation
+	returnStatus
+}
+
+function handleExport() {
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): backing up ${idfDir}/export.sh to ${idfDir}/export.sh.bak"
+	cp $idfDir/export.sh $idfDir/export.sh.bak
+	returnStatus
+	
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): editing ${idfDir}/export.sh"
+	sed -i 's/return 0/# return 0/g' $idfDir/export.sh
+	returnStatus
+	
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): adding ${runningDir}/add-to-export-sh.txt to ${idfDir}/export.sh"
+	cat $runningDir/add-to-export-sh.txt >> $idfDir/export.sh
+	returnStatus
+}
+
+function handleSetupEnvironment() {
+	if ! [ -d $installDir ]; then
+		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): creating ${installDir}"
+		mkdir $installDir
+		returnStatus
+	fi
+
+	if [ -d $idfDir ]; then
+		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): deleting ${idfDir}"
+		rm -rf $idfDir
+		returnStatus
+	fi
+
+	if [ -d $espressifLocation ]; then
+		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): deleting ${espressifLocation}"
+		rm -rf "${espressifLocation}"
+		returnStatus
+	fi
+}
+
+function handleDownloadInstall() {
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): cloning git branch ${gitBranch} with ${gitJobs} jobs to ${idfDir}"
+	eval "$gitCmd"
+	returnStatus
+
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installing with ${idfDir}/install.sh all"
+	eval "$installCmd"
+	returnStatus
+
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installing tools with python ${idfDir}/tools/idf_tools.py install all"
+	eval "$toolsInstallCmd"
+	returnStatus
+
+	# check up on if dis be workan
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): getting the commit hash"
+	commitHash=$(git -C $idfDir rev-parse HEAD)
+	returnStatus
+
+	gitDataLog="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installed esp-idf from commit $commitHash from branch $gitBranch using $scriptVers"
+	writeToLog "$gitDataLog"
+	echo -e "$gitDataLog" >> $versionData
+	returnStatus
+}
+
+handleReboot() {
+	rebootMsg="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): rebooting in $sleepMins minutes. save and log out"
+	writeToLog "$rebootMsg"
+	# warn_all_users "$rebootMsg"
+	echo "$rebootMsg" | sudo write "$myUser"
+	returnStatus
+}
+
+function handleWarn() {
+	warningString="WARNING:\n\tReinstalling esp-idf in ${sleepMins} minutes! You will be force logged out in ${sleepMins} minutes! Save and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`\n\t$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')"
+	writeToLog $warningString
+
+	sleepHold
+
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Force logging out ${myUser}"
+
+	echo -e "$warningString" | sudo write "$myUser"
+	returnStatus
+}
+
+function handleLogoutAllUsers() {
+	handleWarn
+
+	# logout all users
+	who | sudo awk '$1 !~ /root/{ cmd="/usr/bin/loginctl terminate-user " $1; system(cmd)}'
+	returnStatus
+}
+
+function handleStart() {
+	startTime=$(date '+%s')
+
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tmyUser: $myUser\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tsleepSecs: $sleepSecs\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd"
+
+	writeToLog " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new ${action} ==="
+	writeToLog "Version: ${scriptVers}"
+}
+
+function handleEmptyLogs() {
+ 	rm -f $log
+ 	touch $log
+ 
+ 	rm -f $versionData
+ 	touch $versionData
+}
+
+function handleEnd() {
+	endTime=$(date '+%s')
+	timeElapsed=$(($endTime-$startTime))
+
+	writeToLog "reinstall completed in $timeElapsed seconds"
+	writeToLog " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): finished ===\n\n"
+}
+
+# full order:
+# handleStart
+# handleWarn
+# sleepHold
+# handleLogoutAllUsers
+# handleSetupEnvironment
+# handleCustomBins
+# handleDownloadInstall
+# handleExport
+# handleWarn
+# sleepHold
+# handleEnd
+# handleReboot
+# exit
+
+
+if [ "$arg" == "test" ]; then
+ 	action="TEST"
+ 
+ 	gitCmd="echo git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
+
+ 	installCmd="echo $idfDir/install.sh all"
+ 	
+	toolsInstallCmd="echo python $idfDir/tools/idf_tools.py install all"
+
+	sleepMins=0
+
+	handleStart
+	handleLogoutAllUsers
+	handleCustomBins
+	handleDownloadInstall
+	handleExport
+	handleEnd
+	exit
+
+elif [ "$arg" == "nologout" ]; then
+	action="REINSTALL (NOLOGOUT)"
+	
+ 	gitCmd="git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
+
+ 	installCmd="$idfDir/install.sh all"
+ 	
+	toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
+
+	handleStart
+	handleSetupEnvironment
+	handleCustomBins
+	handleDownloadInstall
+	handleExport
+	handleEnd
+	exit
+
+elif [ "$arg" == "retool" ]; then
+	action="RETOOL"
+
+	handleStart
+	handleCustomBins
+	handleExport
+	handleEnd
+	exit
+
+else # full install with warn, sleep, and reboot
+	action="REINSTALL (DEFAULT)"
+	
+ 	gitCmd="git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
+
+ 	installCmd="$idfDir/install.sh all"
+ 	
+	toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
+
+	handleStart
+	handleLogoutAllUsers
+	handleSetupEnvironment
+	handleCustomBins
+	handleDownloadInstall
+	handleExport
+	handleLogoutAllUsers
+	handleEnd
+	handleReboot
+	exit
+fi
+
+# startTime=$(date '+%s')
+
+# 	if [ "$arg" == "test" ]; then
+# 		# rm -f $log
+# 		# touch $log
+# 		# 
+# 		# rm -f $versionData
+# 		# touch $versionData
+# 	else
+# 		handleReboot
+# 	fi
+# }
 
 # function warn_all_users() {
 # 	who | sudo awk '$1 !~ /root/{ cmd="echo '$1' | /usr/bin/write " $1; system(cmd)}'
 #}
 
-if [ "$arg" == "test" ]; then
-	# write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): TEST mode"
-	action="TEST"
+# 	# writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): NOLOGOUT mode"
+# 	action="REINSTALL (NOLOGOUT)"
+# 
+# 	sleepMins=0 # minutes of warning to wait for user to log out
+# 
+# 	gitCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
+# 	installCmd="$idfDir/install.sh all"
+# 	toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
+# 
+# 	function logout_all_users() {
+# 		return 0;
+# 	}
+# elif [ "$arg" == "retool" ]; then
+# 	action="RETOOL"
+# 
+# 	writeToLog " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new ${action} ==="
+# 	writeToLog "Version: ${scriptVers}"
+# 
+# 	writeToLog "deleting old export.sh"
+# 	rm $idfDir/export.sh
+# 	returnStatus
+# 
+# 	writeToLog "Replacing original export.sh from export.sh.bak"
+# 	cp $idfDir/export.sh.bak $idfDir/export.sh
+# 	returnStatus
+# 
+# 	writeToLog "Editing ${idfDir}/export.sh"
+# 	sed -i 's/return 0/# return 0/g' $idfDir/export.sh
+# 	returnStatus
+# 
+# 	writeToLog "Appending new add-to-export-sh.txt to export.sh"
+# 	cat $runningDir/add-to-export-sh.txt >> $idfDir/export.sh
+# 	returnStatus
+# 
+# 	handleCustomBins
+# 
+# 	# writeToLog "Deleting .custom_bin dir"
+# 	# rm -rf $customBinLocation
+# 	# returnStatus
+# # 
+# 	# writeToLog "Coppying new custom_bin and making them executable"
+# 	# cp -r $customBinFrom $customBinLocation
+# 	# chmod +x $customBinLocation/*
+# 	# returnStatus
+# 
+# 	exit
+# else
+# 	# writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): LIVE mode"
+# 
+# 	sleepMins=3 # minutes of warning to wait for user to log out
+# 
+# 	gitCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
+# 	installCmd="$idfDir/install.sh all"
+# 	toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
+# 
+# 	function logout_all_users() {
+# 		who | sudo awk '$1 !~ /root/{ cmd="/usr/bin/loginctl terminate-user " $1; system(cmd)}'
+# 		return $?
+# 	}
+# fi
+# 
+# writeToLog " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new ${action} ==="
+# writeToLog "Version: ${scriptVers}"
 
-	gitCmd="git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
-	installCmd="echo $idfDir/install.sh all"
-	toolsInstallCmd="echo python $idfDir/tools/idf_tools.py install all"
-	sleepMins=0
+# sleepSecs=$((sleepMins*60)) # calculated seconds of warning to wait for user to log out
 
-	rm -f $log
-	rm -f $versionData
-	
-	function logout_all_users() {
-		return 0;
-	}
-elif [ "$arg" == "nologout" ]; then
-	# write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): NOLOGOUT mode"
-	action="REINSTALL (NOLOGOUT)"
+# warningString="\nWARNING:\n\tReinstalling esp-idf in ${sleepMins} minutes! You will be force logged out in ${sleepMins} minutes! Save and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`\n\t$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')"
 
-	sleepMins=0 # minutes of warning to wait for user to log out
+# writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sending warning message to $myUser"
+# writeToLog "$warningString"
+# echo -e "$warningString" | sudo write "$myUser"
+# # warn_all_users "$warningString"
+# returnStatus
 
-	gitCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
-	installCmd="$idfDir/install.sh all"
-	toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
+# sleepHold
 
-	function logout_all_users() {
-		return 0;
-	}
-elif [ "$arg" == "retool" ]; then
-	action="RETOOL"
+# writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): force logging out all users"
+# logout_all_users
+# returnStatus
 
-	write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new ${action} ==="
-	write_to_log "Version: ${scriptVers}"
+# writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tmyUser: $myUser\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tsleepSecs: $sleepSecs\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd"
+# returnStatus
 
-	write_to_log "deleting old export.sh"
-	rm $idfDir/export.sh
-	return_status
+# if ! [ -d $installDir ]; then
+# 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): creating ${installDir}"
+# 	mkdir $installDir
+# 	returnStatus
+# fi
+# 
+# if [ -d $idfDir ]; then
+# 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): deleting ${idfDir}"
+# 	rm -rf $idfDir
+# 	returnStatus
+# fi
+# 
+# if [ -d $espressifLocation ]; then
+# 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): deleting ${espressifLocation}"
+# 	rm -rf "${espressifLocation}"
+# 	returnStatus
+# fi
 
-	write_to_log "Replacing original export.sh from export.sh.bak"
-	cp $idfDir/export.sh.bak $idfDir/export.sh
-	return_status
+# if [ -d $customBinLocation ]; then
+# 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): deleting ${customBinLocation}"
+# 	rm -rf $customBinLocation
+# 	returnStatus
+# fi
+# 
+# writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): copying scripts from ${customBinFrom} to ${customBinLocation}"
+# cp -r $customBinFrom $customBinLocation
+# returnStatus
+# 
+# writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): making scripts executable at ${customBinLocation}"
+# chmod -R +x $customBinLocation
+# returnStatus
 
-	write_to_log "Editing ${idfDir}/export.sh"
-	sed -i 's/return 0/# return 0/g' $idfDir/export.sh
-	return_status
+# writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): cloning git branch ${gitBranch} with ${gitJobs} jobs to ${idfDir}"
+# eval "$gitCmd"
+# returnStatus
+# 
+# writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installing with ${idfDir}/install.sh all"
+# eval "$installCmd"
+# returnStatus
+# 
+# writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installing tools with python ${idfDir}/tools/idf_tools.py install all"
+# eval "$toolsInstallCmd"
+# returnStatus
 
-	write_to_log "Appending new add-to-export-sh.txt to export.sh"
-	cat $runningDir/add-to-export-sh.txt >> $idfDir/export.sh
-	return_status
+# writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): backing up ${idfDir}/export.sh to ${idfDir}/export.sh.bak"
+# cp $idfDir/export.sh $idfDir/export.sh.bak
+# returnStatus
+# 
+# writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): editing ${idfDir}/export.sh"
+# sed -i 's/return 0/# return 0/g' $idfDir/export.sh
+# returnStatus
+# 
+# writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): adding ${runningDir}/add-to-export-sh.txt to ${idfDir}/export.sh"
+# cat $runningDir/add-to-export-sh.txt >> $idfDir/export.sh
+# returnStatus
 
-	write_to_log "Deleting .custom_bin dir"
-	rm -rf $customBinLocation
-	return_status
+# writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): getting the commit hash"
+# commitHash=$(git -C $idfDir rev-parse HEAD)
+# returnStatus
 
-	write_to_log "Coppying new custom_bin and making them executable"
-	cp -r $customBinFrom $customBinLocation
-	chmod +x $customBinLocation/*
-	return_status
+# gitDataLog="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installed esp-idf from commit $commitHash from branch $gitBranch using $scriptVers"
+# writeToLog "$gitDataLog"
+# echo -e "$gitDataLog" >> $versionData
+# returnStatus
 
-	exit
-else
-	# write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): LIVE mode"
+# rebootMsg="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): rebooting in $sleepMins minutes. save and log out"
+# writeToLog "$rebootMsg"
+# # warn_all_users "$rebootMsg"
+# echo "$rebootMsg" | sudo write "$myUser"
+# returnStatus
 
-	sleepMins=3 # minutes of warning to wait for user to log out
+# sleepHold
 
-	gitCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
-	installCmd="$idfDir/install.sh all"
-	toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
+#writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): force logging out all users"
+# logout_all_users
+# returnStatus
 
-	function logout_all_users() {
-		who | sudo awk '$1 !~ /root/{ cmd="/usr/bin/loginctl terminate-user " $1; system(cmd)}'
-		return $?
-	}
-fi
+# endTime=$(date '+%s')
+# timeElapsed=$(($endTime-$startTime))
+# writeToLog "reinstall completed in $timeElapsed seconds"
+# writeToLog " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): finished ===\n\n"
 
-write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new ${action} ==="
-write_to_log "Version: ${scriptVers}"
-
-sleepSecs=$((sleepMins*60)) # calculated seconds of warning to wait for user to log out
-
-warningString="\nWARNING:\n\tReinstalling esp-idf in ${sleepMins} minutes! You will be force logged out in ${sleepMins} minutes! Save and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall cron-reinstall-esp-idf.sh\`\n\t$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')"
-
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sending warning message to $myUser"
-write_to_log "$warningString"
-echo -e "$warningString" | sudo write "$myUser"
-# warn_all_users "$warningString"
-return_status
-
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sleeping ${sleepMins} minutes"
-sleep $sleepSecs
-return_status
-
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): force logging out all users"
-logout_all_users
-return_status
-
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tmyUser: $myUser\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tsleepSecs: $sleepSecs\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd"
-return_status
-
-if ! [ -d $installDir ]; then
-	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): creating ${installDir}"
-	mkdir $installDir
-	return_status
-fi
-
-if [ -d $idfDir ]; then
-	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): deleting ${idfDir}"
-	rm -rf $idfDir
-	return_status
-fi
-
-if [ -d $espressifLocation ]; then
-	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): deleting ${espressifLocation}"
-	rm -rf "${espressifLocation}"
-	return_status
-fi
-
-if [ -d $customBinLocation ]; then
-	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): deleting ${customBinLocation}"
-	rm -rf $customBinLocation
-	return_status
-fi
-
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): copying scripts from ${customBinFrom} to ${customBinLocation}"
-cp -r $customBinFrom $customBinLocation
-return_status
-
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): making scripts executable at ${customBinLocation}"
-chmod -R +x $customBinLocation
-return_status
-
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): cloning git branch ${gitBranch} with ${gitJobs} jobs to ${idfDir}"
-eval "$gitCmd"
-return_status
-
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installing with ${idfDir}/install.sh all"
-eval "$installCmd"
-return_status
-
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installing tools with python ${idfDir}/tools/idf_tools.py install all"
-eval "$toolsInstallCmd"
-return_status
-
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): backing up ${idfDir}/export.sh to ${idfDir}/export.sh.bak"
-cp $idfDir/export.sh $idfDir/export.sh.bak
-return_status
-
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): editing ${idfDir}/export.sh"
-sed -i 's/return 0/# return 0/g' $idfDir/export.sh
-return_status
-
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): adding ${runningDir}/add-to-export-sh.txt to ${idfDir}/export.sh"
-cat $runningDir/add-to-export-sh.txt >> $idfDir/export.sh
-return_status
-
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): getting the commit hash"
-commitHash=$(git -C $idfDir rev-parse HEAD)
-return_status
-
-gitDataLog="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installed esp-idf from commit $commitHash from branch $gitBranch using $scriptVers"
-write_to_log "$gitDataLog"
-echo -e "$gitDataLog" >> $versionData
-return_status
-
-rebootMsg="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): rebooting in $sleepMins minutes. save and log out"
-write_to_log "$rebootMsg"
-# warn_all_users "$rebootMsg"
-echo "$rebootMsg" | sudo write "$myUser"
-return_status
-
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sleeping ${sleepMins} minutes"
-sleep $sleepSecs
-return_status
-
-write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): force logging out all users"
-logout_all_users
-return_status
-
-endTime=$(date '+%s')
-timeElapsed=$(($endTime-$startTime))
-write_to_log "reinstall completed in $timeElapsed seconds"
-write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): finished ===\n\n"
-
-if [ "$arg" == "test" ]; then
-	echo sudo reboot
-
-	rm -f $log
-	touch $log
-
-	rm -f $versionData
-	touch $versionData
-else
-	sudo reboot
-fi
+# if [ "$arg" == "test" ]; then
+# 	echo sudo reboot
+# 
+# 	rm -f $log
+# 	touch $log
+# 
+# 	rm -f $versionData
+# 	touch $versionData
+# else
+# 	sudo reboot
+# fi
