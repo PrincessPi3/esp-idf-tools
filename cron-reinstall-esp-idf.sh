@@ -229,7 +229,7 @@ function handleStart() {
 		sleepMins="disabled"
 	fi
 
-	if [ -z $ESPIDF_INSTALLDIR ];
+	if [ -z $ESPIDF_INSTALLDIR ]; then
 		installdirEnvvar="not set"
 	else
 		installdirEnvvar=$ESPIDF_INSTALLDIR
