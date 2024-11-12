@@ -89,7 +89,7 @@ function handleCheckInstallPackages() {
 		sudo apt install -y "$installPackagees"
 		returnStatus
 	else
-		writeToLog "No pissing packages found, continuing"
+		writeToLog "No missing packages found, continuing"
 	fi
 }
 
