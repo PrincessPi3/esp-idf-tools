@@ -13,7 +13,7 @@ startTime=$(date '+%s')
 # 	crontab -e
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
-cronVers=55-dev.2 # version of this script
+# cronVers=55-dev.3 # version of this script
 myUser=princesspi
 test=$1
 
@@ -27,6 +27,7 @@ idfDir=$installDir/esp-idf
 espressifLocation=$HOME/.espressif
 customBinLocation=$installDir/.custom_bin
 customBinFrom=$runningDir/custom_bin
+cronVers=$(cat $runningDir/version.txt)
 
 function return_status() {
 	strii="\treturn status: ${?}"

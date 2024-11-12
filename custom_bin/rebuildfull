@@ -5,27 +5,27 @@ echo -e "\nRunning fullclean\n"
 
 idf.py fullclean
 
-echo -e "\nRunning manual delete tasks\n"
+echo -e "\nRunning manual delete tasks:"
 
 if [ -f build ]; then
-	echo -e "\nDeleting build dir\n"
+	echo -e "\tDeleting build dir"
 	rm -rf build
 else
-	echo -e "\nNo build dir, skipping delete\n"
+	echo -e "\tNo build dir, skipping delete"
 fi
 
 if [ -f sdkconfig ]; then
-	echo -e "\nDeleting sdkconfig\n"
+	echo -e "\tDeleting sdkconfig"
 	rm sdkconfig
 else
-	echo -e "\nNo sdkconfig, skipping delete\n"
+	echo -e "\tNo sdkconfig, skipping delete"
 fi
 
 if [ -f sdkconfig.old ]; then
-	echo -e "\nDeleting sdkconfig.old\n"
+	echo -e "\tDeleting sdkconfig.old"
 	rm sdkconfig.old
 else
-	echo -e "\nNo sdkconfig.old, skipping delete\n"
+	echo -e "\tNo sdkconfig.old, skipping delete"
 fi
 
 echo -e "\nSetting up project for $ESPTARGET\n"
@@ -34,15 +34,22 @@ idf.py set-target $ESPTARGET
 echo -e "\nErase flash? y/n"
 read wipe
 if [ "$wipe" == "y" ]; then
+	echo -e "\nExecuting erase-flash\n"
 	idf.py erase-flash
 	echo -e "\nFlash wiped\n"
 fi
 
-idf.py menuconfig
+echo -e "\nRun menuconfig?\n"
+read menuconfig
+if [ "$wipe" == "y" ]; then
+	echo -e "\n\Executing menuconfig"
+	idf.py menuconfig
+fi
 
 echo -e "\nBuild now? y/n"
 read build
 if [ "$build" == "y" ]; then
+	echo -e "\nBuildan~\n"
 	idf.py build
 	echo -e "\nBuild complete\n"
 fi

@@ -26,4 +26,4 @@ else
 	echo -e "\nNo sdkconfig.old, skipping delete\n"
 fi
 
-echo "\nAll done :3\n"
+echo -e "\nAll done :3\n"

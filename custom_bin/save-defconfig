@@ -1,7 +1,7 @@
 #!/bin/bash
 echo -e "\nSaving default config\n"
 
-if [-f ./sdkconfig.defaults ]; then
+if [ -f ./sdkconfig.defaults ]; then
     echo -e "backing up sdkconfig.defaults to sdkconfig.defaults.bak"
     cp sdkconfig.defaults sdkconfig.defaults.bak
 else
