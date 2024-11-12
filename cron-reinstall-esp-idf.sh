@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e # for testan, die on error
 
+# redo these notes:
 # testing:
 # 	bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh test
 # 	tail -f -n 50 $HOME/esp/install.log
