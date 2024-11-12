@@ -230,8 +230,10 @@ function handleStart() {
 		installdirEnvvar=$ESPIDF_INSTALLDIR
 	fi
 
-	writeToLog "\n === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new ${action} ==="
-	writeToLog "\tVersion: ${scriptVers}\n"
+	if [ "$arg" != "interactive" -a "$arg" != "i" ]; then
+		writeToLog "\n === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new ${action} ==="
+		writeToLog "\tVersion: ${scriptVers}\n"
+	fi
 
 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tuser: $USER\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd\n\trcFile: $rcFile\n\t(envvar) ESPIDF_INSTALLDIR: $installdirEnvvar"
 
@@ -324,6 +326,9 @@ elif [ "$arg" == "interactive" -o "$arg" == "i" ]; then
 		gitJobs=$readGitJobs
 	fi
 
+	writeToLog "\n === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new ${action} ==="
+	writeToLog "\tVersion: ${scriptVers}\n"
+
 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Interactive vars set:\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trcFile: $rcFile\n\tgitJobs: $gitJobs"
 
 	handleStart
@@ -338,6 +343,9 @@ elif [ "$arg" == "interactive" -o "$arg" == "i" ]; then
 
 elif [ "$arg" == "cron" -o "$arg" == "c" ]; then # full install with warn, sleep, and reboot
 	action="REINSTALL (CRON)"
+
+	sleepMins=1
+	# sleepMins=3
 
 	handleStart
 	handleLogoutAllUsers

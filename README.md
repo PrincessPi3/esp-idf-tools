@@ -76,9 +76,9 @@ cron:
 	    crontab -e
 	    0 8 * * * bash $HOME/esp/esp-install-custom/reinstall-esp-idf.sh cron
 
-manually wipe logs: 
-	rm $ESPIDF_INSTALLDIR/install.log; rm $ESPIDF_INSTALLDIR/version-data.txt; touch $ESPIDF_INSTALLDIR/install.log; touch $ESPIDF_INSTALLDIR/version-data.txt;
-
 monitor log file during install:
-	tail -n 75 $ESPIDF_INSTALLDIR/install.log;
+	tail -n 75 -f $ESPIDF_INSTALLDIR/install.log;
+
+view both logs from beginning:
+	less $ESPIDF_INSTALLDIR/install.log; less $ESPIDF_INSTALLDIR/version-data.txt;
 ```
