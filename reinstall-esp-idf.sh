@@ -281,7 +281,18 @@ function handleLogoutAllUsers() {
 	fi
 }
 
+function handleCheckEspIdf() {
+	if [ ! -z $IDF_PYTHON_ENV_PATH ]; then
+		writeToLog "FAIL: esp-idf environment varibles found!\nPelase run from a fresh termnal that has not had get_idf ran! Exiting"
+		exit
+	else
+		writeToLog "Environment correct: no esp-idf evnironment variables found, proceeding"
+	fi
+}
+
 function handleStart() {
+	handleCheckEspIdf
+
 	if [ -z $sleepMins ]; then 
 		sleepMins="disabled"
 	fi
