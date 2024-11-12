@@ -14,7 +14,7 @@ startTime=$(date '+%s')
 # 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh
 
 myUser=princesspi
-test=$1
+arg=$1
 
 gitJobs=5
 installDir=/home/$myUser/esp
@@ -44,11 +44,10 @@ function write_to_log() {
 # 	who | sudo awk '$1 !~ /root/{ cmd="echo '$1' | /usr/bin/write " $1; system(cmd)}'
 #}
 
-write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new reinstall ==="
-write_to_log "Version: ${scriptVers}"
+if [ "$arg" == "test" ]; then
+	# write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): TEST mode"
+	action="TEST"
 
-if [ "$test" == "test" ]; then
-	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): TEST mode"
 	gitCmd="git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
 	installCmd="echo $idfDir/install.sh all"
 	toolsInstallCmd="echo python $idfDir/tools/idf_tools.py install all"
@@ -60,8 +59,9 @@ if [ "$test" == "test" ]; then
 	function logout_all_users() {
 		return 0;
 	}
-elif [ "$test" == "nologout" ]; then
-	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): NOLOGOUT mode"
+elif [ "$arg" == "nologout" ]; then
+	# write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): NOLOGOUT mode"
+	action="REINSTALL (NOLOGOUT)"
 
 	sleepMins=0 # minutes of warning to wait for user to log out
 
@@ -72,8 +72,31 @@ elif [ "$test" == "nologout" ]; then
 	function logout_all_users() {
 		return 0;
 	}
+elif [ "$arg" == "retool" ]; then
+	action="RETOOL"
+
+	write_to_log "deleting old export.sh"
+	rm $idfDir/export.sh
+
+	write_to_log "Replacing original export.sh from export.sh.bak"
+	cp $idfDir/export.sh.bak $idfDir/export.sh
+
+	write_to_log "Appending new add-to-export-sh.txt to export.sh"
+	cat $runningDir/add-to-export-sh.txt >> $idfDir/export.sh
+
+	write_to_log "Deleting .custom_bin dir"
+	rm -rf $customBinLocation
+
+	write_to_log "Coppying new custom_bin and making them executable"
+	cp -r $customBinFrom $customBinLocation
+	chmod +x $customBinLocation/*
+
+	write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new ${action} ==="
+	write_to_log "Version: ${scriptVers}"
+
+	exit
 else
-	write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): LIVE mode"
+	# write_to_log "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): LIVE mode"
 
 	sleepMins=3 # minutes of warning to wait for user to log out
 
@@ -86,6 +109,9 @@ else
 		return $?
 	}
 fi
+
+write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new ${action} ==="
+write_to_log "Version: ${scriptVers}"
 
 sleepSecs=$((sleepMins*60)) # calculated seconds of warning to wait for user to log out
 
@@ -192,7 +218,7 @@ timeElapsed=$(($endTime-$startTime))
 write_to_log "reinstall completed in $timeElapsed seconds"
 write_to_log " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): finished ===\n\n"
 
-if [ "$test" == "test" ]; then
+if [ "$arg" == "test" ]; then
 	echo sudo reboot
 
 	rm -f $log
