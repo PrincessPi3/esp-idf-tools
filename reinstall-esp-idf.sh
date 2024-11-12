@@ -53,73 +53,81 @@ function returnStatus() {
 }
 
 function writeToLog() {
-	echo -e "$1"
-	echo -e "$1" >> $log
+	echo -e "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): $1"
+	echo -e "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): $1" >> $log
 }
 
 function handleSleep() {
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Handling sleep hold (function ran)"
+	writeToLog "Handling sleep hold (function ran)"
 
 	sleepSecs=$(($sleepMins*60)) # calculated seconds of warning to wait for user to log out
 
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): sleeping ${sleepMins} minutes"
+	writeToLog "sleeping ${sleepMins} minutes"
 	sleep $sleepSecs
 	returnStatus
 }
 
 function handleCustomBins() {
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Handling custon bins (function ran)"
+	writeToLog "Handling custon bins (function ran)"
 
 	if [ -d $customBinLocation ]; then
-		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): deleting ${customBinLocation}"
+		writeToLog "deleting ${customBinLocation}"
 		rm -rf $customBinLocation
 		returnStatus
 	else
-		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): ${customBinLocation} not found, skipping delete"
+		writeToLog "${customBinLocation} not found, skipping delete"
 	fi
 
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): copying scripts from ${customBinFrom} to ${customBinLocation}"
+	writeToLog "copying scripts from ${customBinFrom} to ${customBinLocation}"
 	cp -r $customBinFrom $customBinLocation
 	returnStatus
 
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): making scripts executable at ${customBinLocation}"
+	writeToLog "making scripts executable at ${customBinLocation}"
 	chmod -R +x $customBinLocation
 	returnStatus
 }
 
 function handleExport() {
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Handling export.sh (function ran)"
+	writeToLog "Handling export.sh (function ran)"
 
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): backing up ${idfDir}/export.sh to ${idfDir}/export.sh.bak"
+	writeToLog "backing up ${idfDir}/export.sh to ${idfDir}/export.sh.bak"
 	cp $idfDir/export.sh $idfDir/export.sh.bakno
 	returnStatus
 	
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): editing ${idfDir}/export.sh"
+	writeToLog "editing ${idfDir}/export.sh"
 	sed -i 's/return 0/# return 0/g' $idfDir/export.sh
 	returnStatus
 	
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): adding ${runningDir}/add-to-export-sh.txt to ${idfDir}/export.sh"
+	writeToLog "adding ${runningDir}/add-to-export-sh.txt to ${idfDir}/export.sh"
 	cat $runningDir/add-to-export-sh.txt >> $idfDir/export.sh
+	returnStatus
+
+	writeToLog "editing $idfDir/export.sh with version information"
+	sed -i "s/versionTAG/${versionData}/g" $idfDir/export.sh
+	returnStatus
+
+	writeToLog "editing $idfDir/export.sh with install date information"
+	sed -i "s/versionTAG/$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')/g" $idfDir/export.sh
 	returnStatus
 }
 
 function handleSetupEnvironment() {
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Handling setup environment (function ran)"
+	writeToLog "Handling setup environment (function ran)"
 
 	if ! [ -d $installDir ]; then
-		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): creating ${installDir}"
+		writeToLog "creating ${installDir}"
 		mkdir $installDir
 		returnStatus
 	fi
 
 	if [ -d $idfDir ]; then
-		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): deleting ${idfDir}"
+		writeToLog "deleting ${idfDir}"
 		rm -rf $idfDir
 		returnStatus
 	fi
 
 	if [ -d $espressifLocation ]; then
-		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): deleting ${espressifLocation}"
+		writeToLog "deleting ${espressifLocation}"
 		rm -rf "${espressifLocation}"
 		returnStatus
 	fi
@@ -127,67 +135,71 @@ function handleSetupEnvironment() {
 
 function handleAliasEnviron() {
 	if ! [ -z $(alias | grep get_idf) ]; then
-		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): get_idf alias not found, appending to ${$rcFile}"
+		writeToLog "get_idf alias not found, appending to ${$rcFile}"
 		echo -e "\nalias get_idf='. ${idfDir}/export.sh'" >> $rcFile
 		returnStatus
 	else
-		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): get_idf alias already installed, skipping"
+		writeToLog "get_idf alias already installed, skipping"
 	fi
 
 	if [ -z $ESPIDF_INSTALLDIR ]; then
-		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): ESPIDF_INSTALLDIR environment variable not found, appending to ${rcFile}" 
+		writeToLog "ESPIDF_INSTALLDIR environment variable not found, appending to ${rcFile}" 
 		echo -e "export ESPIDF_INSTALLDIR=\"${installDir}\"\n" >> $rcFile
 		returnStatus
 	else
-		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): ESPIDF_INSTALLDIR environment variable already installed, skipping"
+		writeToLog "ESPIDF_INSTALLDIR environment variable already installed, skipping"
 	fi
 }
 
 function handleDownloadInstall() {
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Handling download and install (function ran)"
+	writeToLog "Handling download and install (function ran)"
 
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): cloning git branch ${gitBranch} with ${gitJobs} jobs to ${idfDir}"
+	writeToLog "cloning git branch ${gitBranch} with ${gitJobs} jobs to ${idfDir}"
 	eval "$gitCmd"
 	returnStatus
 
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installing with ${idfDir}/install.sh all"
+	writeToLog "installing with ${idfDir}/install.sh all"
 	eval "$installCmd"
 	returnStatus
 
 	# silly python envvar workans testant
 	if [ -z $IDF_PYTHON_ENV_PATH ]; then
-		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): IDF_PYTHON_ENV_PATH not set"
+		writeToLog "IDF_PYTHON_ENV_PATH not set"
 		return
 	else
-		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): IDF_PYTHON_ENV_PATH: $IDF_PYTHON_ENV_PATH"
+		writeToLog "IDF_PYTHON_ENV_PATH: $IDF_PYTHON_ENV_PATH"
 		ls -lah $IDF_PYTHON_ENV_PATH/bin/python
 		returnStatus
 	fi
 
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installing tools with python ${idfDir}/tools/idf_tools.py install all"
+	writeToLog "installing tools with python ${idfDir}/tools/idf_tools.py install all"
 	eval "$toolsInstallCmd"
 	returnStatus
 
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): getting the commit hash"
+	writeToLog "getting the commit hash"
 	commitHash=$(git -C $idfDir rev-parse HEAD)
 	returnStatus
 
-	gitDataLog="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): installed esp-idf from commit $commitHash from branch $gitBranch using $scriptVers"
+	writeToLog "editing $idfDir/export.sh with git commit hash data"
+	sed -i "s/commitTagTAG/${commitHash}/g" $idfDir/export.sh
+	returnStatus	
+
+	gitDataLog="installed esp-idf from commit $commitHash from branch $gitBranch using $scriptVers"
 	writeToLog "$gitDataLog"
 	echo -e "$gitDataLog" >> $versionData
 	returnStatus
 }
 
 handleReboot() {
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)') Handling reboot: (function ran)"
+	writeToLog "Handling reboot: (function ran)"
 
 	sudo reboot
 }
 
 handleWarnAllUsers() {
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Warning all users of impending logout (function called)"
+	writeToLog "Warning all users of impending logout (function called)"
 
-	warningString="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'):\nWARNING:\n\tReinstalling esp-idf:\n\tForce logut in ${sleepMins} minutes!!\n\tSave and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall reinstall-esp-idf.sh\`"
+	warningString="\nWARNING:\n\tReinstalling esp-idf:\n\tForce logut in ${sleepMins} minutes!!\n\tSave and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall reinstall-esp-idf.sh\`"
 
 	writeToLog "$warningString"
 
@@ -196,10 +208,10 @@ handleWarnAllUsers() {
 	loggedIn=$(who | awk '{print $1}' | uniq)
 
 	if [ -z $loggedIn ]; then
-		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): no users logged in to warn"
+		writeToLog "no users logged in to warn"
 		return
 	else
-		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Warning all logged in users:" # make sure dis workan
+		writeToLog "Warning all logged in users:" # make sure dis workan
 
 		echo $loggedIn | while read line; do
 			writeToLog "\tWarning $line"
@@ -211,17 +223,17 @@ handleWarnAllUsers() {
 }
 
 function handleLogoutAllUsers() {
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Handling user logout (function ran)"
+	writeToLog "Handling user logout (function ran)"
 
 	handleWarnAllUsers
 
 	loggedIn=$(who | awk '{print $1}' | uniq)
 
 	if [ -z $loggedIn ]; then
-		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): no logged in users to log out"
+		writeToLog "no logged in users to log out"
 		return
 	else
-		writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): logging out all logged in users:"
+		writeToLog "logging out all logged in users:"
 		echo $loggedIn | while read line; do
 		writeToLog "\tlogging out $line"
 			sudo loginctl terminate-user $line
@@ -243,15 +255,15 @@ function handleStart() {
 	fi
 
 	if [ "$arg" != "interactive" -a "$arg" != "i" ]; then
-		writeToLog "\n === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new ${action} ==="
+		writeToLog "\n === new ${action} ==="
 		writeToLog "\tVersion: ${scriptVers}\n"
 	fi
 
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tuser: $USER\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd\n\trcFile: $rcFile\n\t(envvar) ESPIDF_INSTALLDIR: $installdirEnvvar"
+	writeToLog "\nvars:\n\tuser: $USER\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd\n\trcFile: $rcFile\n\t(envvar) ESPIDF_INSTALLDIR: $installdirEnvvar"
 }
 
 function handleEmptyLogs() {
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Emptying and touching logs (function ran)"
+	writeToLog "Emptying and touching logs (function ran)"
 
  	rm -f $log
  	touch $log
@@ -267,7 +279,7 @@ function handleEnd() {
 	echo -e "\nesp-idf re/installed! run \`source $rcFile\` and then \`get_idf\`\n to go\n\nAll done :3\n\n"
 
 	writeToLog "reinstall completed in $timeElapsed seconds"
-	writeToLog " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): finished ===\n\n"
+	writeToLog " === finished ===\n\n"
 }
 
 if [ "$arg" == "--help" -o "$arg" == "help" -o "$arg" == "-h" -o "$arg" == "h" ]; then
@@ -336,10 +348,10 @@ elif [ "$arg" == "interactive" -o "$arg" == "i" ]; then
 		gitJobs=$readGitJobs
 	fi
 
-	writeToLog "\n === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new ${action} ==="
+	writeToLog "\n === new ${action} ==="
 	writeToLog "\tVersion: ${scriptVers}\n"
 
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Interactive vars set:\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trcFile: $rcFile\n\tgitJobs: $gitJobs"
+	writeToLog "Interactive vars set:\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trcFile: $rcFile\n\tgitJobs: $gitJobs"
 
 	handleStart
 	handleSetupEnvironment

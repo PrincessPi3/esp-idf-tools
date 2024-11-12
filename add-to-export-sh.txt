@@ -5,8 +5,11 @@
 # begin esp-idf stuffss I made ################
 ###############################################
 
-
 echo "\n=======CUSTOM=======\n"
+
+versionData="versionTAG"
+commitHash="commitTagTAG"
+installDate="installDateTAG"
 
 if [ -z $ESPIDF_INSTALLDIR ]; then
     echo "\nFAIL: ESPIDF_INSTALLDIR environment variable not found!\nReinstall via script or manually add to ~/.zshrc\n"
@@ -14,7 +17,6 @@ if [ -z $ESPIDF_INSTALLDIR ]; then
 fi
 
 binDir="${ESPIDF_INSTALLDIR}/.custom_bin"
-
 
 echo "TTY devices found in dmesg:"
 COUNTER=0
@@ -39,6 +41,10 @@ export PATH="${ESPIDF_INSTALLDIR}/.custom_bin:${PATH}"
 export ESPPORT="${ttyselect}"
 export ESPBAUD=460800
 export ESPTARGET=$esp
+
+echo "esp-install-custom version: $versionData"
+echo "esp-idf commmit hash: $commitHash"
+echo "install date: $installDate"
 
 echo "ESPBAUD = ${ESPBAUD}"
 echo "ESPTARGET = ${ESPTARGET}"
