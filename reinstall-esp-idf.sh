@@ -75,7 +75,11 @@ function handleCheckInstallPackages() {
 	packages=(git wget flex bison gperf python3 python3-pip python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0)
 
 	for package in "${packages[@]}"; do
-		if [ -z $(apt list $package --installed) ]; then
+		dpkg-query --show --showformat='${db:Status-Status}\n' $package 2>/dev/null
+		ret=$?
+
+		echo $ret
+		if [ $ret -ne 0 ]; then
 			echo "$package not installed, addded to list"
 			inastallPackagees+=" $package"
 		fi
