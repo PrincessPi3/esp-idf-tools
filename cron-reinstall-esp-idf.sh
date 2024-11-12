@@ -1,42 +1,13 @@
 #!/bin/bash
-# set -e # for testan, die on error
-startTime=$(date '+%s')
-
-# modes:
-# 	default: 
-# 		reinstalls non-interactively with no delays, logouts, or reboots
-# 			bash cron-reinstall-esp-idf.sh
-#
-# 	test:
-# 		tests the script. very fast. minimal actions taken. no reinstall is done
-# 			bash cron-reinstall-esp-idf.sh test
-#
-# 	retool:
-#		reinstalls bins and export.sh, nothing else
-#			bash cron-reinstall-esp-idf.sh retool
-#
-# 	cron:
-# 		runs noninteractively with forced user logout and automatic reboot, plus delays
-#			bash cron-reinstall-esp-idf.sh cron
-#
-# 	interactive:
-# 		interactively installs/reinstalls esp-idf
-#			bash cron-reinstall-esp-idf.sh interactive
-# cron:
-# 	crontab -e
-# 	0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh cron
-# manually wipe logs: 
-# 	rm $ESPIDF_INSTALLDIR/install.log; rm $ESPIDF_INSTALLDIR/version-data.txt; touch $ESPIDF_INSTALLDIR/install.log; touch $ESPIDF_INSTALLDIR/version-data.txt;
-#
-# monitor log file during install
-# 	tail -n 75 $ESPIDF_INSTALLDIR/install.log;
+# set -e # for testan, die on eelrror
+startTime=$(date '+%s') # to time the (re)install time for the logs
 
 myUser=princesspi # user installing esp-ids
 gitJobs=5 # number of jobs to download from github with
 gitBranch=master # branch from github
 rcFile=$HOME/.zshrc # shell rc file
 
-if [ -z ESPIDF_INSTALLDIR ]; then
+if [ -z $ESPIDF_INSTALLDIR ]; then
 	installDir=$HOME/esp
 else
 	installDir=$ESPIDF_INSTALLDIR
@@ -48,6 +19,7 @@ versionData=$installDir/version-data.txt # version data log file
 idfDir=$installDir/esp-idf # esp-idf path
 espressifLocation=$HOME/.espressif # espressif tools install location
 customBinLocation=$installDir/.custom_bin # where custom bin scripts are placed
+helpText=$runningDir/help.txt
 runningDir="$( cd "$( dirname "$0" )" && pwd )"
 customBinFrom=$runningDir/custom_bin # dir where custom scripts are coming FROM
 scriptVers=$(cat $runningDir/version.txt) # make sure version.txt does NOT have newline
@@ -236,10 +208,9 @@ function handleStart() {
 	fi
 
 	writeToLog "\n === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new ${action} ==="
-	writeToLog "Version: ${scriptVers}"
+	writeToLog "\tVersion: ${scriptVers}\n"
 
-	returnStatus
-	writeToLog "\n$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tmyUser: $myUser\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd\n\trcFile: $rcFile\n\t(envvar) ESPIDF_INSTALLDIR: $installdirEnvvar"
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tmyUser: $myUser\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd\n\trcFile: $rcFile\n\t(envvar) ESPIDF_INSTALLDIR: $installdirEnvvar"
 
 }
 
@@ -263,7 +234,12 @@ function handleEnd() {
 	writeToLog " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): finished ===\n\n"
 }
 
-if [ "$arg" == "test" ]; then # minimal actions taken, echo the given commands and such
+if [ "$arg" == "--help" || "$arg" == "help" || "$arg" == "-h" || "$arg" == "h" ]; then
+	cat $helpText;
+
+	exit
+
+elif [ "$arg" == "test" ]; then # minimal actions taken, echo the given commands and such
  	action="TEST"
  
  	gitCmd="echo git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
