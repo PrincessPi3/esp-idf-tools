@@ -219,7 +219,7 @@ function handleDownloadInstall() {
 	returnStatus
 
 	writeToLog "editing $exportScript with git commit hash data: $commitHash"
-	sed -i "s/commitTAG/$commitHash/g" $exportScript
+	sed -i "s/commitTAG/\'$commitHash\'/g" $exportScript
 	returnStatus
 
 	gitDataLog="installed esp-idf from commit $commitHash from branch $gitBranch using $scriptVers"
