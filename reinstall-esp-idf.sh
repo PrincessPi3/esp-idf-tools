@@ -17,6 +17,8 @@ versionData=$installDir/version-data.txt # version data log file
 idfDir=$installDir/esp-idf # esp-idf path
 espressifLocation=$HOME/.espressif # espressif tools install location
 customBinLocation=$installDir/.custom_bin # where custom bin scripts are placed
+exportScript=$idfDir/export.sh # export script
+exportBackupScript="${exportScript}.bak"
 runningDir="$( cd "$( dirname "$0" )" && pwd )"
 customBinFrom=$runningDir/custom_bin # dir where custom scripts are coming FROM
 helpText=$runningDir/help.txt
@@ -88,28 +90,42 @@ function handleCustomBins() {
 }
 
 function handleExport() {
-	writeToLog "Handling export.sh (function ran)"
+	writeToLog "Handling $exportScript (function ran)"
 
-	writeToLog "backing up ${idfDir}/export.sh to ${idfDir}/export.sh.bak"
-	cp $idfDir/export.sh $idfDir/export.sh.bak
-	returnStatus
-	
+	if [ -z $testExport ]; then
+		writeToLog "testExport not set"
+
+		writeToLog "backing up $exportScript to $exportBackupScript"
+		cp $exportScript $exportBackupScript
+		returnStatus
+	else
+		writeToLog "testExport enabled"
+
+		writeToLog "deleting $exportScript"
+		rm -f $exportScript
+		returnStatus
+
+		writeToLog "restoring $exportScript from backup at $exportBackupScript"
+		cp $exportBackupScript $exportScript
+		returnStatus
+	fi
+
 	writeToLog "adding ${runningDir}/add-to-export-sh.txt to ${idfDir}/export.sh"
 	cat $runningDir/add-to-export-sh.txt >> $idfDir/export.sh
 	returnStatus
 
-	writeToLog "editing ${idfDir}/export.sh to remove ending \`return 0\`"
-	sed -i 's/return 0/# return 0/g' $idfDir/export.sh
+	writeToLog "editing $exportScript to remove ending \`return 0\`"
+	sed -i 's/return 0/# return 0/g' $exportScript
 	returnStatus
 
-	writeToLog "editing $idfDir/export.sh with version information: $versionData"
-	sed -i "s/versionTAG/\'$versionData\'/g" $idfDir/export.sh
+	writeToLog "editing $exportScript with version information: $scriptVers"
+	sed -i "s/versionTAG/\'$scriptVers\'/g" $exportScript
 	returnStatus
 
 	dateStampInstall=$(date '+%d-%m-%Y %H:%M:%S %Z (%s)')
 
-	writeToLog "editing $idfDir/export.sh with install date information: $dateStampInstall"
-	sed -i "s/installDateTAG/\'$dateStampInstall\'/g" $idfDir/export.sh
+	writeToLog "editing $exportScript with install date information: $dateStampInstall"
+	sed -i "s/installDateTAG/\'$dateStampInstall\'/g" $exportScript
 	returnStatus
 }
 
@@ -138,7 +154,7 @@ function handleSetupEnvironment() {
 function handleAliasEnviron() {
 	if ! [ -z $(alias | grep get_idf) ]; then
 		writeToLog "get_idf alias not found, appending to ${$rcFile}"
-		echo -e "\nalias get_idf='. ${idfDir}/export.sh'" >> $rcFile
+		echo -e "\nalias get_idf='. ${exportScript}'" >> $rcFile
 		returnStatus
 	else
 		writeToLog "get_idf alias already installed, skipping"
@@ -202,8 +218,8 @@ function handleDownloadInstall() {
 	commitHash=$(git -C $idfDir rev-parse HEAD)
 	returnStatus
 
-	writeToLog "editing $idfDir/export.sh with git commit hash data: $commitHash"
-	sed -i "s/commitTAG/\'$commitHash\'/g" $idfDir/export.sh
+	writeToLog "editing $exportScript with git commit hash data: $commitHash"
+	sed -i "s/commitTAG/\'$commitHash\'/g" $exportScript
 	returnStatus	
 
 	gitDataLog="installed esp-idf from commit $commitHash from branch $gitBranch using $scriptVers"
@@ -320,10 +336,13 @@ elif [ "$arg" == "test" -o "$arg" == "t" ]; then # minimal actions taken, echo t
 
 	sleepMins=0
 
+	testExport=1
+
 	handleStart
 	handleCustomBins
 	handleDownloadInstall
 	handleExport
+	handleTestExport
 	handleAliasEnviron
 	handleEnd
 
