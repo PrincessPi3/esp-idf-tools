@@ -1,5 +1,6 @@
 #!/bin/bash
-set -e # for testan, die on error
+# set -e # for testan, die on error
+startTime=$(date '+%s')
 
 # redo these notes:
 # testing:
@@ -168,9 +169,11 @@ function handleLogoutAllUsers() {
 }
 
 function handleStart() {
-	startTime=$(date '+%s')
+	if [ -z $sleepMins ]; then 
+		sleepMins="disabled"
+	fi
 
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tmyUser: $myUser\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tsleepSecs: $sleepSecs\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd"
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tmyUser: $myUser\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd"
 
 	writeToLog " === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new ${action} ==="
 	writeToLog "Version: ${scriptVers}"
@@ -238,8 +241,6 @@ elif [ "$arg" == "nologout" ]; then
  	
 	toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
 
-	sleepMins=0
-
 	handleStart
 	handleSetupEnvironment
 	handleCustomBins
@@ -250,8 +251,6 @@ elif [ "$arg" == "nologout" ]; then
 
 elif [ "$arg" == "retool" ]; then
 	action="RETOOL"
-
-	sleepMins=0
 
 	handleStart
 	handleCustomBins
@@ -267,8 +266,6 @@ else # full install with warn, sleep, and reboot
  	installCmd="$idfDir/install.sh all"
  	
 	toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
-
-	sleepMins=0
 
 	handleStart
 	handleLogoutAllUsers
