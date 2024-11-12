@@ -1,27 +1,27 @@
 Modes:
 	default: 
 		reinstalls non-interactively with no delays, logouts, or reboots
-			`bash cron-reinstall-esp-idf.sh`
+			`bash reinstall-esp-idf.sh`
 
 	test:
 		tests the script. very fast. minimal actions taken. no reinstall is done
-			`bash cron-reinstall-esp-idf.sh test`
+			`bash reinstall-esp-idf.sh test`
 
 	retool:
 	    reinstalls bins and export.sh, nothing else
-		    `bash cron-reinstall-esp-idf.sh retool`
+		    `bash reinstall-esp-idf.sh retool`
 
 	cron:
 		runs noninteractively with forced user logout and automatic reboot, plus delays
-		    `bash cron-reinstall-esp-idf.sh cron`
+		    `bash reinstall-esp-idf.sh cron`
 
 	interactive:
 		interactively installs/reinstalls esp-idf
-		    `bash cron-reinstall-esp-idf.sh interactive`
+		    `bash reinstall-esp-idf.sh interactive`
     
     help:
         display this help text
-            `bash cron-reinstall-esp-idf.sh help`
+            `bash reinstall-esp-idf.sh help`
 
 
 Usage:
@@ -50,7 +50,7 @@ Helpful Stuff:
 	cron:
 	    reinstall from master everyday at 8pm, logging out users with warn delays and rebooting after
 		    `crontab -e`
-		    0 8 * * * bash $HOME/esp/esp-install-custom/cron-reinstall-esp-idf.sh cron
+		    0 8 * * * bash $HOME/esp/esp-install-custom/reinstall-esp-idf.sh cron
 
 	manually wipe logs: 
 		`rm $ESPIDF_INSTALLDIR/install.log; rm $ESPIDF_INSTALLDIR/version-data.txt; touch $ESPIDF_INSTALLDIR/install.log; touch $ESPIDF_INSTALLDIR/version-data.txt;`
