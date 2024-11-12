@@ -2,10 +2,9 @@
 # set -e # for testan, die on eelrror
 startTime=$(date '+%s') # to time the (re)install time for the logs
 
-myUser=princesspi # user installing esp-ids
-gitJobs=5 # number of jobs to download from github with
 gitBranch=master # branch from github
 rcFile=$HOME/.zshrc # shell rc file
+gitJobs=5 # number of jobs to download from github with
 
 if [ -z $ESPIDF_INSTALLDIR ]; then
 	installDir=$HOME/esp
@@ -13,7 +12,6 @@ else
 	installDir=$ESPIDF_INSTALLDIR
 fi
 
-# installDir=/home/$myUser/esp # install dir
 log=$installDir/install.log # log file
 versionData=$installDir/version-data.txt # version data log file
 idfDir=$installDir/esp-idf # esp-idf path
@@ -27,8 +25,6 @@ arg=$1 # just rename the argument var for clarity with the functions
 
 # full order:
 # handleStart
-# handleLogoutAllUsers
-# sleepHold
 # handleLogoutAllUsers
 # handleSetupEnvironment
 # handleCustomBins
@@ -51,7 +47,7 @@ function writeToLog() {
 	echo -e "$1" >> $log
 }
 
-function sleepHold() {
+function handleSleep() {
 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Handling sleep hold (function ran)"
 
 	sleepSecs=$(($sleepMins*60)) # calculated seconds of warning to wait for user to log out
@@ -165,34 +161,50 @@ function handleDownloadInstall() {
 handleReboot() {
 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)') Handling reboot: (function ran)"
 
-	rebootMsg="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): rebooting in $sleepMins minutes. save and log out"
-	writeToLog "$rebootMsg"
-
-	echo "$rebootMsg" | sudo write "$myUser"
-	returnStatus
+	sudo reboot
 }
 
-function handleWarn() {
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Handling warn (function ran)"
- 
-	warningString="WARNING:\n\tReinstalling esp-idf in ${sleepMins} minutes! You will be force logged out in ${sleepMins} minutes! Save and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall reinstall-esp-idf.sh\`\n\t$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')"
-	writeToLog $warningString
+# function handleWarn() {
+# 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Handling warn (function ran)"
+#  
+# 	warningString="WARNING:\n\tReinstalling esp-idf:\n\tForce logut in ${sleepMins} minutes!!\n\tSave and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall reinstall-esp-idf.sh\`\n\t$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')"
+# 	writeToLog $warningString
+# 
+# 	sleepHold
+# 
+# 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Force logging out all users"
+# 
+# 	echo -e "$warningString" | sudo write "$myUser"
+# 	returnStatus
+# }
 
-	sleepHold
+handleWarnAllUsers() {
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Warning all users of impending logout (function called)"
 
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Force logging out ${myUser}"
+	warningString="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'):\nWARNING:\n\tReinstalling esp-idf:\n\tForce logut in ${sleepMins} minutes!!\n\tSave and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall reinstall-esp-idf.sh\`"
 
-	echo -e "$warningString" | sudo write "$myUser"
+	writeToLog "$warningString"
+
+	handleSleep
+
+	loggedIn=$(who | awk '{print $1}' | uniq)
+
+	echo $loggedIn | while read line; do
+		echo -e "$warningString" | sudo write
+	done
 	returnStatus
 }
 
 function handleLogoutAllUsers() {
 	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Handling user logout (function ran)"
 
-	handleWarn
+	handleWarnAllUsers
 
-	# logout all users
-	who | sudo awk '$1 !~ /root/{ cmd="/usr/bin/loginctl terminate-user " $1; system(cmd)}'
+	loggedIn=$(who | awk '{print $1}' | uniq)
+
+	echo $loggedIn | while read line; do
+		sudo loginctl terminate-user $line
+	done
 	returnStatus
 }
 
@@ -210,7 +222,7 @@ function handleStart() {
 	writeToLog "\n === $(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): new ${action} ==="
 	writeToLog "\tVersion: ${scriptVers}\n"
 
-	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tmyUser: $myUser\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd\n\trcFile: $rcFile\n\t(envvar) ESPIDF_INSTALLDIR: $installdirEnvvar"
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)')\nvars:\n\tuser: $USER\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd\n\trcFile: $rcFile\n\t(envvar) ESPIDF_INSTALLDIR: $installdirEnvvar"
 
 }
 
@@ -272,7 +284,51 @@ elif [ "$arg" == "retool" ]; then # just reinstall bins and export
 
 elif [ "$arg" == "interactive" ]; then
 	action="REINSTALL (INTERACTIVE)"
-	# something here lmfao
+
+	echo "Enter full path to install dir, default: $installDir"
+	read readInstallDir
+	
+	echo "Enter git branch to pull from, default: $gitBranch"
+	read readGitBranch
+	
+	echo "Enter full path to rc file (.bashrc, .zshrc) default: $rcFile"
+	read readRcFile
+
+	echo "Enter numeber of jobs to download from github with, default: $gitJobs"
+	read readgitJobs
+
+	if [ ! -z $readInstallDir ]; then
+		installDir=$readInstallDir
+	fi
+
+	if [ ! -z $readGitBranch ]; then
+		gitBranch=$readGitBranch
+	fi
+
+	if [ ! -z $readRcFile ]; then
+		rcFile=$readRcFile
+	fi
+
+	if [ ! -z $readGitJobs ]; then
+		gitJobs=$readGitJobs
+	fi
+
+	writeToLog "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): Interactive vars set:\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trcFile: $rcFile\n\tgitJobs: $gitJobs"
+
+ 	gitCmd="git clone --jobs $gitJobs --branch $gitBranch --single-branch https://github.com/espressif/esp-idf $idfDir"
+
+ 	installCmd="$idfDir/install.sh all"
+ 	
+	toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
+
+	handleStart
+	handleSetupEnvironment
+	handleCustomBins
+	handleDownloadInstall
+	handleExport
+	handleAliasEnviron
+	handleEnd
+
 	exit
 
 elif [ "$arg" == "cron" ]; then # full install with warn, sleep, and reboot
