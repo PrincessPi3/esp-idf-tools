@@ -8,6 +8,8 @@ only currently tested on zsh
 ## Quick start
 `git clone https://github.com/PrincessPi3/esp-install-custom.git ~`  
 `bash ~/reinstall-esp-idf.sh`
+`source ~/.zshrc`
+`get_idf`
 
 ## Features
 `build` idf.py build  
