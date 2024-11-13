@@ -1,6 +1,7 @@
 test-scratch.sh
 notes.txt
 todo.txt
+scratch.txt
 *.bak
 next-*
 old
