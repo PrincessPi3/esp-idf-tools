@@ -203,7 +203,7 @@ function handleDownloadInstall() {
 	writeToLog "Handling download and install (function ran)"
 
 	if [ "$idfGet" == "download" -o ! -d "$idfDir" ]; then
-		if [ ! -d "$idfDir" ]; then
+		if [ -d "$idfDir" ]; then
 			writeToLog "deleting $idfDir"
 			rm -rf $idfDir
 			returnStatus
@@ -220,25 +220,25 @@ function handleDownloadInstall() {
 		returnStatus
 	fi
 
-	# is this helpful in teh slightest? idk lel
-	if [ ! -z $(which python3) ]; then
-		writeToLog "python3 found at $(which python3), using"
-		idfPython="python3"
-	elif [! -z $(which python) ]; then
-		writeToLog "python found at $(which python), using"
-		idfPython="python"
-	else
-		writeToLog "no python found, skipping python tools install"
-	fi
-
-	if [ -z $idfPython ]; then
-		writeToLog "installing tools with \`eval \"$idfPython $toolsInstallCmd\"\`"
-
-		eval "$idfPython $toolsInstallCmd"
-		returnStatus
-	else
-		writeToLog "No python found on system, skipping python tools install"
-	fi
+#	# is this helpful in teh slightest? idk lel
+#	if [ $(which python3)  ]; then
+#		writeToLog "python3 found at $(which python3), using"
+#		idfPython="python3"
+#	elif [! -z $(which python) ]; then
+#		writeToLog "python found at $(which python), using"
+#		idfPython="python"
+#	else
+#		writeToLog "no python found, skipping python tools install"
+#	fi
+#
+#	if [ -z $idfPython ]; then
+#		writeToLog "installing tools with \`eval \"$idfPython $toolsInstallCmd\"\`"
+#
+#		eval "$idfPython $toolsInstallCmd"
+#		returnStatus
+#	else
+#		writeToLog "No python found on system, skipping python tools install"
+#	fi
 
 	writeToLog "getting the commit hash"
 	commitHash=$(git -C $idfDir rev-parse HEAD)
