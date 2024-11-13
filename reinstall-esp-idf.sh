@@ -398,7 +398,7 @@ function handleStart() {
 	handleCheckEspIdf
 	handleCheckInstallPackages
 
-	writeToLog "\n\tvars:\n\t\tuser: $USER\n\t\tscriptVers: $scriptVers\n\t\tversionData: $versionData\n\t\tlog: $log\n\t\tsleepMins: $sleepMins\n\t\tinstallDir: $installDir\n\t\tgitJobs: $gitJobs\n\t\tgitBranch: $gitBranch\n\t\tgitCmd: $gitCmd\n\t\trunningDir: $runningDir\n\t\tidfDir: $idfDir\n\t\tespressifLocation: $espressifLocation\n\t\tcustomBinLocation: $customBinLocation\n\t\tcustomBinFrom: $customBinFrom\n\t\tinstallCmd: $installCmd\n\t\ttoolsInstallCmd: $toolsInstallCmd\n\t\trcFile: $rcFile\n\t\t(envvar) ESPIDF_INSTALLDIR: $installDirEnvvar\n\t\tidfGet: $idfGet\n"
+	writeToLog "\n\tvars:\n\t\tuser: $USER\n\t\tscriptVers: $scriptVers\n\t\tversionData: $versionData\n\t\tlog: $log\n\t\tsleepMins: $sleepMins\n\t\tinstallDir: $installDir\n\t\tgitJobs: $gitJobs\n\t\tgitBranch: $gitBranch\n\t\tgitCloneCmd: $gitCloneCmd\n\t\tgitUpdateCmd: $gitUpdateCmd\n\t\t\tGitrunningDir: $runningDir\n\t\tidfDir: $idfDir\n\t\tespressifLocation: $espressifLocation\n\t\tcustomBinLocation: $customBinLocation\n\t\tcustomBinFrom: $customBinFrom\n\t\tinstallCmd: $installCmd\n\t\ttoolsInstallCmd: $toolsInstallCmd\n\t\trcFile: $rcFile\n\t\t(envvar) ESPIDF_INSTALLDIR: $installDirEnvvar\n\t\tidfGet: $idfGet\n"
 }
 
 function handleEmptyLogs() {
