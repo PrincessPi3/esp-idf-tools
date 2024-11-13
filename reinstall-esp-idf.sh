@@ -186,7 +186,7 @@ function handleExport() {
 		restoreExportScriptChk=$?
 	fi
 
-	writeToLog "Ddding $runningDir/add-to-export-sh.txt to $exportScript"
+	writeToLog "Appending $runningDir/add-to-export-sh.txt to $exportScript"
 	cat $runningDir/add-to-export-sh.txt >> $exportScript
 	returnStatus
 	exportCatChk=$?

@@ -33,15 +33,15 @@ testan:
     x bash reinstall-esp-idf.sh --help
     x bash reinstall-esp-idf.sh -h
     x bash reinstall-esp-idf.sh h
-    bash reinstall-esp-idf.sh test
-    bash reinstall-esp-idf.sh t
-    bash reinstall-esp-idf.sh retool
-    bash reinstall-esp-idf.sh rt
-    bash reinstall-esp-idf.sh
+    x bash reinstall-esp-idf.sh test
+    x bash reinstall-esp-idf.sh t
+    b bash reinstall-esp-idf.sh retool
+    b bash reinstall-esp-idf.sh rt
+    x bash reinstall-esp-idf.sh
     bash reinstall-esp-idf.sh clearlogs
     bash reinstall-esp-idf.sh clear
     bash reinstall-esp-idf.sh cl
-    bash reinstall-esp-idf.sh interactive
+    x bash reinstall-esp-idf.sh interactive
     bash reinstall-esp-idf.sh i
     bash reinstall-esp-idf.sh nuke
     bash reinstall-esp-idf.sh n
@@ -54,7 +54,7 @@ figure out how to message users properly
 
 bug: duplicate export added to export.sh
     involves testExport prolly lol
-    # nuke and retool working fine for sure
+    issue be in retool
 
 verbosity levels?
     less verbose on git commands and installers?
