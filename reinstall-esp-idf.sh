@@ -26,7 +26,8 @@ scriptVers=$(cat $runningDir/version.txt) # make sure version.txt does NOT have 
 arg=$1 # just rename the argument var for clarity with the functions
 
 # commands
-gitCloneCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
+# gitCloneCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
+gitCloneCmd="git clone --recursive --single-branch --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
 gitUpdateCmd="git -C $idfDir reset --hard; git -C $idfDir clean -df; git -C $idfDir pull $idfDir" # mayhapsnasst?
 installCmd="$idfDir/install.sh all"
 toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
@@ -51,7 +52,7 @@ idfGet="update" # default method
 function returnStatus() {
 	strii="\treturn status: ${?}"
 	echo -e "$strii\n"
-	echo -e "$strii" >> $log
+	echo -e "$strii\n" >> $log
 }
 
 function writeToLog() {
@@ -217,26 +218,26 @@ function handleDownloadInstall() {
 		fi
 
 		istartTime=$(date '+%s')
-		writeToLog "CLONING esp-idf, branch $gitBranch with $gitJobs jobs to $idfDir"
+		writeToLog "CLONING esp-idf, branch $gitBranch with $gitJobs jobs to $idfDir\n\tCommand: $gitCloneCmd\n"
 		eval "$gitCloneCmd"
 		returnStatus
 		iendTime=$(date '+%s')
 		installerTime=$(($iendTime-$istartTime))
-		writeToLog "Git clone completed in $installerTime seconds\n"
+		writeToLog "Git CLONE completed in $installerTime seconds\n"
 	else
 		writeToLog "Setting for update mode\n"
 
 		istartTime=$(date '+%s')
-		writeToLog "UPDATING esp-idf, branch $gitBranch with $gitJobs jobs to $idfDir"
+		writeToLog "UPDATING esp-idf, branch $gitBranch with $gitJobs jobs to $idfDir\n\tCommand: $gitUpdateCmd\n"
 		eval "$gitUpdateCmd"
 		returnStatus
 		iendTime=$(date '+%s')
 		installerTime=$(($iendTime-$istartTime))
-		writeToLog "Git update completed in $installerTime seconds\n"
+		writeToLog "Git UPDATE completed in $installerTime seconds\n"
 	fi
 
 	istartTime=$(date '+%s')
-	writeToLog "Executing installer\n"
+	writeToLog "Executing installer\n\tCommand: $installCmd\n"
 	eval "$installCmd"
 	returnStatus
 	iendTime=$(date '+%s')
@@ -244,7 +245,7 @@ function handleDownloadInstall() {
 	writeToLog "Installer completed in $installerTime seconds\n"
 
 	istartTime=$(date '+%s')
-	writeToLog "Executing extra tools installer\n"
+	writeToLog "Executing extra tools installer\n\tCommand: $toolsInstallCmd\n"
 	eval "$toolsInstallCmd"
 	returnStatus
 	iendTime=$(date '+%s')
@@ -344,11 +345,11 @@ function handleStart() {
 	handleCheckEspIdf
 	handleCheckInstallPackages
 
-	writeToLog "\nvars:\n\tuser: $USER\n\tscriptVers: $scriptVers\n\tversionData: $versionData\n\tlog: $log\n\tsleepMins: $sleepMins\n\tinstallDir: $installDir\n\tgitJobs: $gitJobs\n\tgitBranch: $gitBranch\n\tgitCmd: $gitCmd\n\trunningDir: $runningDir\n\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\tcustomBinLocation: $customBinLocation\n\tcustomBinFrom: $customBinFrom\n\tinstallCmd: $installCmd\n\ttoolsInstallCmd: $toolsInstallCmd\n\trcFile: $rcFile\n\t(envvar) ESPIDF_INSTALLDIR: $installDirEnvvar\n\tidfGet: $idfGet\n"
+	writeToLog "\n\tvars:\n\t\tuser: $USER\n\t\tscriptVers: $scriptVers\n\t\tversionData: $versionData\n\t\tlog: $log\n\t\tsleepMins: $sleepMins\n\t\tinstallDir: $installDir\n\t\tgitJobs: $gitJobs\n\t\tgitBranch: $gitBranch\n\t\tgitCmd: $gitCmd\n\t\trunningDir: $runningDir\n\t\tidfDir: $idfDir\n\tespressifLocation: $espressifLocation\n\t\tcustomBinLocation: $customBinLocation\n\t\tcustomBinFrom: $customBinFrom\n\t\tinstallCmd: $installCmd\n\t\ttoolsInstallCmd: $toolsInstallCmd\n\t\trcFile: $rcFile\n\t\t(envvar) ESPIDF_INSTALLDIR: $installDirEnvvar\n\t\tidfGet: $idfGet\n"
 }
 
 function handleEmptyLogs() {
-	echo "Deleting $log"
+	echo -e "\nDeleting $log\n"
  	rm -f $log
 	echo -e "\treturn status: ${?}\n"
  
