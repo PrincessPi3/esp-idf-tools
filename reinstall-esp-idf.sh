@@ -400,7 +400,6 @@ function handleLogoutAllUsers() {
 function handleCheckEspIdf() {
 	if [ ! -z $IDF_PYTHON_ENV_PATH ]; then
 		writeToLog "FAIL: Sanity check failed!\n\tesp-idf environment varibles found!\n\tPelase run from a fresh termnal that has not had get_idf ran!\n\tExiting\n"
-		exit
 	else
 		writeToLog "Sanity check: Environment correct\n\tNo esp-idf environment variables found, proceeding\n"
 	fi
