@@ -190,17 +190,35 @@ function handleSetupEnvironment() {
 
 function handleAliasEnviron() {
 	if ! [ -z $(alias | grep get_idf) ]; then
-		writeToLog "get_idf alias not found, appending to ${$rcFile}"
+		writeToLog "get_idf alias not found, appending to $rcFile"
 		echo -e "\nalias get_idf='. ${exportScript}'" >> $rcFile
 		returnStatus
 	else
 		writeToLog "get_idf alias already installed, skipping\n"
 	fi
 
+	if [ ! -z $(alias | grep run_esp_reinstall) ]; then
+		writeToLog "run_esp_reinstall alias not found, appending to $rcFile"
+		echo "alias run_esp_reinstall='git -C $runningDir pull; cat $runningDir/version.txt; bash $runningDir/reinstall-esp-idf.sh '" >> $rcFile
+		aliasRunEspReinstallChk=returnStatus
+	fi
+
+	if [ ! -z $(alias | grep esp_monitor) ]; then
+		writeToLog "esp_monitor alias not found, appending to $rcFile"
+		echo "alias esp_monitor='tail -n 75 -f $installDir/install.log'" >> $rcFile
+		aliasEspMonitorchk=returnStatus
+	fi
+
+	if [ ! -z $(alias | grep esp_logs) ]; then
+		writeToLog "esp_logs alias not found, appending to $rcFile"
+		echo "alias esp_logs='less $installDir/install.log; less $installDir/version-data.txt'" >> $rcFile
+		aliasEspLogsChk=returnStatus
+	fi
+
 	if [ -z $ESPIDF_INSTALLDIR ]; then
-		writeToLog "ESPIDF_INSTALLDIR environment variable not found, appending to ${rcFile}" 
+		writeToLog "ESPIDF_INSTALLDIR environment variable not found, appending to ${rcFile}"
 		echo -e "export ESPIDF_INSTALLDIR=\"${installDir}\"\n" >> $rcFile
-		returnStatus
+		aliasInstallDirChk=returnStatus
 	else
 		writeToLog "ESPIDF_INSTALLDIR environment variable already installed, skipping\n"
 	fi
@@ -369,6 +387,11 @@ function handleEmptyLogs() {
 	echo -e "\treturn status: ${?}\n"
 }
 
+function handleChk() {
+	writeToLog "Error Checking:\n\tPackages install: $pkgInstallChk\n\tGit pull/clone: $gitChk\n\tInstall script: $installChk\n\tInstall tools: $toolsInstallChk\n\tExport append: $exportCatChk\n\tExport edit return: $exportSedReturnChk\n\tExport version: $exportSedVersionChk\n\tExport date: $exportSedDateChk\n\tExport git hash: $exportSedHashChk\n\trun_esp_reinstall alias: $aliasRunEspReinstallChk\n\tesp_monitor alias: $aliasEspMonitorchk\n\tesp_logs alias: $aliasEspLogsChk\n\tESPIDF_INSTALLDIR envvar: $aliasInstallDirChk\n"
+}
+
+
 function handleEnd() {
 	handleChk
 
@@ -379,10 +402,6 @@ function handleEnd() {
 
 	writeToLog "reinstall completed in $timeElapsed seconds\n"
 	writeToLog " === finished ===\n\n"
-}
-
-function handleChk() {
-	writeToLog "Error Checking:\n\tExport append: $exportCatChk\n\tPackages install: $pkgInstallChk\n\tGit pull/clone: $gitChk\n\tInstall script: $installChk\n\tInstall tools: $toolsInstallChk\n\tExport edit return: $exportSedReturnChk\n\tExport version: $exportSedVersionChk\n\tExport date: $exportSedDateChk\n\tExport git hash: $exportSedHashChk\n"
 }
 
 if [ "$arg" == "--help" -o "$arg" == "help" -o "$arg" == "-h" -o "$arg" == "h" ]; then
