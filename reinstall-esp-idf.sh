@@ -390,6 +390,7 @@ elif [ "$arg" == "test" -o "$arg" == "t" ]; then # minimal actions taken, echo t
 
 elif [ "$arg" == "retool" -o "$arg" == "rt" ]; then # just reinstall bins and export
 	action="RETOOL"
+	testExport=1
 
 	handleStart
 	handleCustomBins
