@@ -76,37 +76,32 @@ Modes:
 
 ## Ailases
 ```
-	run_esp_reinstall
-		Updates the esp-install-custom code via git, displays the script version, then executes reinstall-esp-idf.sh with optional arument.
-		Takes identical arguments to running reinstall-esp-idf.sh manually
-			run_esp_reinstall
-			run_esp_reinstall clean
-			run_esp_reinstall nuke
-			run_esp_reinstall retool
-			run_esp_reinstall cron
-			run_esp_reinstall interactive
-			run_esp_reinstall test
+run_esp_reinstall
+	Updates the esp-install-custom code via git, displays the script version, then executes reinstall-esp-idf.sh with optional arument.
+	Takes identical arguments to running reinstall-esp-idf.sh manually
+		run_esp_reinstall
+		run_esp_reinstall clean
+		run_esp_reinstall nuke
+		run_esp_reinstall retool
+		run_esp_reinstall cron
+		run_esp_reinstall interactive
+		run_esp_reinstall test
 
-	esp_monitor
-		monitors install.log
-		alias for tail -n 75 -f $ESPIDF_INSTALLDIR/install.log
-		no arguments
+esp_monitor
+	monitors install.log
+	alias for tail -n 75 -f $ESPIDF_INSTALLDIR/install.log
+	no arguments
 
-	esp_logs
-		displays full text of install.log and version-data.txt
-		no arguments
+esp_logs
+	displays full text of install.log and version-data.txt
+	no arguments
 ```
 
 ## Helpful stuff
 ```
 cron:
     reinstall from master everyday at 4am, logging out users with warn delays and rebooting after
-	    crontab -e
+	    `crontab -e`
+
 	    0 4 * * * bash $HOME/esp/esp-install-custom/reinstall-esp-idf.sh cron
-
-monitor log file during install:
-	tail -n 75 -f $ESPIDF_INSTALLDIR/install.log;
-
-view both logs from beginning:
-	less $ESPIDF_INSTALLDIR/install.log; less $ESPIDF_INSTALLDIR/version-data.txt;
 ```
