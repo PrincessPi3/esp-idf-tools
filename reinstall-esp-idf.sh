@@ -365,7 +365,7 @@ if [ "$arg" == "--help" -o "$arg" == "help" -o "$arg" == "-h" -o "$arg" == "h" ]
 elif [ "$arg" == "test" -o "$arg" == "t" ]; then # minimal actions taken, echo the given commands and such
  	action="TEST"
 	sleepMins=0
-	testExport=1
+	# testExport=1
 
   	installCmdTemp="echo $installCmd"
 	toolsInstallCmdTemp="echo $toolsInstallCmd"
