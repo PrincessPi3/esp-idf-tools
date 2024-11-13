@@ -351,7 +351,7 @@ handleReboot() {
 handleWarnAllUsers() {
 	writeToLog "Warning all users of impending logout (function called)\n"
 
-	warningString="\nWARNING:\n\tReinstalling esp-idf:\n\tForce logut in $sleepMins minutes!!\n\tSave and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall reinstall-esp-idf.sh\`\n"
+	warningString="\nWARNING:\n\tReinstalling esp-idf:\n\tForce logut in $sleepMins minutes!!\n\tSave and log out!\n\tmonitor with \`esp+monitor\`\n\tterminate with \`sudo killall reinstall-esp-idf.sh\`\n"
 
 	writeToLog "$warningString"
 
@@ -399,7 +399,7 @@ function handleLogoutAllUsers() {
 
 function handleCheckEspIdf() {
 	if [ ! -z $IDF_PYTHON_ENV_PATH ]; then
-		writeToLog "FAIL: Sanity check failed!\n\tesp-idf environment varibles found!\n\tPelase run from a fresh termnal that has not had get_idf ran!\n\tExiting\n"
+		writeToLog "FAIL: Sanity check failed!\n\tesp-idf environment varibles found!\n\tPelase run from a fresh termnal that has not had get_idf ran!\n"
 	else
 		writeToLog "Sanity check: Environment correct\n\tNo esp-idf environment variables found, proceeding\n"
 	fi
