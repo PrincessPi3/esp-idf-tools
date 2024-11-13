@@ -90,7 +90,7 @@ sleepChk=0
 
 function returnStatus() {
 	ret=$?
-	strii="\treturn status: $ret"
+	strii="\tReturn status: $ret"
 	echo -e "$strii\n"
 	echo -e "$strii\n" >> $log
 	
@@ -102,12 +102,13 @@ function writeToLog() {
 	echo -e "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): $1" >> $log
 }
 
+# this is not needed so long as warn doesnt god damned fucking work lmfao
 function handleSleep() {
 	writeToLog "Handling sleep hold (function ran)\n"
 
 	sleepSecs=$(($sleepMins*60)) # calculated seconds of warning to wait for user to log out
 
-	writeToLog "sleeping $sleepMins minutes"
+	writeToLog "Sleeping $sleepMins minutes"
 	sleep $sleepSecs
 	returnStatus
 	sleepChk=$?
@@ -142,7 +143,7 @@ function handleCustomBins() {
 	writeToLog "Handling custon bins (function ran)\n"
 
 	if [ -d $customBinLocation ]; then
-		writeToLog "deleting $customBinLocation"
+		writeToLog "Deleting $customBinLocation"
 		rm -rf $customBinLocation
 		returnStatus
 		rmCustomBinChk=$?
@@ -150,12 +151,12 @@ function handleCustomBins() {
 		writeToLog "$customBinLocation not found, skipping delete\n"
 	fi
 
-	writeToLog "copying scripts from $customBinFrom to $customBinLocation"
+	writeToLog "Copying scripts from $customBinFrom to $customBinLocation"
 	cp -r $customBinFrom $customBinLocation
 	returnStatus
 	cpCustomBinChk=$?
 
-	writeToLog "making scripts executable at $customBinLocation"
+	writeToLog "Making scripts executable at $customBinLocation"
 	chmod -R +x $customBinLocation
 	returnStatus
 	customBinExecChk=$?
@@ -167,47 +168,47 @@ function handleExport() {
 	if [ -z $testExport ]; then
 		writeToLog "testExport not set\n"
 
-		writeToLog "backing up $exportScript to $exportBackupScript"
+		writeToLog "Backing up $exportScript to $exportBackupScript"
 		cp -f $exportScript $exportBackupScript
 		returnStatus
 		backupExportScriptChk=$?
 	else
 		writeToLog "testExport export is set\n"
 
-		writeToLog "deleting $exportScript"
+		writeToLog "Deleting $exportScript"
 		rm -f $exportScript
 		returnStatus
 		rmExportScriptChk=$?
 
-		writeToLog "restoring $exportScript from backup at $exportBackupScript"
+		writeToLog "Restoring $exportScript from backup at $exportBackupScript"
 		cp $exportBackupScript $exportScript
 		returnStatus
 		restoreExportScriptChk=$?
 	fi
 
-	writeToLog "adding $runningDir/add-to-export-sh.txt to $exportScript"
+	writeToLog "Ddding $runningDir/add-to-export-sh.txt to $exportScript"
 	cat $runningDir/add-to-export-sh.txt >> $exportScript
 	returnStatus
 	exportCatChk=$?
 
-	writeToLog "editing $exportScript to remove ending \`return 0\`"
+	writeToLog "Editing $exportScript to remove ending \`return 0\`"
 	sed -i 's/return 0/# return 0/g' $exportScript
 	returnStatus
 	exportSedReturnChk=$?
 
-	writeToLog "editing $exportScript with version information: $scriptVers"
+	writeToLog "Editing $exportScript with version information: $scriptVers"
 	sed -i "s/versionTAG/\'$scriptVers\'/g" $exportScript
 	returnStatus
 	exportSedVersionChk=$?
 
 	dateStampInstall=$(date '+%d-%m-%Y %H:%M:%S %Z (%s)')
 
-	writeToLog "editing $exportScript with install date information: $dateStampInstall"
+	writeToLog "Editing $exportScript with install date information: $dateStampInstall"
 	sed -i "s/installDateTAG/\'$dateStampInstall\'/g" $exportScript
 	returnStatus
 	exportSedDateChk=$?
 
-	writeToLog "editing $exportScript with git commit hash data: $commitHash"
+	writeToLog "Editing $exportScript with git commit hash data: $commitHash"
 	sed -i "s/commitTAG/\'$commitHash\'/g" $exportScript
 	returnStatus
 	exportSedHashChk=$?
@@ -232,7 +233,7 @@ function handleSetupEnvironment() {
 		writeToLog "$espressifLocation set to be reinstalled\n"
 
 		if [ -d "$espressifLocation" ]; then
-			writeToLog "$espressifLocation fonud, deleting for reinstall"
+			writeToLog "$espressifLocation found, deleting for reinstall"
 			rm -rf $espressifLocation
 			returnStatus
 			rmEspressifChk=$?
@@ -244,7 +245,7 @@ function handleSetupEnvironment() {
 
 function testAppendAlias() {
 	echo "Testing alias '$1'"
-	alias $1 2>/dev/null
+	alias $1 2>/dev/null # redirect errrors to keep it lookan clean
 	ret=$?
 	echo -e "\tretcode: $ret"
 	if [ ! $ret -eq 0 ]; then
@@ -260,13 +261,13 @@ function testAppendAlias() {
 
 function handleAliasEnviron() {
 	testAppendAlias "get_idf" "alias get_idf='. $exportScript'"
-	testAppendAlias "run_esp_reinstall" "alias run_esp_reinstall='git -C $runningDir pull; cat $runningDir/version.txt; bash $runningDir/reinstall-esp-idf.sh '"
+	testAppendAlias "run_esp_reinstall" "alias run_esp_reinstall='git -C $runningDir pull; echo -e \"\nVersion:\"; cat $runningDir/version.txt; echo -e \"\n\" bash $runningDir/reinstall-esp-idf.sh '"
 	testAppendAlias "esp_monitor" "alias esp_monitor='tail -n 75 -f $installDir/install.log'"
 	testAppendAlias "esp_logs" "alias esp_logs='less $installDir/install.log; less $installDir/version-data.txt'"
 
 	if [ -z $ESPIDF_INSTALLDIR ]; then
 		writeToLog "ESPIDF_INSTALLDIR environment variable not found, appending to $rcFile"
-		echo -e "export ESPIDF_INSTALLDIR=\"$installDir\"\n" >> $rcFile
+		echo -e "Export ESPIDF_INSTALLDIR=\"$installDir\"\n" >> $rcFile
 		returnStatus
 		aliasInstallDirChk=$?
 	else
@@ -282,7 +283,7 @@ function handleDownloadInstall() {
 		writeToLog "Setting for download mode\n"
 
 		if [ -d "$idfDir" ]; then
-			writeToLog "deleting $idfDir"
+			writeToLog "Deleting $idfDir"
 			rm -rf $idfDir
 			returnStatus
 			rmIdfDirChk=$?
@@ -291,7 +292,7 @@ function handleDownloadInstall() {
 		fi
 
 		istartTime=$(date '+%s')
-		writeToLog "CLONING esp-idf, branch $gitBranch with $gitJobs jobs to $idfDir\n\tCommand: $gitCloneCmd\n"
+		writeToLog "CLONING esp-idf, branch $gitBranch with $gitJobs jobs to $idfDir\n\tCommand: $gitCloneCmd"
 		eval "$gitCloneCmd"
 		returnStatus
 		gitChk=$?
@@ -302,7 +303,7 @@ function handleDownloadInstall() {
 		writeToLog "Setting for update mode\n"
 
 		istartTime=$(date '+%s')
-		writeToLog "UPDATING esp-idf, branch $gitBranch with $gitJobs jobs to $idfDir\n\tCommand: $gitUpdateCmd\n"
+		writeToLog "UPDATING esp-idf, branch $gitBranch with $gitJobs jobs to $idfDir\n\tCommand: $gitUpdateCmd"
 		eval "$gitUpdateCmd"
 		returnStatus
 		gitChk=$?
@@ -312,7 +313,7 @@ function handleDownloadInstall() {
 	fi
 
 	istartTime=$(date '+%s')
-	writeToLog "Executing installer\n\tCommand: $installCmd\n"
+	writeToLog "Executing installer\n\tCommand: $installCmd"
 	eval "$installCmd"
 	returnStatus
 	installChk=$?
@@ -330,7 +331,7 @@ function handleDownloadInstall() {
 	writeToLog "Extra tools installer completed in $installerTime seconds\n"
 
 
-	writeToLog "getting the commit hash\n"
+	writeToLog "Getting the commit hash"
 	commitHash=$(git -C $idfDir rev-parse HEAD)
 	returnStatus
 	gitHashChk=$?
@@ -348,6 +349,7 @@ handleReboot() {
 	sudo reboot
 }
 
+# warning not work how i make it work fuckin ell
 handleWarnAllUsers() {
 	writeToLog "Warning all users of impending logout (function called)\n"
 
@@ -360,7 +362,7 @@ handleWarnAllUsers() {
 	loggedIn=$(who | awk '{print $1}' | uniq)
 
 	if [ -z $loggedIn ]; then
-		writeToLog "no users logged in to warn\n"
+		writeToLog "No users logged in to warn\n"
 		return
 	else
 		writeToLog "Warning all logged in users:" # make sure dis workan
@@ -375,6 +377,7 @@ handleWarnAllUsers() {
 	fi
 }
 
+# dis one sure af be workan tho lmfao
 function handleLogoutAllUsers() {
 	writeToLog "Handling user logout (function ran)\n"
 
@@ -383,12 +386,12 @@ function handleLogoutAllUsers() {
 	loggedIn=$(who | awk '{print $1}' | uniq)
 
 	if [ -z $loggedIn ]; then
-		writeToLog "no logged in users to log out\n"
+		writeToLog "No logged in users to log out\n"
 		return
 	else
-		writeToLog "logging out all logged in users:"
+		writeToLog "Logging out all logged in users:"
 		echo $loggedIn | while read line; do
-		writeToLog "\tlogging out $line"
+		writeToLog "\tLogging out $line"
 			sudo loginctl terminate-user $line
 			returnStatus
 		done
@@ -429,21 +432,21 @@ function handleStart() {
 }
 
 function handleEmptyLogs() {
-	echo -e "\n\nDeleting $log\n"
+	echo -e "\n\nDeleting $log"
  	rm -f $log
-	echo -e "\treturn status: ${?}\n"
+	echo -e "\tReturn status: ${?}\n"
  
 	echo "Deleting $versionData"
  	rm -f $versionData
-	echo -e "\treturn status: ${?}\n"
+	echo -e "\tReturn status: ${?}\n"
 
 	echo "Creating empty file at $log"
  	touch $log
-	echo -e "\treturn status: ${?}\n"
+	echo -e "\tReturn status: ${?}\n"
 
 	echo "Creating empty file at $versionData"
  	touch $versionData
-	echo -e "\treturn status: ${?}\n"
+	echo -e "\tReturn status: ${?}\n"
 }
 
 function handleChk() {
@@ -468,8 +471,8 @@ function handleEnd() {
 
 	echo -e "\nesp-idf (re)installed! run \`source $rcFile\` and then \`get_idf\`\n\nAll done :3\n\n"
 
-	writeToLog "reinstall completed in $timeElapsed seconds\n"
-	writeToLog " === finished ===\n\n"
+	writeToLog "Reinstall completed in $timeElapsed seconds\n"
+	writeToLog " === Finished ===\n\n"
 }
 
 if [[ "$arg" == "--help" || "$arg" == "help" || "$arg" == "-h" || "$arg" == "h" ]]; then
@@ -552,7 +555,7 @@ elif [[ "$arg" == "interactive" || "$arg" == "i" ]]; then
 		idfGet=$readIdfGet
 	fi
 	
-	writeToLog "\n === new $action ===\n"
+	writeToLog "\n === New $action ===\n"
 	writeToLog "\tVersion: $scriptVers\n"
 
 	writeToLog "Interactive vars set:\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trcFile: $rcFile\n\tgitJobs: $gitJobs\n\tidfGet: $idfGet\n"

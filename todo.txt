@@ -25,6 +25,8 @@ x alias add and document too
    x maybe just cat a txt lmao
 x test reinstall from zero
 x fix dat nuke issue on line ~307 # fixed?
+x standardize the capatilization and format and content of notes
+
 
 testan:
     x bash reinstall-esp-idf.sh help
@@ -53,8 +55,7 @@ figure out how to message users properly
 bug: duplicate export added to export.sh
     involves testExport prolly lol
 
-standardize the capatilization and format and content of notes
-
 verbosity levels?
     less verbose on git commands and installers?
     
+get current esp-idf version plox
