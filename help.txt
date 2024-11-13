@@ -63,6 +63,26 @@ Features:
 	`save-defconfig` idf.py save-defconfig  
 	`step-flash-monitor` attempt clean, build, flash, then monitor, dying on error  
 
+Aliases:
+	run_esp_reinstall
+		Updates the esp-install-custom code via git, displays the script version, then executes reinstall-esp-idf.sh with optional arument.
+		Takes identical arguments to running reinstall-esp-idf.sh manually
+			run_esp_reinstall
+			run_esp_reinstall clean
+			run_esp_reinstall nuke
+			run_esp_reinstall retool
+			run_esp_reinstall cron
+			run_esp_reinstall interactive
+			run_esp_reinstall test
+
+	esp_monitor
+		monitors install.log
+		alias for tail -n 75 -f $ESPIDF_INSTALLDIR/install.log
+		no arguments
+
+	esp_logs
+		displays full text of install.log and version-data.txt
+		no arguments
 
 Helpful Stuff:
 	cron:
