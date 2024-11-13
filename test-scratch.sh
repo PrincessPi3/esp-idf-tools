@@ -2,7 +2,7 @@ function checkAlias() {
 	echo "Testing $1"
 	alias $1 2>/dev/null
 	ret=$?
-	echo "\tretcode: $ret"
+	echo -e "\tretcode: $ret"
 	if [ $ret -eq 1 ]; then
 		echo "$1 not found"
 	else
