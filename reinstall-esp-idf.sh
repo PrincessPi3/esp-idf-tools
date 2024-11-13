@@ -6,6 +6,9 @@ gitBranch=master # branch from github
 rcFile=$HOME/.zshrc # shell rc file
 gitJobs=5 # number of jobs to download from github with
 
+# get us our FUCKING ALIASES HOLY FUCK GOD DAMN SHIT FUCK IT
+source $rcFile
+
 if [ -z $ESPIDF_INSTALLDIR ]; then
 	installDir=$HOME/esp # path to install to. $HOME/esp by default
 else
@@ -237,7 +240,28 @@ function handleSetupEnvironment() {
 	fi
 }
 
+function testAppendAlias() {
+	echo "Testing alias '$1'"
+	alias $1 2>/dev/null
+	ret=$?
+	echo -e "\tretcode: $ret"
+	if [ ! $ret -eq 0 ]; then
+		writeToLog "$1 not found, appending to $rcFile"
+		echo "$2" >> "$rcFile"
+		returnStatus
+	else
+		writeToLog "$1 found: $(alias $1), skipping"
+	fi
+
+	return $ret	
+}
+
 function handleAliasEnviron() {
+	testAppendAlias "get_idf" "alias get_idf='. $exportScript'"
+	testAppendAlias "run_esp_reinstall" "alias run_esp_reinstall='git -C $runningDir pull; cat $runningDir/version.txt; bash $runningDir/reinstall-esp-idf.sh '"
+	testAppendAlias "esp_monitor" "alias esp_monitor='tail -n 75 -f $installDir/install.log'"
+	testAppendAlias "esp_logs" "alias esp_logs='less $installDir/install.log; less $installDir/version-data.txt'"
+	
 #	alias get_idf
 #	ret=$?
 #	if [ $ret -eq 1 ]; then
