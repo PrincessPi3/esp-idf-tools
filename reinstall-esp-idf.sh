@@ -29,7 +29,7 @@ arg=$1 # just rename the argument var for clarity with the functions
 gitCloneCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
 gitUpdateCmd="git -C $idfDir reset --hard; git -C $idfDir clean -df; git -C $idfDir pull $idfDir" # mayhapsnasst?
 installCmd="$idfDir/install.sh all"
-toolsInstallCmd="$idfDir/tools/idf_tools.py install all"
+toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
 idfGet="update" # default method
 
 # full order:
@@ -60,7 +60,7 @@ function writeToLog() {
 }
 
 function handleSleep() {
-	writeToLog "Handling sleep hold (function ran)"
+	writeToLog "Handling sleep hold (function ran)\n"
 
 	sleepSecs=$(($sleepMins*60)) # calculated seconds of warning to wait for user to log out
 
@@ -70,7 +70,7 @@ function handleSleep() {
 }
 
 function handleCheckInstallPackages() {
-	writeToLog "Handling check and install packages (function ran)"
+	writeToLog "Handling check and install packages (function ran)\n"
 
 	packages=(git wget flex bison gperf python3 python3-pip python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0)
 
@@ -89,19 +89,19 @@ function handleCheckInstallPackages() {
 		sudo apt install -y "$installPackagees"
 		returnStatus
 	else
-		writeToLog "No missing packages found, continuing"
+		writeToLog "No missing packages found, continuing\n"
 	fi
 }
 
 function handleCustomBins() {
-	writeToLog "Handling custon bins (function ran)"
+	writeToLog "Handling custon bins (function ran)\n"
 
 	if [ -d $customBinLocation ]; then
 		writeToLog "deleting ${customBinLocation}"
 		rm -rf $customBinLocation
 		returnStatus
 	else
-		writeToLog "${customBinLocation} not found, skipping delete"
+		writeToLog "${customBinLocation} not found, skipping delete\n"
 	fi
 
 	writeToLog "copying scripts from ${customBinFrom} to ${customBinLocation}"
@@ -114,16 +114,16 @@ function handleCustomBins() {
 }
 
 function handleExport() {
-	writeToLog "Handling $exportScript (function ran)"
+	writeToLog "Handling $exportScript (function ran)\n"
 
 	if [ -z $testExport ]; then
-		writeToLog "testExport not set"
+		writeToLog "testExport not set\n"
 
 		writeToLog "backing up $exportScript to $exportBackupScript"
 		cp -f $exportScript $exportBackupScript
 		returnStatus
 	else
-		writeToLog "testExport export"
+		writeToLog "testExport export\n"
 
 		writeToLog "deleting $exportScript"
 		rm -f $exportScript
@@ -158,25 +158,28 @@ function handleExport() {
 }
 
 function handleSetupEnvironment() {
-	writeToLog "Handling setup environment (function ran)"
+	writeToLog "Handling setup environment (function ran)\n"
 
 	if [ ! -d "$installDir" ]; then
 		writeToLog "creating $installDir"
 		mkdir $installDir
 		returnStatus
 	else
-		writeToLog "$installDir exisits, skiping creation"
+		writeToLog "$installDir exisits, skiping creation\n"
 	fi
 
 	if [[ -d "$espressifLocation" && "$idfGet" == "update" ]]; then
-		writeToLog "Skipping delete of $espressifLocation because dir exists AND idfGet is set to update"
+		writeToLog "$espressifLocation set to be updated by installer\n"
+		writeToLog "Skipping delete of $espressifLocation because dir exists AND idfGet is set to update\n"
 	else
-		if [[ -d $espressifLocation ]]; then
-			writeToLog "$espressifLocation fonud, deleting"
+		writeToLog "$espressifLocation set to be reinstalled\n"
+
+		if [ -d "$espressifLocation" ]; then
+			writeToLog "$espressifLocation fonud, deleting for reinstall"
 			rm -rf $espressifLocation
 			returnStatus
 		else
-			writeToLog "Skipping delete of $espressifLocation"
+			writeToLog "$espressifLocation not found, skipping delete for reinstall\n"
 		fi
 	fi
 }
@@ -187,7 +190,7 @@ function handleAliasEnviron() {
 		echo -e "\nalias get_idf='. ${exportScript}'" >> $rcFile
 		returnStatus
 	else
-		writeToLog "get_idf alias already installed, skipping"
+		writeToLog "get_idf alias already installed, skipping\n"
 	fi
 
 	if [ -z $ESPIDF_INSTALLDIR ]; then
@@ -195,20 +198,20 @@ function handleAliasEnviron() {
 		echo -e "export ESPIDF_INSTALLDIR=\"${installDir}\"\n" >> $rcFile
 		returnStatus
 	else
-		writeToLog "ESPIDF_INSTALLDIR environment variable already installed, skipping"
+		writeToLog "ESPIDF_INSTALLDIR environment variable already installed, skipping\n"
 	fi
 }
 
 function handleDownloadInstall() {
-	writeToLog "Handling download and install (function ran)"
+	writeToLog "Handling download and install (function ran)\n"
 
-	if [[ "$idfGet" == "download" || ! -d "$idfDir" ]]; then
+	if [[ "$idfGet" == "download" || -d "$idfDir" ]]; then
 		if [ -d "$idfDir" ]; then
 			writeToLog "deleting $idfDir"
 			rm -rf $idfDir
 			returnStatus
 		else
-			writeToLog "$idfDir not found, skipping delete"
+			writeToLog "$idfDir not found, skipping delete\n"
 		fi
 
 		writeToLog "CLONING esp-idf, branch $gitBranch with $gitJobs jobs to $idfDir"
@@ -220,25 +223,13 @@ function handleDownloadInstall() {
 		returnStatus
 	fi
 
-#	# is this helpful in teh slightest? idk lel
-#	if [ $(which python3)  ]; then
-#		writeToLog "python3 found at $(which python3), using"
-#		idfPython="python3"
-#	elif [! -z $(which python) ]; then
-#		writeToLog "python found at $(which python), using"
-#		idfPython="python"
-#	else
-#		writeToLog "no python found, skipping python tools install"
-#	fi
-#
-#	if [ -z $idfPython ]; then
-#		writeToLog "installing tools with \`eval \"$idfPython $toolsInstallCmd\"\`"
-#
-#		eval "$idfPython $toolsInstallCmd"
-#		returnStatus
-#	else
-#		writeToLog "No python found on system, skipping python tools install"
-#	fi
+	writeToLog "Executing installer"
+	eval "$installCmd"
+	returnStatus
+
+	writeToLog "Executing extra tools installer"
+	eval "$toolsInstallCmd"
+	returnStatus
 
 	writeToLog "getting the commit hash"
 	commitHash=$(git -C $idfDir rev-parse HEAD)
@@ -251,24 +242,24 @@ function handleDownloadInstall() {
 }
 
 handleReboot() {
-	writeToLog "Handling reboot: (function ran)"
+	writeToLog "Handling reboot: (function ran)\n"
 
 	sudo reboot
 }
 
 handleWarnAllUsers() {
-	writeToLog "Warning all users of impending logout (function called)"
+	writeToLog "Warning all users of impending logout (function called)\n"
 
-	warningString="\nWARNING:\n\tReinstalling esp-idf:\n\tForce logut in ${sleepMins} minutes!!\n\tSave and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall reinstall-esp-idf.sh\`"
+	warningString="\nWARNING:\n\tReinstalling esp-idf:\n\tForce logut in ${sleepMins} minutes!!\n\tSave and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall reinstall-esp-idf.sh\`\n"
 
-	writeToLog "$warningString"
+	writeToLog "$warningStrin"
 
 	handleSleep
 
 	loggedIn=$(who | awk '{print $1}' | uniq)
 
 	if [ -z $loggedIn ]; then
-		writeToLog "no users logged in to warn"
+		writeToLog "no users logged in to warn\n"
 		return
 	else
 		writeToLog "Warning all logged in users:" # make sure dis workan
@@ -283,14 +274,14 @@ handleWarnAllUsers() {
 }
 
 function handleLogoutAllUsers() {
-	writeToLog "Handling user logout (function ran)"
+	writeToLog "Handling user logout (function ran)\n"
 
 	handleWarnAllUsers
 
 	loggedIn=$(who | awk '{print $1}' | uniq)
 
 	if [ -z $loggedIn ]; then
-		writeToLog "no logged in users to log out"
+		writeToLog "no logged in users to log out\n"
 		return
 	else
 		writeToLog "logging out all logged in users:"
@@ -305,10 +296,10 @@ function handleLogoutAllUsers() {
 
 function handleCheckEspIdf() {
 	if [ ! -z $IDF_PYTHON_ENV_PATH ]; then
-		writeToLog "FAIL: Sanity check failed!\n\tesp-idf environment varibles found!\n\tPelase run from a fresh termnal that has not had get_idf ran!\n\tExiting"
+		writeToLog "FAIL: Sanity check failed!\n\tesp-idf environment varibles found!\n\tPelase run from a fresh termnal that has not had get_idf ran!\n\tExiting\n"
 		exit
 	else
-		writeToLog "Sanity check: Environment correct\n\tNo esp-idf environment variables found, proceeding"
+		writeToLog "Sanity check: Environment correct\n\tNo esp-idf environment variables found, proceeding\n"
 	fi
 }
 
@@ -359,7 +350,7 @@ function handleEnd() {
 
 	echo -e "\nesp-idf re/installed! run \`source $rcFile\` and then \`get_idf\`\n to go\n\nAll done :3\n\n"
 
-	writeToLog "reinstall completed in $timeElapsed seconds"
+	writeToLog "reinstall completed in $timeElapsed seconds\n"
 	writeToLog " === finished ===\n\n"
 }
 
@@ -444,10 +435,10 @@ elif [ "$arg" == "interactive" -o "$arg" == "i" ]; then
 		idfGet="update"
 	fi
 
-	writeToLog "\n === new ${action} ==="
+	writeToLog "\n === new ${action} ===\n"
 	writeToLog "\tVersion: ${scriptVers}\n"
 
-	writeToLog "Interactive vars set:\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trcFile: $rcFile\n\tgitJobs: $gitJobs\n\tidfGet: $idfGet"
+	writeToLog "Interactive vars set:\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trcFile: $rcFile\n\tgitJobs: $gitJobs\n\tidfGet: $idfGet\n"
 
 	handleStart
 	handleSetupEnvironment
