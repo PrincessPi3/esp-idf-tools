@@ -1,27 +1,26 @@
-alias get_idf #2>/dev/null
-ret=$?
-if [ $ret -eq 1 ]; then
-	echo "get_idf not found"
-fi
+function checkAlias() {
+	echo "Testing $1"
+	alias $1 2>/dev/null
+	ret=$?
+	echo "\tretcode: $ret"
+	if [ $ret -eq 1 ]; then
+		echo "$1 not found"
+	else
+		echo "$1: $(alias $1)"
+	fi
 
-alias run_esp_reinstall #2>/dev/null
-ret=$?
-if [ $ret -eq 1 ]; then
-	echo "run_esp_reinstall not found"
-fi
+	return $ret
+}
 
-alias esp_monitor #2>/dev/null
-ret=$?
-if [ $ret -eq 1 ]; then
-	echo "esp_monitor not found"
-fi
+checkAlias get_idf
+checkAlias run_esp_reinstall
+checkAlias esp_monitor
+checkAlias esp_logs
+checkAlias notarealone
 
-alias esp_logs #2>/dev/null
-ret=$?
-if [ $ret -eq 1 ]; then
-	echo "esp_monitor not found"
-fi
+# if [ -z $ESPIDF_INSTALLDIR ]; then
+# 	echo "ESPIDF_INSTALLDIR not found"
+# else
+# 	echo "ESPIDF_INSTALLDIR: $ESPIDF_INSTALLDIR"
+# fi
 
-if [ -z $ESPIDF_INSTALLDIR ]; then
-	echo "ESPIDF_INSTALLDIR not found"
-fi
