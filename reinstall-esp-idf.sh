@@ -242,7 +242,6 @@ function testAppendAlias() {
 	echo "Testing alias '$1'"
 	alias $1 2>/dev/null # redirect errrors to keep it lookan clean
 	ret=$?
-	echo -e "\tretcode: $ret"
 	if [ ! $ret -eq 0 ]; then
 		writeToLog "$1 not found, appending to $rcFile"
 		echo "$2" >> "$rcFile"

@@ -38,11 +38,12 @@ testan:
     b bash reinstall-esp-idf.sh retool
     b bash reinstall-esp-idf.sh rt
     x bash reinstall-esp-idf.sh
-    bash reinstall-esp-idf.sh clearlogs
-    bash reinstall-esp-idf.sh clear
-    bash reinstall-esp-idf.sh cl
+    x bash reinstall-esp-idf.sh clearlogs
+    x bash reinstall-esp-idf.sh clear
+    x bash reinstall-esp-idf.sh clean
+    x bash reinstall-esp-idf.sh cl
     x bash reinstall-esp-idf.sh interactive
-    bash reinstall-esp-idf.sh i
+    x bash reinstall-esp-idf.sh i
     bash reinstall-esp-idf.sh nuke
     bash reinstall-esp-idf.sh n
     bash reinstall-esp-idf.sh cron
