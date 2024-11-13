@@ -26,4 +26,11 @@ else
 	echo -e "\nNo sdkconfig.old, skipping delete\n"
 fi
 
+if [ -f sdkconfig.bak ]; then
+	echo -e "\nDeleting sdkconfig.bak\n"
+	rm sdkconfig.bak
+else
+	echo -e "\nNo sdkconfig.bak, skipping delete\n"
+fi
+
 echo -e "\nAll done :3\n"
