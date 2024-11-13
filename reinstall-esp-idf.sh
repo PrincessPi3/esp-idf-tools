@@ -220,6 +220,7 @@ function handleDownloadInstall() {
 		eval "$gitCloneCmd"
 		returnStatus
 	else
+		writeToLog "Setting for update mode\n"
 		writeToLog "UPDATING esp-idf, branch $gitBranch with $gitJobs jobs to $idfDir"
 		eval "$gitUpdateCmd"
 		returnStatus
