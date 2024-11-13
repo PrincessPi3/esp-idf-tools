@@ -225,15 +225,15 @@ function handleDownloadInstall() {
 		returnStatus
 	fi
 
-	writeToLog "Executing installer"
+	writeToLog "Executing installer\n"
 	eval "$installCmd"
 	returnStatus
 
-	writeToLog "Executing extra tools installer"
+	writeToLog "Executing extra tools installer\n"
 	eval "$toolsInstallCmd"
 	returnStatus
 
-	writeToLog "getting the commit hash"
+	writeToLog "getting the commit hash\n"
 	commitHash=$(git -C $idfDir rev-parse HEAD)
 	returnStatus
 
