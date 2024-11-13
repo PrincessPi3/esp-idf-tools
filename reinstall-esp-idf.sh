@@ -160,7 +160,7 @@ function handleExport() {
 function handleSetupEnvironment() {
 	writeToLog "Handling setup environment (function ran)"
 
-	if ! [ -d $installDir ]; then
+	if [ ! -d "$installDir" ]; then
 		writeToLog "creating $installDir"
 		mkdir $installDir
 		returnStatus
@@ -168,12 +168,16 @@ function handleSetupEnvironment() {
 		writeToLog "$installDir exisits, skiping creation"
 	fi
 
-	if [ -d $espressifLocation ]; then
-		writeToLog "deleting $espressifLocation"
-		rm -rf $espressifLocation
-		returnStatus
+	if [ -d "$espressifLocation" -a "$idfGet" == "update" ]; then
+		writeToLog "Skipping delete of $espressifLocation"
 	else
-		writeToLog "$espressifLocation not found, skipping delete"
+		if [ -d "$espressifLocation" ]; then
+			writeToLog "deleting $espressifLocation"
+			rm -rf $espressifLocation
+			returnStatus
+		else
+			writeToLog "Skipping delete of $espressifLocation"
+		fi
 	fi
 }
 
