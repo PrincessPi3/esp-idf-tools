@@ -195,7 +195,7 @@ function handleSetupEnvironment() {
 }
 
 function handleAliasEnviron() {
-	alias get_idf
+	alias get_idf 2>/dev/null
 	ret=$?
 	if [ $ret -eq 1 ]; then
 		writeToLog "get_idf alias not found, appending to $rcFile"
@@ -205,7 +205,7 @@ function handleAliasEnviron() {
 		writeToLog "get_idf alias already installed, skipping\n"
 	fi
 
-	alias run_esp_reinstall
+	alias run_esp_reinstall 2>/dev/null
 	ret=$?
 	if [ $ret -eq 1 ]; then
 		writeToLog "run_esp_reinstall alias not found, appending to $rcFile"
@@ -217,7 +217,7 @@ function handleAliasEnviron() {
 		aliasRunEspReinstallChk=0
 	fi
 
-	alias esp_monitor
+	alias esp_monitor 2>/dev/null
 	ret=$?
 	if [ $ret -eq 1 ]; then
 		writeToLog "esp_monitor alias not found, appending to $rcFile"
@@ -229,7 +229,7 @@ function handleAliasEnviron() {
 		aliasEspMonitorchk=0
 	fi
 
-	alias esp_logs
+	alias esp_logs 2>/dev/null
 	ret=$?
 	if [ $ret -eq 1 ]; then
 		writeToLog "esp_logs alias not found, appending to $rcFile"
