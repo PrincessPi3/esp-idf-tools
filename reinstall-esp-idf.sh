@@ -123,7 +123,7 @@ function handleExport() {
 		cp -f $exportScript $exportBackupScript
 		returnStatus
 	else
-		writeToLog "testExport export\n"
+		writeToLog "testExport export is set\n"
 
 		writeToLog "deleting $exportScript"
 		rm -f $exportScript
