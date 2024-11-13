@@ -34,7 +34,7 @@ gitUpdateCmd="git -C $idfDir reset --hard; git -C $idfDir clean -df; git -C $idf
 
 installCmd="$idfDir/install.sh all"
 
-toolsInstallCmd="python $idfDir/tools/idf_tools.py install all 2>/dev/null"
+toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
 
 idfGet="update" # default method
 
@@ -477,6 +477,7 @@ function handleChk() {
 
 	if [[ $totalErrorLoad < 2 ]]; then
 		writeToLog "Installed Successfully, total error load: $totalErrorLoad"
+		echo -e "\n\n$retCodes\n\n"
 	else
 		writeToLog "Install FAILED! Dumping return codes:\n"
 		writeToLog "$retCodes"
