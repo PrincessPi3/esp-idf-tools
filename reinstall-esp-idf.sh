@@ -163,9 +163,8 @@ function handleExport() {
 	# writeToLog "Handling $exportScript (function ran)\n"
 	if [ -z $testExport ]; then
 		writeToLog "testExport not set\n"
-
 		writeToLog "Backing up $exportScript to $exportBackupScript"
-		cp -f $exportScript $exportBackupScript
+		cp $exportScript $exportBackupScript 2>/dev/null
 		returnStatus
 		backupExportScriptChk=$?
 	else
@@ -183,7 +182,7 @@ function handleExport() {
 	fi
 
 	writeToLog "Appending $runningDir/add-to-export-sh.txt to $exportScript"
-	cat $runningDir/add-to-export-sh.txt >> $exportScript
+	echo cat $runningDir/add-to-export-sh.txt >> $exportScript
 	returnStatus
 	exportCatChk=$?
 

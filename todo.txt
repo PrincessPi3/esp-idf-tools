@@ -44,8 +44,8 @@ testan:
     x bash reinstall-esp-idf.sh cl
     x bash reinstall-esp-idf.sh interactive
     x bash reinstall-esp-idf.sh i
-    bash reinstall-esp-idf.sh nuke
-    bash reinstall-esp-idf.sh n
+    x bash reinstall-esp-idf.sh nuke
+    x bash reinstall-esp-idf.sh n
     bash reinstall-esp-idf.sh cron
     bash reinstall-esp-idf.sh c
 
