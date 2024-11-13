@@ -238,12 +238,12 @@ function handleSetupEnvironment() {
 }
 
 function handleAliasEnviron() {
-	alias get_idf
-	ret=$?
-	if [ $ret -eq 1 ]; then
-		echo aliasnant not found
-	fi
-
+#	alias get_idf
+#	ret=$?
+#	if [ $ret -eq 1 ]; then
+#		echo aliasnant not found
+#	fi
+#
 #	alias get_idf 2>/dev/null
 #	ret=$?
 #	if [ $ret == 1 ]; then
