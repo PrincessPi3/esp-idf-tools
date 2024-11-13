@@ -4,4 +4,11 @@ echo 'alias esp_monitor="tail -n 75 -f $ESPIDF_INSTALLDIR/install.log;"' >> ~/.z
 
 echo 'alias esp_logs="less $ESPIDF_INSTALLDIR/install.log; less $ESPIDF_INSTALLDIR/version-data.txt"' >> ~/.zshrc
 
-run_esp_reinstal clear
+# run_esp_reinstall
+# run_esp_reinstall clear
+# run_esp_reinstall nuke
+# run_esp_reinstall test
+# run_esp_reinstall interactive
+# run_esp_reinstall retool
+# esp_monitor
+# esp_logs
