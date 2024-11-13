@@ -195,7 +195,9 @@ function handleSetupEnvironment() {
 }
 
 function handleAliasEnviron() {
-	if ! [ -z $(alias | grep get_idf) ]; then
+	alias get_idf
+	ret=$?
+	if [ $ret -eq 1 ]; then
 		writeToLog "get_idf alias not found, appending to $rcFile"
 		echo -e "\nalias get_idf='. ${exportScript}'" >> $rcFile
 		returnStatus
@@ -203,7 +205,9 @@ function handleAliasEnviron() {
 		writeToLog "get_idf alias already installed, skipping\n"
 	fi
 
-	if ! [ -z $(alias | grep run_esp_reinstall) ]; then
+	alias run_esp_reinstall
+	ret=$?
+	if [ $ret -eq 1 ]; then
 		writeToLog "run_esp_reinstall alias not found, appending to $rcFile"
 		echo "alias run_esp_reinstall='git -C $runningDir pull; cat $runningDir/version.txt; bash $runningDir/reinstall-esp-idf.sh '" >> $rcFile
 		returnStatus
@@ -213,7 +217,9 @@ function handleAliasEnviron() {
 		aliasRunEspReinstallChk=0
 	fi
 
-	if ! [ -z $(alias | grep esp_monitor) ]; then
+	alias esp_monitor
+	ret=$?
+	if [ $ret -eq 1 ]; then
 		writeToLog "esp_monitor alias not found, appending to $rcFile"
 		echo "alias esp_monitor='tail -n 75 -f $installDir/install.log'" >> $rcFile
 		returnStatus
@@ -223,7 +229,9 @@ function handleAliasEnviron() {
 		aliasEspMonitorchk=0
 	fi
 
-	if ! [ -z $(alias | grep esp_logs) ]; then
+	alias esp_logs
+	ret=$?
+	if [ $ret -eq 1 ]; then
 		writeToLog "esp_logs alias not found, appending to $rcFile"
 		echo "alias esp_logs='less $installDir/install.log; less $installDir/version-data.txt'" >> $rcFile
 		returnStatus
@@ -233,7 +241,7 @@ function handleAliasEnviron() {
 		aliasEspLogsChk=0
 	fi
 
-	if ! [ $ESPIDF_INSTALLDIR ]; then
+	if [ -z $ESPIDF_INSTALLDIR ]; then
 		writeToLog "ESPIDF_INSTALLDIR environment variable not found, appending to ${rcFile}"
 		echo -e "export ESPIDF_INSTALLDIR=\"${installDir}\"\n" >> $rcFile
 		returnStatus
