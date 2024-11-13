@@ -261,58 +261,6 @@ function handleAliasEnviron() {
 	testAppendAlias "run_esp_reinstall" "alias run_esp_reinstall='git -C $runningDir pull; cat $runningDir/version.txt; bash $runningDir/reinstall-esp-idf.sh '"
 	testAppendAlias "esp_monitor" "alias esp_monitor='tail -n 75 -f $installDir/install.log'"
 	testAppendAlias "esp_logs" "alias esp_logs='less $installDir/install.log; less $installDir/version-data.txt'"
-	
-#	alias get_idf
-#	ret=$?
-#	if [ $ret -eq 1 ]; then
-#		echo aliasnant not found
-#	fi
-#
-#	alias get_idf 2>/dev/null
-#	ret=$?
-#	if [ $ret == 1 ]; then
-#		writeToLog "get_idf alias not found, appending to $rcFile"
-#		echo -e "\nalias get_idf='. ${exportScript}'" >> $rcFile
-#		returnStatus
-#	else
-#		writeToLog "get_idf alias already installed, skipping\n"
-#	fi
-#
-#	alias run_esp_reinstall 2>/dev/null
-#	ret=$?
-#	if [ $ret == 1 ]; then
-#		writeToLog "run_esp_reinstall alias not found, appending to $rcFile"
-#		echo "alias run_esp_reinstall='git -C $runningDir pull; cat $runningDir/version.txt; bash $runningDir/reinstall-esp-idf.sh '" >> $rcFile
-#		returnStatus
-#		aliasRunEspReinstallChk=$?
-#	else
-#		writeToLog "run_esp_reinstall alias already installed, skipping\n"
-#		aliasRunEspReinstallChk=0
-#	fi
-#
-#	alias esp_monitor 2>/dev/null
-#	ret=$?
-#	if [ $ret == 1 ]; then
-#		writeToLog "esp_monitor alias not found, appending to $rcFile"
-#		echo "alias esp_monitor='tail -n 75 -f $installDir/install.log'" >> $rcFile
-#		returnStatus
-#		aliasEspMonitorchk=$?
-#	else
-#		writeToLog "esp_monitor alias already installed, skipping\n"
-#		aliasEspMonitorchk=0
-#	fi
-#
-#	alias esp_logs 2>/dev/null
-#	ret=$?
-#	if [ $ret == 1 ]; then
-#		writeToLog "esp_logs alias not found, appending to $rcFile"
-#		echo "alias esp_logs='less $installDir/install.log; less $installDir/version-data.txt'" >> $rcFile
-#		returnStatus
-#		aliasEspLogsChk=$?
-#	else
-#		writeToLog "esp_logs alias already installed, skipping\n"
-#		aliasEspLogsChk=0
-#	fi
 
 	if [ -z $ESPIDF_INSTALLDIR ]; then
 		writeToLog "ESPIDF_INSTALLDIR environment variable not found, appending to ${rcFile}"
