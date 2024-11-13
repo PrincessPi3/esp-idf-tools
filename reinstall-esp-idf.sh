@@ -610,7 +610,7 @@ elif [ "$arg" == "cron" -o "$arg" == "c" ]; then # full install with warn, sleep
 
 	exit
 
-elif [ "$arg" == "clearlogs" -o "$arg" == "cl" -o "$arg" == "clear" ]; then # clear logs
+elif [[ "$arg" == "clearlogs" || "$arg" == "cl" || "$arg" == "clear" ]]; then # clear logs
 	handleEmptyLogs
 
 	exit
