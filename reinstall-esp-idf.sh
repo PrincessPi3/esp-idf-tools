@@ -431,12 +431,10 @@ elif [ "$arg" == "interactive" -o "$arg" == "i" ]; then
 		gitJobs=$readGitJobs
 	fi
 
-	if [ -z $readIdfGet ]; then
+	if [ ! -z $readIdfGet ]; then
 		idfGet=$readIdfGet
-	else
-		idfGet="update"
 	fi
-
+	
 	writeToLog "\n === new ${action} ===\n"
 	writeToLog "\tVersion: ${scriptVers}\n"
 
