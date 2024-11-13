@@ -1,3 +1,5 @@
+source $HOME/.zshrc
+
 function checkAlias() {
 	echo "Testing $1"
 	alias $1 2>/dev/null
