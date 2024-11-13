@@ -421,6 +421,10 @@ function handleEmptyLogs() {
 
 function handleChk() {
 	writeToLog "Error Checking:\n\tPackages install: $pkgInstallChk\n\tGit pull/clone: $gitChk\n\tInstall script: $installChk\n\tInstall tools: $toolsInstallChk\n\tExport append: $exportCatChk\n\tExport edit return: $exportSedReturnChk\n\tExport version: $exportSedVersionChk\n\tExport date: $exportSedDateChk\n\tExport git hash: $exportSedHashChk\n\trun_esp_reinstall alias: $aliasRunEspReinstallChk\n\tesp_monitor alias: $aliasEspMonitorchk\n\tesp_logs alias: $aliasEspLogsChk\n\tESPIDF_INSTALLDIR envvar: $aliasInstallDirChk\n"
+
+	sillyChks=$(($pkgInstallChk+$gitChk+$gitChk+$installChk+$toolsInstallChk+$exportSedHashChk+$exportCatChk+$exportSedReturnChk+$aliasRunEspReinstallChk+$aliasEspMonitorchk+$aliasEspLogsChk+$aliasInstallDirChk))
+
+	writeToLog "Total error load: $sillyChks\n"
 }
 
 
