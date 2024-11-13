@@ -205,9 +205,9 @@ function handleAliasEnviron() {
 function handleDownloadInstall() {
 	writeToLog "Handling download and install (function ran)\n"
 
-	if [ "$idfGet" == "download" || ! -d "$idfDir" ]; then
+	if [[ "$idfGet" == "download" || ! -d "$idfDir" ]]; then
 		writeToLog "Setting for download mode\n"
-		
+
 		if [ -d "$idfDir" ]; then
 			writeToLog "deleting $idfDir"
 			rm -rf $idfDir
