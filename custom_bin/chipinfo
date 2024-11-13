@@ -1,0 +1,8 @@
+#!/bin/bash
+echo -e "\nflash_id\n"
+esptool.py flash_id
+
+echo -e "\nchip_id\n"
+esptool.py chip_id
+
+echo -e "\nAll done :3\n"

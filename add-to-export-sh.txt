@@ -59,6 +59,7 @@ alias changeesp="source ${binDir}/changeesp.sh"
 alias monitor="idf.py monitor"
 alias flashmonitor="idf.py flash monitor"
 alias menuconfig="idf.py menuconfig"
+alias projectsize="idf.py size size-components size-files"
 
 echo -e "Changing dir to ${ESPIDF_INSTALLDIR}"
 cd "${ESPIDF_INSTALLDIR}"
