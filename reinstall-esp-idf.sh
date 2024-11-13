@@ -216,23 +216,41 @@ function handleDownloadInstall() {
 			writeToLog "$idfDir not found, skipping delete\n"
 		fi
 
+		istartTime=$(date '+%s')
 		writeToLog "CLONING esp-idf, branch $gitBranch with $gitJobs jobs to $idfDir"
 		eval "$gitCloneCmd"
 		returnStatus
+		iendTime=$(date '+%s')
+		installerTime=$(($iendTime-$istartTime))
+		writeToLog "Git clone completed in $installerTime seconds\n"
 	else
 		writeToLog "Setting for update mode\n"
+
+		istartTime=$(date '+%s')
 		writeToLog "UPDATING esp-idf, branch $gitBranch with $gitJobs jobs to $idfDir"
 		eval "$gitUpdateCmd"
 		returnStatus
+		iendTime=$(date '+%s')
+		installerTime=$(($iendTime-$istartTime))
+		writeToLog "Git update completed in $installerTime seconds\n"
 	fi
 
+	istartTime=$(date '+%s')
 	writeToLog "Executing installer\n"
 	eval "$installCmd"
 	returnStatus
+	iendTime=$(date '+%s')
+	installerTime=$(($iendTime-$istartTime))
+	writeToLog "Installer completed in $installerTime seconds\n"
 
+	istartTime=$(date '+%s')
 	writeToLog "Executing extra tools installer\n"
 	eval "$toolsInstallCmd"
 	returnStatus
+	iendTime=$(date '+%s')
+	installerTime=$(($iendTime-$istartTime))
+	writeToLog "Extra tools installer completed in $installerTime seconds\n"
+
 
 	writeToLog "getting the commit hash\n"
 	commitHash=$(git -C $idfDir rev-parse HEAD)
