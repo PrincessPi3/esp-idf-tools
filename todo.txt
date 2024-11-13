@@ -43,7 +43,7 @@ testan:
     x bash reinstall-esp-idf.sh nuke
     x bash reinstall-esp-idf.sh n
     x bash reinstall-esp-idf.sh cron
-    bash reinstall-esp-idf.sh c
+    x bash reinstall-esp-idf.sh c
 
 mayhaps support bash?
 
