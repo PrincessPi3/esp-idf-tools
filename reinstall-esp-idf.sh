@@ -104,8 +104,7 @@ function writeToLog() {
 
 # this is not needed so long as warn doesnt god damned fucking work lmfao
 function handleSleep() {
-	writeToLog "Handling sleep hold (function ran)\n"
-
+	# writeToLog "Handling sleep hold (function ran)\n"
 	sleepSecs=$(($sleepMins*60)) # calculated seconds of warning to wait for user to log out
 
 	writeToLog "Sleeping $sleepMins minutes"
@@ -115,8 +114,7 @@ function handleSleep() {
 }
 
 function handleCheckInstallPackages() {
-	writeToLog "Handling check and install packages (function ran)\n"
-
+	# writeToLog "Handling check and install packages (function ran)\n"
 	packages=(git wget flex bison gperf python3 python3-pip python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0)
 
 	for package in "${packages[@]}"; do
@@ -140,8 +138,7 @@ function handleCheckInstallPackages() {
 }
 
 function handleCustomBins() {
-	writeToLog "Handling custon bins (function ran)\n"
-
+	# writeToLog "Handling custon bins (function ran)\n"
 	if [ -d $customBinLocation ]; then
 		writeToLog "Deleting $customBinLocation"
 		rm -rf $customBinLocation
@@ -163,8 +160,7 @@ function handleCustomBins() {
 }
 
 function handleExport() {
-	writeToLog "Handling $exportScript (function ran)\n"
-
+	# writeToLog "Handling $exportScript (function ran)\n"
 	if [ -z $testExport ]; then
 		writeToLog "testExport not set\n"
 
@@ -215,8 +211,7 @@ function handleExport() {
 }
 
 function handleSetupEnvironment() {
-	writeToLog "Handling setup environment (function ran)\n"
-
+	# writeToLog "Handling setup environment (function ran)\n"
 	if [ ! -d "$installDir" ]; then
 		writeToLog "creating $installDir"
 		mkdir $installDir
@@ -277,8 +272,7 @@ function handleAliasEnviron() {
 }
 
 function handleDownloadInstall() {
-	writeToLog "Handling download and install (function ran)\n"
-
+	# writeToLog "Handling download and install (function ran)\n"
 	if [[ "$idfGet" == "download" || ! -d "$idfDir" ]]; then
 		writeToLog "Setting for download mode\n"
 
@@ -344,15 +338,13 @@ function handleDownloadInstall() {
 }
 
 handleReboot() {
-	writeToLog "Handling reboot: (function ran)\n"
-
+	# writeToLog "Handling reboot: (function ran)\n"
 	sudo reboot
 }
 
 # warning not work how i make it work fuckin ell
 handleWarnAllUsers() {
-	writeToLog "Warning all users of impending logout (function called)\n"
-
+	# writeToLog "Warning all users of impending logout (function called)\n"
 	warningString="\nWARNING:\n\tReinstalling esp-idf:\n\tForce logut in $sleepMins minutes!!\n\tSave and log out!\n\tmonitor with \`esp+monitor\`\n\tterminate with \`sudo killall reinstall-esp-idf.sh\`\n"
 
 	writeToLog "$warningString"
@@ -379,8 +371,7 @@ handleWarnAllUsers() {
 
 # dis one sure af be workan tho lmfao
 function handleLogoutAllUsers() {
-	writeToLog "Handling user logout (function ran)\n"
-
+	# writeToLog "Handling user logout (function ran)\n"
 	handleWarnAllUsers
 
 	loggedIn=$(who | awk '{print $1}' | uniq)
