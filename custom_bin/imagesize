@@ -1,0 +1,13 @@
+#!/bin/bash
+echo -e "\nProject sizes\n"
+
+echo -e "\nGeneral:\n"
+idf.py size
+
+echo -e "\nComponants:\n"
+idf.py size-components
+
+echo -e "\nFiles:\n"
+idf.py size-files
+
+echo -e "\nAll done :3\n"
