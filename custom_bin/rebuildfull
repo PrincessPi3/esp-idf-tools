@@ -16,8 +16,8 @@ fi
 
 echo -e "\nRun menuconfig y/n?\n"
 read menuconfig
-if [ "$wipe" == "y" ]; then
-	echo -e "\n\Executing menuconfig"
+if [ "menuconfig" == "y" ]; then
+	echo -e "\n\Executing menuconfig\n"
 	idf.py menuconfig
 fi
 

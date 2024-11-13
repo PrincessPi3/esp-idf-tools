@@ -23,7 +23,7 @@ if [ -f *.old ]; then
 	echo -e "\nDeleting *.old\n"
 	rm *.old
 else
-	echo -e "\nNo *g.old, skipping delete\n"
+	echo -e "\nNo *.old, skipping delete\n"
 fi
 
 if [ -f *.bak ]; then
