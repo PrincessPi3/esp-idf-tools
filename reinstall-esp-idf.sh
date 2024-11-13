@@ -310,9 +310,9 @@ function handleDownloadInstall() {
 	commitHash=$(git -C $idfDir rev-parse HEAD)
 	returnStatus
 
-	gitDataLog="installed esp-idf from commit $commitHash from branch $gitBranch using $scriptVers"
+	gitDataLog="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)') commit $commitHash branch $gitBranch version $scriptVers action $action"
 	writeToLog "$gitDataLog"
-	echo -e "$gitDataLog" >> $versionData
+	echo "$gitDataLog" >> $versionData
 	returnStatus
 }
 
