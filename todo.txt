@@ -1,0 +1,60 @@
+x maybe add retool to combined script?
+x add esp install paths and such to envvars in ~/.zshrc
+x functionize retool some
+x    custom_bin
+x    export
+x prolly refactor some lmfao
+x test --single-branch vs non
+x redo comments
+x handleLogoutAllUsers log users test
+x handleWarnAllUsers log users test
+x interactive mode
+x check end time loggan
+x clean up writeToLog to avoid repeated date()
+x export updoots
+x install applications, use which?
+x test missing packages
+x update repos instead of re-downoadan?
+x test --single-branch
+x    time download and install
+x use return codes to define if install likely completed successfully
+x    upon success, touch some file to show success
+x        when script starts, delete the touched files
+x touch up add-to-export-sh.txt
+x alias add and document too
+   x maybe just cat a txt lmao
+x test reinstall from zero
+
+testan:
+    x bash reinstall-esp-idf.sh help
+    x bash reinstall-esp-idf.sh --help
+    x bash reinstall-esp-idf.sh -h
+    x bash reinstall-esp-idf.sh h
+    x bash reinstall-esp-idf.sh test
+    x bash reinstall-esp-idf.sh t
+    x bash reinstall-esp-idf.sh retool
+    x bash reinstall-esp-idf.sh rt
+    x bash reinstall-esp-idf.sh
+    x bash reinstall-esp-idf.sh clearlogs
+    x bash reinstall-esp-idf.sh clear
+    x bash reinstall-esp-idf.sh cl
+    x bash reinstall-esp-idf.sh interactive
+    x bash reinstall-esp-idf.sh i
+    x bash reinstall-esp-idf.sh nuke
+    x bash reinstall-esp-idf.sh n
+    bash reinstall-esp-idf.sh cron
+    bash reinstall-esp-idf.sh c
+
+mayhaps support bash?
+
+figure out how to message users properly
+
+bug: duplicate export added to export.sh
+    involves testExport prolly lol
+
+standardize the capatilization and format and content of notes
+
+verbosity levels?
+    less verbose on git commands and installers?
+    
+fix dat nuke issue on line ~307 # fixed?
