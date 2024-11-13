@@ -71,6 +71,7 @@ function handleSleep() {
 	writeToLog "sleeping ${sleepMins} minutes"
 	sleep $sleepSecs
 	returnStatus
+	sleepChk=$?
 }
 
 function handleCheckInstallPackages() {
@@ -105,6 +106,7 @@ function handleCustomBins() {
 		writeToLog "deleting ${customBinLocation}"
 		rm -rf $customBinLocation
 		returnStatus
+		rmCustomBinChk=$?
 	else
 		writeToLog "${customBinLocation} not found, skipping delete\n"
 	fi
@@ -112,10 +114,12 @@ function handleCustomBins() {
 	writeToLog "copying scripts from ${customBinFrom} to ${customBinLocation}"
 	cp -r $customBinFrom $customBinLocation
 	returnStatus
+	cpCustomBinChk=$?
 
 	writeToLog "making scripts executable at ${customBinLocation}"
 	chmod -R +x $customBinLocation
 	returnStatus
+	customBinExecChk=$?
 }
 
 function handleExport() {
@@ -127,16 +131,19 @@ function handleExport() {
 		writeToLog "backing up $exportScript to $exportBackupScript"
 		cp -f $exportScript $exportBackupScript
 		returnStatus
+		backupExportScriptChk=$?
 	else
 		writeToLog "testExport export is set\n"
 
 		writeToLog "deleting $exportScript"
 		rm -f $exportScript
 		returnStatus
+		rmExportScriptChk=$?
 
 		writeToLog "restoring $exportScript from backup at $exportBackupScript"
 		cp $exportBackupScript $exportScript
 		returnStatus
+		restoreExportScriptChk=$?
 	fi
 
 	writeToLog "adding $runningDir/add-to-export-sh.txt to $exportScript"
@@ -174,6 +181,7 @@ function handleSetupEnvironment() {
 		writeToLog "creating $installDir"
 		mkdir $installDir
 		returnStatus
+		mkInstallDirChk=$?
 	else
 		writeToLog "$installDir exisits, skiping creation\n"
 	fi
@@ -188,6 +196,7 @@ function handleSetupEnvironment() {
 			writeToLog "$espressifLocation fonud, deleting for reinstall"
 			rm -rf $espressifLocation
 			returnStatus
+			rmEspressifChk=$?
 		else
 			writeToLog "$espressifLocation not found, skipping delete for reinstall\n"
 		fi
@@ -262,6 +271,7 @@ function handleDownloadInstall() {
 			writeToLog "deleting $idfDir"
 			rm -rf $idfDir
 			returnStatus
+			rmIdfDirChk=$?
 		else
 			writeToLog "$idfDir not found, skipping delete\n"
 		fi
@@ -270,7 +280,7 @@ function handleDownloadInstall() {
 		writeToLog "CLONING esp-idf, branch $gitBranch with $gitJobs jobs to $idfDir\n\tCommand: $gitCloneCmd\n"
 		eval "$gitCloneCmd"
 		returnStatus
-		gitCh=$?
+		gitChk=$?
 		iendTime=$(date '+%s')
 		installerTime=$(($iendTime-$istartTime))
 		writeToLog "Git CLONE completed in $installerTime seconds\n"
@@ -309,11 +319,13 @@ function handleDownloadInstall() {
 	writeToLog "getting the commit hash\n"
 	commitHash=$(git -C $idfDir rev-parse HEAD)
 	returnStatus
+	gitHashChk=$?
 
 	gitDataLog="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)') commit $commitHash branch $gitBranch version $scriptVers action $action"
 	writeToLog "$gitDataLog"
 	echo "$gitDataLog" >> $versionData
 	returnStatus
+	gitLogChk=$?
 }
 
 handleReboot() {
@@ -345,6 +357,7 @@ handleWarnAllUsers() {
 			returnStatus
 		done
 		returnStatus
+		warnChk=$?
 	fi
 }
 
@@ -366,6 +379,7 @@ function handleLogoutAllUsers() {
 			returnStatus
 		done
 		returnStatus
+		logoutChk=$?
 	fi
 }
 
@@ -402,7 +416,7 @@ function handleStart() {
 }
 
 function handleEmptyLogs() {
-	echo -e "\nDeleting $log\n"
+	echo -e "\n\nDeleting $log\n"
  	rm -f $log
 	echo -e "\treturn status: ${?}\n"
  
@@ -420,9 +434,10 @@ function handleEmptyLogs() {
 }
 
 function handleChk() {
-	retCodes="Error Checking:\n\tPackages install: $pkgInstallChk\n\tGit pull/clone: $gitChk\n\tInstall script: $installChk\n\tInstall tools: $toolsInstallChk\n\tExport append: $exportCatChk\n\tExport edit return: $exportSedReturnChk\n\tExport version: $exportSedVersionChk\n\tExport date: $exportSedDateChk\n\tExport git hash: $exportSedHashChk\n\trun_esp_reinstall alias: $aliasRunEspReinstallChk\n\tesp_monitor alias: $aliasEspMonitorchk\n\tesp_logs alias: $aliasEspLogsChk\n\tESPIDF_INSTALLDIR envvar: $aliasInstallDirChk\n"
+	retCodes="Error Checking:\n\tPackages install: $pkgInstallChk\n\tGit pull/clone: $gitChk\n\tInstall script: $installChk\n\tInstall tools: $toolsInstallChk\n\tExport append: $exportCatChk\n\tExport edit return: $exportSedReturnChk\n\tExport version: $exportSedVersionChk\n\tExport date: $exportSedDateChk\n\tExport git hash: $exportSedHashChk\n\trun_esp_reinstall alias: $aliasRunEspReinstallChk\n\tesp_monitor alias: $aliasEspMonitorchk\n\tesp_logs alias: $aliasEspLogsChk\n\tESPIDF_INSTALLDIR envvar: $aliasInstallDirChk\n\tWarned Users: $warnChk\n\tLogged out users: $logoutChk\n\tAppended git log to version-data.txt: $gitLogChk\n\tAcquired git hash: $gitHashChk\n\tDeleted esp-idf dir: $rmIdfDirChk\n\tDeleted .espressif dir: $rmEspressifChk
+	\n\tCreated install dir: $mkInstallDirChk\n\tRestored export.sh.bak: $restoreExportScriptChk\n\tDeleted old export.sh: $rmExportScriptCh\n\tBacked up export.sh to export.sh.bak: $backupExportScriptChk\n\tMade custom scripts executable: $customBinExecChk\n\tCopied custom scripts: $cpCustomBinChk\n\tDeleted old custom scripts dir: $rmCustomBinChk\n\tWoke from sleep: $sleepChk"
 
-	totalErrorLoad=$(($pkgInstallChk+$gitChk+$gitChk+$installChk+$toolsInstallChk+$exportSedHashChk+$exportCatChk+$exportSedReturnChk+$aliasRunEspReinstallChk+$aliasEspMonitorchk+$aliasEspLogsChk+$aliasInstallDirChk))
+	totalErrorLoad=$(($pkgInstallChk+$gitChk+$gitChk+$installChk+$toolsInstallChk+$exportSedHashChk+$exportCatChk+$exportSedReturnChk+$aliasRunEspReinstallChk+$aliasEspMonitorchk+$aliasEspLogsChk+$aliasInstallDirChk+$warnChk+$logoutChk+$gitLogChk+$gitHashChk+$rmIdfDirChk+$rmEspressifChk+$mkInstallDirChk+$restoreExportScriptChk+$rmExportScriptCh+$backupExportScriptChk+$customBinExecChk+$rmCustomBinChk+$sleepChk))
 
 	if [[ $totalErrorLoad < 2 ]]; then
 		writeToLog "Installed Successfully, total error load: $totalErrorLoad"
