@@ -340,7 +340,7 @@ function handleEmptyLogs() {
 
 	echo "Creating empty file at $log"
  	touch $log
-	echo "\treturn status: ${?}\n"
+	echo -e "\treturn status: ${?}\n"
 
 	echo "Creating empty file at $versionData"
  	touch $versionData
