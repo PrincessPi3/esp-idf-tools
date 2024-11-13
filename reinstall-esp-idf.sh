@@ -255,7 +255,7 @@ handleWarnAllUsers() {
 
 	warningString="\nWARNING:\n\tReinstalling esp-idf:\n\tForce logut in ${sleepMins} minutes!!\n\tSave and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall reinstall-esp-idf.sh\`\n"
 
-	writeToLog "$warningStrin"
+	writeToLog "$warningString"
 
 	handleSleep
 
