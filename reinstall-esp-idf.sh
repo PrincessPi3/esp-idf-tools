@@ -91,7 +91,8 @@ function handleCheckInstallPackages() {
 	if [ ! -z $installPackagees ]; then
 		writeToLog "Missing packages found! Installing: $installPackagees"
 		sudo apt install -y "$installPackagees"
-		pkgInstallChk=returnStatus
+		returnStatus
+		pkgInstallChk=$?
 	else
 		writeToLog "No missing packages found, continuing\n"
 	fi
@@ -140,25 +141,30 @@ function handleExport() {
 
 	writeToLog "adding $runningDir/add-to-export-sh.txt to $exportScript"
 	cat $runningDir/add-to-export-sh.txt >> $exportScript
-	exportCatChk=returnStatus
+	returnStatus
+	exportCatChk=$?
 
 	writeToLog "editing $exportScript to remove ending \`return 0\`"
 	sed -i 's/return 0/# return 0/g' $exportScript
-	exportSedReturnChk=returnStatus
+	returnStatus
+	exportSedReturnChk=$?
 
 	writeToLog "editing $exportScript with version information: $scriptVers"
 	sed -i "s/versionTAG/\'$scriptVers\'/g" $exportScript
-	exportSedVersionChk=returnStatus
+	returnStatus
+	exportSedVersionChk=$?
 
 	dateStampInstall=$(date '+%d-%m-%Y %H:%M:%S %Z (%s)')
 
 	writeToLog "editing $exportScript with install date information: $dateStampInstall"
 	sed -i "s/installDateTAG/\'$dateStampInstall\'/g" $exportScript
-	exportSedDateChk=returnStatus
+	returnStatus
+	exportSedDateChk=$?
 
 	writeToLog "editing $exportScript with git commit hash data: $commitHash"
 	sed -i "s/commitTAG/\'$commitHash\'/g" $exportScript
-	exportSedHashChk=returnStatus
+	returnStatus
+	exportSedHashChk=$?
 }
 
 function handleSetupEnvironment() {
@@ -200,25 +206,29 @@ function handleAliasEnviron() {
 	if [ ! -z $(alias | grep run_esp_reinstall) ]; then
 		writeToLog "run_esp_reinstall alias not found, appending to $rcFile"
 		echo "alias run_esp_reinstall='git -C $runningDir pull; cat $runningDir/version.txt; bash $runningDir/reinstall-esp-idf.sh '" >> $rcFile
-		aliasRunEspReinstallChk=returnStatus
+		returnStatus
+		aliasRunEspReinstallChk=$?
 	fi
 
 	if [ ! -z $(alias | grep esp_monitor) ]; then
 		writeToLog "esp_monitor alias not found, appending to $rcFile"
 		echo "alias esp_monitor='tail -n 75 -f $installDir/install.log'" >> $rcFile
-		aliasEspMonitorchk=returnStatus
+		returnStatus
+		aliasEspMonitorchk=$?
 	fi
 
 	if [ ! -z $(alias | grep esp_logs) ]; then
 		writeToLog "esp_logs alias not found, appending to $rcFile"
 		echo "alias esp_logs='less $installDir/install.log; less $installDir/version-data.txt'" >> $rcFile
-		aliasEspLogsChk=returnStatus
+		returnStatus
+		aliasEspLogsChk=$?
 	fi
 
 	if [ -z $ESPIDF_INSTALLDIR ]; then
 		writeToLog "ESPIDF_INSTALLDIR environment variable not found, appending to ${rcFile}"
 		echo -e "export ESPIDF_INSTALLDIR=\"${installDir}\"\n" >> $rcFile
-		aliasInstallDirChk=returnStatus
+		returnStatus
+		aliasInstallDirChk=$?
 	else
 		writeToLog "ESPIDF_INSTALLDIR environment variable already installed, skipping\n"
 	fi
@@ -241,7 +251,8 @@ function handleDownloadInstall() {
 		istartTime=$(date '+%s')
 		writeToLog "CLONING esp-idf, branch $gitBranch with $gitJobs jobs to $idfDir\n\tCommand: $gitCloneCmd\n"
 		eval "$gitCloneCmd"
-		gitChk=returnStatus
+		returnStatus
+		gitCh=$?
 		iendTime=$(date '+%s')
 		installerTime=$(($iendTime-$istartTime))
 		writeToLog "Git CLONE completed in $installerTime seconds\n"
@@ -251,7 +262,8 @@ function handleDownloadInstall() {
 		istartTime=$(date '+%s')
 		writeToLog "UPDATING esp-idf, branch $gitBranch with $gitJobs jobs to $idfDir\n\tCommand: $gitUpdateCmd\n"
 		eval "$gitUpdateCmd"
-		gitChk=returnStatus
+		returnStatus
+		gitChk=$?
 		iendTime=$(date '+%s')
 		installerTime=$(($iendTime-$istartTime))
 		writeToLog "Git UPDATE completed in $installerTime seconds\n"
@@ -260,7 +272,8 @@ function handleDownloadInstall() {
 	istartTime=$(date '+%s')
 	writeToLog "Executing installer\n\tCommand: $installCmd\n"
 	eval "$installCmd"
-	installChk=returnStatus
+	returnStatus
+	installChk=$?
 	iendTime=$(date '+%s')
 	installerTime=$(($iendTime-$istartTime))
 	writeToLog "Installer completed in $installerTime seconds\n"
@@ -268,7 +281,8 @@ function handleDownloadInstall() {
 	istartTime=$(date '+%s')
 	writeToLog "Executing extra tools installer\n\tCommand: $toolsInstallCmd\n"
 	eval "$toolsInstallCmd"
-	toolsInstallChk=returnStatus
+	returnStatus
+	toolsInstallChk=$?
 	iendTime=$(date '+%s')
 	installerTime=$(($iendTime-$istartTime))
 	writeToLog "Extra tools installer completed in $installerTime seconds\n"
