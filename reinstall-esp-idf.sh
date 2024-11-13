@@ -171,8 +171,8 @@ function handleSetupEnvironment() {
 	if [[ -d "$espressifLocation" && "$idfGet" == "update" ]]; then
 		writeToLog "Skipping delete of $espressifLocation because dir exists AND idfGet is set to update"
 	else
-		if [ -d "$espressifLocation" ]; then
-			writeToLog "deleting $espressifLocation"
+		if [[ -d $espressifLocation ]]; then
+			writeToLog "$espressifLocation fonud, deleting"
 			rm -rf $espressifLocation
 			returnStatus
 		else
