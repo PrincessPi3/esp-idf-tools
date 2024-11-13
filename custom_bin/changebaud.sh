@@ -1,7 +1,7 @@
 subprocess() {
-    echo "\nChanging ESPBAUD\n\t1: 9600\n\t2: 115200\n\t3: 230400\n\t4: 460800\n\t5: 1152000\n\t6: 1500000\n\nEnter Selection: "
+    echo -e "\nChanging ESPBAUD\n\t1: 9600\n\t2: 115200\n\t3: 230400\n\t4: 460800\n\t5: 1152000\n\t6: 1500000\n\nEnter Selection: "
     read baudRate
-    echo "\n"
+    echo -e "\n"
     case $baudRate in
     1) selection=9600 ;;
     2) selection=115200 ;;

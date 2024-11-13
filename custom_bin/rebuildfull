@@ -1,32 +1,7 @@
 #!/bin/bash
 echo -e "\nFully Rebuildan~\n"
 
-echo -e "\nRunning fullclean\n"
-
-idf.py fullclean
-
-echo -e "\nRunning manual delete tasks:"
-
-if [ -f build ]; then
-	echo -e "\tDeleting build dir"
-	rm -rf build
-else
-	echo -e "\tNo build dir, skipping delete"
-fi
-
-if [ -f sdkconfig ]; then
-	echo -e "\tDeleting sdkconfig"
-	rm sdkconfig
-else
-	echo -e "\tNo sdkconfig, skipping delete"
-fi
-
-if [ -f sdkconfig.old ]; then
-	echo -e "\tDeleting sdkconfig.old"
-	rm sdkconfig.old
-else
-	echo -e "\tNo sdkconfig.old, skipping delete"
-fi
+bash fullclean
 
 echo -e "\nSetting up project for $ESPTARGET\n"
 idf.py set-target $ESPTARGET
@@ -39,7 +14,7 @@ if [ "$wipe" == "y" ]; then
 	echo -e "\nFlash wiped\n"
 fi
 
-echo -e "\nRun menuconfig?\n"
+echo -e "\nRun menuconfig y/n?\n"
 read menuconfig
 if [ "$wipe" == "y" ]; then
 	echo -e "\n\Executing menuconfig"

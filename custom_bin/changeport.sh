@@ -23,5 +23,5 @@ subprocess ret
 
 export ESPPORT=$ret
 
-echo "\nESPPORT set to ${ESPPORT}\n"
+echo "\nESPPORT set to $ESPPORT\n"
 echo "\nAll done :3\n"
