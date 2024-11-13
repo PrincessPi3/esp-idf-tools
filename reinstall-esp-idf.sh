@@ -253,7 +253,7 @@ function testAppendAlias() {
 		echo "$2" >> "$rcFile"
 		returnStatus
 	else
-		writeToLog "$1 found: $(alias $1), skipping"
+		writeToLog "$1 found: $(alias $1), skipping\n"
 	fi
 
 	return $ret	
