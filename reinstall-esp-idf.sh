@@ -208,6 +208,9 @@ function handleAliasEnviron() {
 		echo "alias run_esp_reinstall='git -C $runningDir pull; cat $runningDir/version.txt; bash $runningDir/reinstall-esp-idf.sh '" >> $rcFile
 		returnStatus
 		aliasRunEspReinstallChk=$?
+	else
+		writeToLog "run_esp_reinstall alias already installed, skipping\n"
+		aliasRunEspReinstallChk=0
 	fi
 
 	if [ ! -z $(alias | grep esp_monitor) ]; then
@@ -215,6 +218,9 @@ function handleAliasEnviron() {
 		echo "alias esp_monitor='tail -n 75 -f $installDir/install.log'" >> $rcFile
 		returnStatus
 		aliasEspMonitorchk=$?
+	else
+		writeToLog "esp_monitor alias already installed, skipping\n"
+		aliasEspMonitorchk=0
 	fi
 
 	if [ ! -z $(alias | grep esp_logs) ]; then
@@ -222,6 +228,9 @@ function handleAliasEnviron() {
 		echo "alias esp_logs='less $installDir/install.log; less $installDir/version-data.txt'" >> $rcFile
 		returnStatus
 		aliasEspLogsChk=$?
+	else
+		writeToLog "esp_logs alias already installed, skipping\n"
+		aliasEspLogsChk=0
 	fi
 
 	if [ -z $ESPIDF_INSTALLDIR ]; then
@@ -231,6 +240,7 @@ function handleAliasEnviron() {
 		aliasInstallDirChk=$?
 	else
 		writeToLog "ESPIDF_INSTALLDIR environment variable already installed, skipping\n"
+		aliasInstallDirChk=0
 	fi
 }
 
@@ -412,7 +422,7 @@ function handleEnd() {
 	endTime=$(date '+%s')
 	timeElapsed=$(($endTime-$startTime))
 
-	echo -e "\nesp-idf re/installed! run \`source $rcFile\` and then \`get_idf\`\n to go\n\nAll done :3\n\n"
+	echo -e "\nesp-idf re/installed! run \`source $rcFile\` and then \`get_idf\`\n\nAll done :3\n\n"
 
 	writeToLog "reinstall completed in $timeElapsed seconds\n"
 	writeToLog " === finished ===\n\n"
