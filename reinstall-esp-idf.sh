@@ -50,9 +50,12 @@ idfGet="update" # default method
 # exit
 
 function returnStatus() {
-	strii="\treturn status: ${?}"
+	ret=$?
+	strii="\treturn status: $ret"
 	echo -e "$strii\n"
 	echo -e "$strii\n" >> $log
+	
+	return $ret
 }
 
 function writeToLog() {
@@ -88,7 +91,7 @@ function handleCheckInstallPackages() {
 	if [ ! -z $installPackagees ]; then
 		writeToLog "Missing packages found! Installing: $installPackagees"
 		sudo apt install -y "$installPackagees"
-		returnStatus
+		pkgInstallChk=returnStatus
 	else
 		writeToLog "No missing packages found, continuing\n"
 	fi
@@ -137,25 +140,25 @@ function handleExport() {
 
 	writeToLog "adding $runningDir/add-to-export-sh.txt to $exportScript"
 	cat $runningDir/add-to-export-sh.txt >> $exportScript
-	returnStatus
+	exportCatChk=returnStatus
 
 	writeToLog "editing $exportScript to remove ending \`return 0\`"
 	sed -i 's/return 0/# return 0/g' $exportScript
-	returnStatus
+	exportSedReturnChk=returnStatus
 
 	writeToLog "editing $exportScript with version information: $scriptVers"
 	sed -i "s/versionTAG/\'$scriptVers\'/g" $exportScript
-	returnStatus
+	exportSedVersionChk=returnStatus
 
 	dateStampInstall=$(date '+%d-%m-%Y %H:%M:%S %Z (%s)')
 
 	writeToLog "editing $exportScript with install date information: $dateStampInstall"
 	sed -i "s/installDateTAG/\'$dateStampInstall\'/g" $exportScript
-	returnStatus
+	exportSedDateChk=returnStatus
 
 	writeToLog "editing $exportScript with git commit hash data: $commitHash"
 	sed -i "s/commitTAG/\'$commitHash\'/g" $exportScript
-	returnStatus
+	exportSedHashChk=returnStatus
 }
 
 function handleSetupEnvironment() {
@@ -220,7 +223,7 @@ function handleDownloadInstall() {
 		istartTime=$(date '+%s')
 		writeToLog "CLONING esp-idf, branch $gitBranch with $gitJobs jobs to $idfDir\n\tCommand: $gitCloneCmd\n"
 		eval "$gitCloneCmd"
-		returnStatus
+		gitChk=returnStatus
 		iendTime=$(date '+%s')
 		installerTime=$(($iendTime-$istartTime))
 		writeToLog "Git CLONE completed in $installerTime seconds\n"
@@ -230,7 +233,7 @@ function handleDownloadInstall() {
 		istartTime=$(date '+%s')
 		writeToLog "UPDATING esp-idf, branch $gitBranch with $gitJobs jobs to $idfDir\n\tCommand: $gitUpdateCmd\n"
 		eval "$gitUpdateCmd"
-		returnStatus
+		gitChk=returnStatus
 		iendTime=$(date '+%s')
 		installerTime=$(($iendTime-$istartTime))
 		writeToLog "Git UPDATE completed in $installerTime seconds\n"
@@ -239,7 +242,7 @@ function handleDownloadInstall() {
 	istartTime=$(date '+%s')
 	writeToLog "Executing installer\n\tCommand: $installCmd\n"
 	eval "$installCmd"
-	returnStatus
+	installChk=returnStatus
 	iendTime=$(date '+%s')
 	installerTime=$(($iendTime-$istartTime))
 	writeToLog "Installer completed in $installerTime seconds\n"
@@ -247,7 +250,7 @@ function handleDownloadInstall() {
 	istartTime=$(date '+%s')
 	writeToLog "Executing extra tools installer\n\tCommand: $toolsInstallCmd\n"
 	eval "$toolsInstallCmd"
-	returnStatus
+	toolsInstallChk=returnStatus
 	iendTime=$(date '+%s')
 	installerTime=$(($iendTime-$istartTime))
 	writeToLog "Extra tools installer completed in $installerTime seconds\n"
@@ -367,6 +370,8 @@ function handleEmptyLogs() {
 }
 
 function handleEnd() {
+	handleChk
+
 	endTime=$(date '+%s')
 	timeElapsed=$(($endTime-$startTime))
 
@@ -374,6 +379,10 @@ function handleEnd() {
 
 	writeToLog "reinstall completed in $timeElapsed seconds\n"
 	writeToLog " === finished ===\n\n"
+}
+
+function handleChk() {
+	writeToLog "Error Checking:\n\tExport append: $exportCatChk\n\tPackages install: $pkgInstallChk\n\tGit pull/clone: $gitChk\n\tInstall script: $installChk\n\tInstall tools: $toolsInstallChk\n\tExport edit return: $exportSedReturnChk\n\tExport version: $exportSedVersionChk\n\tExport date: $exportSedDateChk\n\tExport git hash: $exportSedHashChk\n"
 }
 
 if [ "$arg" == "--help" -o "$arg" == "help" -o "$arg" == "-h" -o "$arg" == "h" ]; then
