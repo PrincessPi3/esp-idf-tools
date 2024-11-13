@@ -5,54 +5,54 @@
 # begin esp-idf stuffss I made ################
 ###############################################
 
-echo "\n=======CUSTOM=======\n"
+echo -e "\n=======CUSTOM=======\n"
 
 versionData=versionTAG
 commitHash=commitTAG
 installDate=installDateTAG
 
 if [ -z $ESPIDF_INSTALLDIR ]; then
-    echo "\nFAIL: ESPIDF_INSTALLDIR environment variable not found!\nReinstall via script or manually add to ~/.zshrc\n"
+    echo -e "\nFAIL: ESPIDF_INSTALLDIR environment variable not found!\nReinstall via script or manually add to ~/.zshrc\n"
     exit
 fi
 
 binDir="${ESPIDF_INSTALLDIR}/.custom_bin"
 
-echo "TTY devices found in dmesg:"
+echo -e "\nTTY devices found in dmesg:"
 COUNTER=0
 devarr=()
 for line in $(dmesg | tail -50 | grep -o -E "tty[A-Z]{3}[0-9]{0,2}" | sort -u); do
-                echo "$COUNTER  /dev/$line"
+                echo -e "$COUNTER  /dev/$line"
                 devarr+=("/dev/$line")
                 COUNTER=$((COUNTER+1))
 done
 
-echo "\nEnter TTY Number You'd Like:"
+echo -e "\nEnter TTY Number You'd Like:"
 read tty
 ttyselect=$devarr[(($tty+1))]
 
-echo "Set esp target:\n\tOne of: esp32, esp32s2, esp32c3, esp32s3, esp32c2, esp32c6, esp32h2, esp32p4, linux, esp32c5, or esp32c61"
+echo -e "Set esp target:\n\tOne of: esp32, esp32s2, esp32c3, esp32s3, esp32c2, esp32c6, esp32h2, esp32p4, linux, esp32c5, or esp32c61"
 read esp
 
-echo "Setting environment variables"
-echo "Adding Custom bins to PATH"
-
+echo -e "\nSetting environment variables\n"
 export PATH="${ESPIDF_INSTALLDIR}/.custom_bin:${PATH}"
-export ESPPORT="${ttyselect}"
+export ESPPORT=$ttyselect
 export ESPBAUD=460800
 export ESPTARGET=$esp
 
-echo "esp-install-custom version: $versionData"
-echo "esp-idf commmit hash: $commitHash"
-echo "install date: $installDate"
+echo -e "Installation Variables:"
+echo -e "\tesp-install-custom version: $versionData"
+echo -e "\tesp-idf commmit hash: $commitHash"
+echo -e "\tinstall date: $installDate\n"
 
-echo "ESPBAUD = ${ESPBAUD}"
-echo "ESPTARGET = ${ESPTARGET}"
-echo "ESPPORT = ${ESPPORT}"
-echo "ESPIDF_INSTALLDIR = ${ESPIDF_INSTALLDIR}"
-echo "binDir = ${binDir}"
+echo -e "\nEnvironment Variables:\n"
+echo -e "ESPBAUD = ${ESPBAUD}\n"
+echo -e "ESPTARGET = ${ESPTARGET}\n"
+echo -e "ESPPORT = ${ESPPORT}\n"
+echo -e "ESPIDF_INSTALLDIR = ${ESPIDF_INSTALLDIR}\n"
+echo -e "binDir = ${binDir}\n"
 
-echo "Setting alias"
+echo -e "Setting alias"
 alias changeport="source ${binDir}/changeport.sh"
 alias changebaud="source ${binDir}/changebaud.sh"
 alias changeesp="source ${binDir}/changeesp.sh"
@@ -60,10 +60,10 @@ alias monitor="idf.py monitor"
 alias flashmonitor="idf.py flash monitor"
 alias menuconfig="idf.py menuconfig"
 
-echo "Changing dir to ${ESPIDF_INSTALLDIR}"
+echo -e "Changing dir to ${ESPIDF_INSTALLDIR}"
 cd "${ESPIDF_INSTALLDIR}"
 
-echo "\nAll done :3\n"
+echo -e "\nAll done :3\n"
 
 ###############################################
 # end esp-idf stuffss I made ##################
