@@ -63,6 +63,7 @@ Modes:
 		clear logs
 			bash reinstall-esp-idf.sh clearlogs
 			bash reinstall-esp-idf.sh clear
+			bash reinstall-esp-idf.sh clean
 			bash reinstall-esp-idf.sh cl
 			
     help:

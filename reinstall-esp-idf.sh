@@ -8,7 +8,7 @@ gitJobs=5 # number of jobs to download from github with
 
 # get us our FUCKING ALIASES HOLY FUCK GOD DAMN SHIT FUCK IT
 source $rcFile 2>/dev/null
-echo -e "\n\n\Source $rcFile\n\t retval: $?\n\n"
+# echo -e "\n\nSource $rcFile\n\t retval: $?\n\n"
 
 if [ -z $ESPIDF_INSTALLDIR ]; then
 	installDir=$HOME/esp # path to install to. $HOME/esp by default
@@ -583,7 +583,7 @@ elif [[ "$arg" == "cron" || "$arg" == "c" ]]; then # full install with warn, sle
 
 	exit
 
-elif [[ "$arg" == "clearlogs" || "$arg" == "cl" || "$arg" == "clear" ]]; then # clear logs
+elif [[ "$arg" == "clearlogs" || "$arg" == "cl" || "$arg" == "clear" || "$arg" == "clean" ]]; then # clear logs
 	handleEmptyLogs
 
 	exit
