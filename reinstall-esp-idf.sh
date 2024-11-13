@@ -474,7 +474,6 @@ function handleChk() {
 
 	if [[ $totalErrorLoad < 2 ]]; then
 		writeToLog "Installed Successfully, total error load: $totalErrorLoad"
-		echo -e "\n\n$retCodes\n\n"
 	else
 		writeToLog "Install FAILED! Dumping return codes:\n"
 		writeToLog "$retCodes"
