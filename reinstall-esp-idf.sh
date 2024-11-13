@@ -499,12 +499,12 @@ function handleEnd() {
 	writeToLog " === finished ===\n\n"
 }
 
-if [ "$arg" == "--help" -o "$arg" == "help" -o "$arg" == "-h" -o "$arg" == "h" ]; then
+if [[ "$arg" == "--help" || "$arg" == "help" || "$arg" == "-h" || "$arg" == "h" ]]; then
 	cat $helpText;
 
 	exit
 
-elif [ "$arg" == "test" -o "$arg" == "t" ]; then # minimal actions taken, echo the given commands and such
+elif [[ "$arg" == "test" || "$arg" == "t" ]]; then # minimal actions taken, echo the given commands and such
  	action="TEST"
 	sleepMins=0
 	# testExport=1
@@ -530,7 +530,7 @@ elif [ "$arg" == "test" -o "$arg" == "t" ]; then # minimal actions taken, echo t
 
 	exit
 
-elif [ "$arg" == "retool" -o "$arg" == "rt" ]; then # just reinstall bins and export
+elif [[ "$arg" == "retool" || "$arg" == "rt" ]]; then # just reinstall bins and export
 	action="RETOOL"
 	testExport=1
 
@@ -541,7 +541,7 @@ elif [ "$arg" == "retool" -o "$arg" == "rt" ]; then # just reinstall bins and ex
 
 	exit
 
-elif [ "$arg" == "interactive" -o "$arg" == "i" ]; then
+elif [[ "$arg" == "interactive" || "$arg" == "i" ]]; then
 	action="REINSTALL (INTERACTIVE)"
 
 	echo "Enter full path to install dir, default: $installDir"
@@ -594,7 +594,7 @@ elif [ "$arg" == "interactive" -o "$arg" == "i" ]; then
 
 	exit
 
-elif [ "$arg" == "cron" -o "$arg" == "c" ]; then # full install with warn, sleep, and reboot
+elif [[ "$arg" == "cron" || "$arg" == "c" ]]; then # full install with warn, sleep, and reboot
 	action="REINSTALL (CRON)"
 	sleepMins=3
 
@@ -615,7 +615,7 @@ elif [[ "$arg" == "clearlogs" || "$arg" == "cl" || "$arg" == "clear" ]]; then # 
 
 	exit
 
-elif [ "$arg" == "nuke" -o "$arg" == "n" ]; then # clear logs
+elif [[ "$arg" == "nuke" || "$arg" == "n" ]]; then # clear logs
 	action="REINSTALL (NUKE)"
 	idfGet="download"
 
