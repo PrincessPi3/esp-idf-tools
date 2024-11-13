@@ -33,20 +33,20 @@ testan:
     x bash reinstall-esp-idf.sh --help
     x bash reinstall-esp-idf.sh -h
     x bash reinstall-esp-idf.sh h
-    x bash reinstall-esp-idf.sh test
-    x bash reinstall-esp-idf.sh t
-    x bash reinstall-esp-idf.sh retool
-    x bash reinstall-esp-idf.sh rt
-    x bash reinstall-esp-idf.sh
-    x bash reinstall-esp-idf.sh clearlogs
-    x bash reinstall-esp-idf.sh clear
-    x bash reinstall-esp-idf.sh cl
-    x bash reinstall-esp-idf.sh interactive
-    x bash reinstall-esp-idf.sh i
-    x bash reinstall-esp-idf.sh nuke
-    x bash reinstall-esp-idf.sh n
-    x bash reinstall-esp-idf.sh cron
-    x bash reinstall-esp-idf.sh c
+    bash reinstall-esp-idf.sh test
+    bash reinstall-esp-idf.sh t
+    bash reinstall-esp-idf.sh retool
+    bash reinstall-esp-idf.sh rt
+    bash reinstall-esp-idf.sh
+    bash reinstall-esp-idf.sh clearlogs
+    bash reinstall-esp-idf.sh clear
+    bash reinstall-esp-idf.sh cl
+    bash reinstall-esp-idf.sh interactive
+    bash reinstall-esp-idf.sh i
+    bash reinstall-esp-idf.sh nuke
+    bash reinstall-esp-idf.sh n
+    bash reinstall-esp-idf.sh cron
+    bash reinstall-esp-idf.sh c
 
 mayhaps support bash?
 
@@ -54,6 +54,7 @@ figure out how to message users properly
 
 bug: duplicate export added to export.sh
     involves testExport prolly lol
+    # nuke and retool working fine for sure
 
 verbosity levels?
     less verbose on git commands and installers?
