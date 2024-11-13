@@ -7,6 +7,7 @@ rcFile=$HOME/.zshrc # shell rc file
 gitJobs=5 # number of jobs to download from github with
 
 # get us our FUCKING ALIASES HOLY FUCK GOD DAMN SHIT FUCK IT
+# 2?/dev/null is to redirect any errors
 source $rcFile 2>/dev/null
 # echo -e "\n\nSource $rcFile\n\t retval: $?\n\n"
 
@@ -106,7 +107,7 @@ function handleSleep() {
 
 	sleepSecs=$(($sleepMins*60)) # calculated seconds of warning to wait for user to log out
 
-	writeToLog "sleeping ${sleepMins} minutes"
+	writeToLog "sleeping $sleepMins minutes"
 	sleep $sleepSecs
 	returnStatus
 	sleepChk=$?
@@ -141,20 +142,20 @@ function handleCustomBins() {
 	writeToLog "Handling custon bins (function ran)\n"
 
 	if [ -d $customBinLocation ]; then
-		writeToLog "deleting ${customBinLocation}"
+		writeToLog "deleting $customBinLocation"
 		rm -rf $customBinLocation
 		returnStatus
 		rmCustomBinChk=$?
 	else
-		writeToLog "${customBinLocation} not found, skipping delete\n"
+		writeToLog "$customBinLocation not found, skipping delete\n"
 	fi
 
-	writeToLog "copying scripts from ${customBinFrom} to ${customBinLocation}"
+	writeToLog "copying scripts from $customBinFrom to $customBinLocation"
 	cp -r $customBinFrom $customBinLocation
 	returnStatus
 	cpCustomBinChk=$?
 
-	writeToLog "making scripts executable at ${customBinLocation}"
+	writeToLog "making scripts executable at $customBinLocation"
 	chmod -R +x $customBinLocation
 	returnStatus
 	customBinExecChk=$?
@@ -264,8 +265,8 @@ function handleAliasEnviron() {
 	testAppendAlias "esp_logs" "alias esp_logs='less $installDir/install.log; less $installDir/version-data.txt'"
 
 	if [ -z $ESPIDF_INSTALLDIR ]; then
-		writeToLog "ESPIDF_INSTALLDIR environment variable not found, appending to ${rcFile}"
-		echo -e "export ESPIDF_INSTALLDIR=\"${installDir}\"\n" >> $rcFile
+		writeToLog "ESPIDF_INSTALLDIR environment variable not found, appending to $rcFile"
+		echo -e "export ESPIDF_INSTALLDIR=\"$installDir\"\n" >> $rcFile
 		returnStatus
 		aliasInstallDirChk=$?
 	else
@@ -350,7 +351,7 @@ handleReboot() {
 handleWarnAllUsers() {
 	writeToLog "Warning all users of impending logout (function called)\n"
 
-	warningString="\nWARNING:\n\tReinstalling esp-idf:\n\tForce logut in ${sleepMins} minutes!!\n\tSave and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall reinstall-esp-idf.sh\`\n"
+	warningString="\nWARNING:\n\tReinstalling esp-idf:\n\tForce logut in $sleepMins minutes!!\n\tSave and log out!\n\tmonitor with \`tail -f -n 50 $HOME/esp/install.log\`\n\tterminate with \`sudo killall reinstall-esp-idf.sh\`\n"
 
 	writeToLog "$warningString"
 
@@ -417,8 +418,8 @@ function handleStart() {
 	fi
 
 	if [ "$arg" != "interactive" -a "$arg" != "i" ]; then
-		writeToLog " === NEW ${action} ==="
-		writeToLog "\tVersion: ${scriptVers}\n"
+		writeToLog " === NEW $action ==="
+		writeToLog "\tVersion: $scriptVers\n"
 	fi
 
 	# run environment sanity checks
@@ -552,8 +553,8 @@ elif [[ "$arg" == "interactive" || "$arg" == "i" ]]; then
 		idfGet=$readIdfGet
 	fi
 	
-	writeToLog "\n === new ${action} ===\n"
-	writeToLog "\tVersion: ${scriptVers}\n"
+	writeToLog "\n === new $action ===\n"
+	writeToLog "\tVersion: $scriptVers\n"
 
 	writeToLog "Interactive vars set:\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trcFile: $rcFile\n\tgitJobs: $gitJobs\n\tidfGet: $idfGet\n"
 
