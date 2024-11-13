@@ -35,7 +35,7 @@ echo -e "Set esp target:\n\tOne of: esp32, esp32s2, esp32c3, esp32s3, esp32c2, e
 read esp
 
 # echo -e "\nSetting environment variables\n"
-export PATH="${ESPIDF_INSTALLDIR}/.custom_bin:${PATH}"
+export PATH="$ESPIDF_INSTALLDIR/.custom_bin:$PATH"
 export ESPPORT=$ttyselect
 export ESPBAUD=460800
 export ESPTARGET=$esp
@@ -53,9 +53,9 @@ echo -e "\tESPIDF_INSTALLDIR = $ESPIDF_INSTALLDIR"
 echo -e "\tbinDir = $binDir"
 
 # echo -e "Setting alias"
-alias changeport="source ${binDir}/changeport.sh"
-alias changebaud="source ${binDir}/changebaud.sh"
-alias changeesp="source ${binDir}/changeesp.sh"
+alias changeport="source $binDir/changeport.sh"
+alias changebaud="source $binDir/changebaud.sh"
+alias changeesp="source $binDir/changeesp.sh"
 alias monitor="idf.py monitor"
 alias flashmonitor="idf.py flash monitor"
 alias menuconfig="idf.py menuconfig"
