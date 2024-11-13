@@ -24,6 +24,7 @@ x touch up add-to-export-sh.txt
 x alias add and document too
    x maybe just cat a txt lmao
 x test reinstall from zero
+x fix dat nuke issue on line ~307 # fixed?
 
 testan:
     x bash reinstall-esp-idf.sh help
@@ -57,4 +58,3 @@ standardize the capatilization and format and content of notes
 verbosity levels?
     less verbose on git commands and installers?
     
-fix dat nuke issue on line ~307 # fixed?

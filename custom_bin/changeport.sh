@@ -1,6 +1,6 @@
 subprocess() {
-    echo "\nChanging ESPPORT\n"
-    echo "TTY devices found in dmesg:"
+    echo -e "\nChanging ESPPORT\n"
+    echo -e "TTY devices found in dmesg:"
     COUNTER=0
     devarr=()
     for line in $(dmesg | tail -50 | grep -o -E "tty[A-Z]{3}[0-9]{0,2}" | sort -u); do
@@ -9,7 +9,7 @@ subprocess() {
                     COUNTER=$((COUNTER+1))
     done
 
-    echo "\nEnter TTY Number You'd Like:"
+    echo -e "\nEnter TTY Number You'd Like:"
     read tty
 
     sel=$tty+1
@@ -23,5 +23,5 @@ subprocess ret
 
 export ESPPORT=$ret
 
-echo "\nESPPORT set to $ESPPORT\n"
-echo "\nAll done :3\n"
+echo -e "\nESPPORT set to $ESPPORT\n"
+echo -e "\nAll done :3\n"

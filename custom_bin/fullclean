@@ -14,21 +14,21 @@ fi
 
 if [ -f sdkconfig ]; then
 	echo -e "\nDeleting sdkconfig\n"
-	rm sdkconfig
+	rm -f sdkconfig
 else
 	echo -e "\nNo sdkconfig, skipping delete\n"
 fi
 
 if [ -f *.old ]; then
 	echo -e "\nDeleting *.old\n"
-	rm *.old
+	rm -f *.old
 else
 	echo -e "\nNo *.old, skipping delete\n"
 fi
 
 if [ -f *.bak ]; then
 	echo -e "\nDeleting *.bak\n"
-	rm *.bak
+	rm -f *.bak
 else
 	echo -e "\nNo *.bak, skipping delete\n"
 fi

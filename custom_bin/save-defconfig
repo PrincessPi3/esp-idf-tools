@@ -2,8 +2,8 @@
 echo -e "\nSaving default config\n"
 
 if [ -f ./sdkconfig.defaults ]; then
-    echo -e "backing up sdkconfig.defaults to sdkconfig.defaults.bak"
-    cp sdkconfig.defaults sdkconfig.defaults.bak
+    echo -e "\nbacking up sdkconfig.defaults to sdkconfig.defaults.bak\n"
+    cp -f sdkconfig.defaults sdkconfig.defaults.bak
 else
     echo -e "\nNo sdkconfig.defaults found, skipping backup\n"
 fi
