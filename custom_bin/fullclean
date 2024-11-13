@@ -20,7 +20,7 @@ else
 fi
 
 if [ -f sdkconfig.old ]; then
-	echo "\nDeleting sdkconfig.old\n"
+	echo -e "\nDeleting sdkconfig.old\n"
 	rm sdkconfig.old
 else
 	echo -e "\nNo sdkconfig.old, skipping delete\n"
