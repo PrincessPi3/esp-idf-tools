@@ -168,8 +168,8 @@ function handleSetupEnvironment() {
 		writeToLog "$installDir exisits, skiping creation"
 	fi
 
-	if [ -d "$espressifLocation" -a "$idfGet" == "update" ]; then
-		writeToLog "Skipping delete of $espressifLocation"
+	if [[ -d "$espressifLocation" && "$idfGet" == "update" ]]; then
+		writeToLog "Skipping delete of $espressifLocation because dir exists AND idfGet is set to update"
 	else
 		if [ -d "$espressifLocation" ]; then
 			writeToLog "deleting $espressifLocation"
@@ -202,7 +202,7 @@ function handleAliasEnviron() {
 function handleDownloadInstall() {
 	writeToLog "Handling download and install (function ran)"
 
-	if [ "$idfGet" == "download" -o ! -d "$idfDir" ]; then
+	if [[ "$idfGet" == "download" || ! -d "$idfDir" ]]; then
 		if [ -d "$idfDir" ]; then
 			writeToLog "deleting $idfDir"
 			rm -rf $idfDir
