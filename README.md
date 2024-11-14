@@ -34,6 +34,8 @@ some features require user to have passwordless sudo rights
 ## Usage
 ```
 Modes:
+	each of these arguments can be used identically on the alias run_esp_reinstall
+	
 	default: 
 		reinstalls non-interactively with no delays, logouts, or reboots. run without any argument
 			bash reinstall-esp-idf.sh
@@ -94,6 +96,8 @@ run_esp_reinstall
 		run_esp_reinstall cron
 		run_esp_reinstall interactive
 		run_esp_reinstall test
+		run_esp_reinstall help
+		run_esp_reinstall uninstall
 
 esp_monitor
 	monitors install.log
