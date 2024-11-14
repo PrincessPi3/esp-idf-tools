@@ -161,26 +161,36 @@ function handleCustomBins() {
 }
 
 function handleExport() {
-	# writeToLog "Handling $exportScript (function ran)\n"
-	if [ -z $testExport ]; then
-		writeToLog "testExport not set\n"
-		writeToLog "Backing up $exportScript to $exportBackupScript"
-		cp $exportScript $exportBackupScript 2>/dev/null
-		returnStatus
-		backupExportScriptChk=$?
-	else
-		writeToLog "testExport export is set\n"
+#	# writeToLog "Handling $exportScript (function ran)\n"
+#	if [ -z $testExport ]; then
+#		writeToLog "testExport not set\n"
+#		writeToLog "Backing up $exportScript to $exportBackupScript"
+#		cp $exportScript $exportBackupScript 2>/dev/null
+#		returnStatus
+#		backupExportScriptChk=$?
+#	else
+#		writeToLog "testExport export is set\n"
+#
+#		writeToLog "Deleting $exportScript"
+#		rm -f $exportScript
+#		returnStatus
+#		rmExportScriptChk=$?
+#
+#		writeToLog "Restoring $exportScript from backup at $exportBackupScript"
+#		cp $exportBackupScript $exportScript
+#		returnStatus
+#		restoreExportScriptChk=$?
+#	fi
 
-		writeToLog "Deleting $exportScript"
-		rm -f $exportScript
-		returnStatus
-		rmExportScriptChk=$?
+	writeToLog "Deleting $exportBackupScript"
+	rm -f $exportBackupScript
+	returnStatus
+	rmExportBackupChk=$?
 
-		writeToLog "Restoring $exportScript from backup at $exportBackupScript"
-		cp $exportBackupScript $exportScript
-		returnStatus
-		restoreExportScriptChk=$?
-	fi
+	writeToLog "Backing up $exportScript to $exportBackupScript"
+	cp $exportScript $exportBackupScript
+	returnStatus
+	backupExportScriptChk=$?
 
 	writeToLog "Appending $runningDir/add-to-export-sh.txt to $exportScript"
 	echo cat $runningDir/add-to-export-sh.txt >> $exportScript
@@ -275,10 +285,10 @@ function handleDownloadInstall() {
 	if [[ "$idfGet" == "download" || ! -d "$idfDir" ]]; then
 		writeToLog "Setting for download mode\n"
 
-		writeToLog "Deleting backup export script $exportBackupScript"
-		rm -f $exportBackupScript
-		returnStatus
-		rmExportBackupChk=$?
+		# writeToLog "Deleting backup export script $exportBackupScript"
+		# rm -f $exportBackupScript
+		# returnStatus
+		# rmExportBackupChk=$?
 
 		if [ -d "$idfDir" ]; then
 			writeToLog "Deleting $idfDir"
@@ -567,7 +577,8 @@ elif [[ "$arg" == "interactive" || "$arg" == "i" ]]; then
 
 elif [[ "$arg" == "cron" || "$arg" == "c" ]]; then # full install with warn, sleep, and reboot
 	action="REINSTALL (CRON)"
-	sleepMins=3
+	# sleepMins=3
+	sleepMins=0
 
 	handleStart
 	handleLogoutAllUsers

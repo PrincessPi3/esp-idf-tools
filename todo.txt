@@ -26,6 +26,9 @@ x alias add and document too
 x test reinstall from zero
 x fix dat nuke issue on line ~307 # fixed?
 x standardize the capatilization and format and content of notes
+x bug: duplicate export added to export.sh
+x     involves testExport prolly lol
+x     issue be in retool
 
 
 testan:
@@ -35,8 +38,8 @@ testan:
     x bash reinstall-esp-idf.sh h
     x bash reinstall-esp-idf.sh test
     x bash reinstall-esp-idf.sh t
-    b bash reinstall-esp-idf.sh retool
-    b bash reinstall-esp-idf.sh rt
+    x bash reinstall-esp-idf.sh retool
+    x bash reinstall-esp-idf.sh rt
     x bash reinstall-esp-idf.sh
     x bash reinstall-esp-idf.sh clearlogs
     x bash reinstall-esp-idf.sh clear
@@ -50,12 +53,10 @@ testan:
     bash reinstall-esp-idf.sh c
 
 mayhaps support bash?
+    # mayhaps it already works mayhaps? test
 
 figure out how to message users properly
-
-x bug: duplicate export added to export.sh
-x     involves testExport prolly lol
-x     issue be in retool
+    x at leastt remove sleeps if cant message ig lol
 
 verbosity levels?
     less verbose on git commands and installers?
