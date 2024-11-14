@@ -53,9 +53,9 @@ mayhaps support bash?
 
 figure out how to message users properly
 
-bug: duplicate export added to export.sh
-    involves testExport prolly lol
-    issue be in retool
+x bug: duplicate export added to export.sh
+x     involves testExport prolly lol
+x     issue be in retool
 
 verbosity levels?
     less verbose on git commands and installers?
