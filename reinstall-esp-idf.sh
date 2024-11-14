@@ -4,7 +4,8 @@ startTime=$(date '+%s') # to time the (re)install time for the logs
 
 gitBranch=master # branch from github
 rcFile=$HOME/.zshrc # shell rc file
-gitJobs=5 # number of jobs to download from github with
+# gitJobs=5 # number of jobs to download from github with
+gitJobs=default
 rebootMins=3 # minutes of warning before reboot
 
 # get us our FUCKING ALIASES HOLY FUCK GOD DAMN SHIT FUCK IT
