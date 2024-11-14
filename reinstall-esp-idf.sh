@@ -8,9 +8,8 @@ rcFile=$HOME/.zshrc # shell rc file
 gitJobs=default
 rebootMins=3 # minutes of warning before reboot
 
-# get us our FUCKING ALIASES HOLY FUCK GOD DAMN SHIT FUCK IT
-# 2?/dev/null is to redirect any errors
-source $rcFile 2>/dev/null
+# get us our FUCKING ALIASES HOLY FUCK GOD DAMN SHIT FUCK IT\
+source $rcFile 2>/dev/null # >2?/dev/null is to redirect any errors
 # echo -e "\n\nSource $rcFile\n\t retval: $?\n\n"
 
 if [ -z $ESPIDF_INSTALLDIR ]; then
@@ -33,9 +32,11 @@ scriptVers=$(cat $runningDir/version.txt) # make sure version.txt does NOT have 
 arg=$1 # just rename the argument var for clarity with the functions
 
 # commands
-gitCloneCmd="git clone --recursive --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
-
-# gitCloneCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
+if [ "$gitJobs" == "default" ]; then
+	gitCloneCmd="git clone --recursive --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
+else
+	gitCloneCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
+fi
 
 # gitCloneCmd="git clone --recursive --single-branch --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
 
@@ -271,11 +272,6 @@ function handleDownloadInstall() {
 	# writeToLog "Handling download and install (function ran)\n"
 	if [[ "$idfGet" == "download" || ! -d "$idfDir" ]]; then
 		writeToLog "Setting for download mode\n"
-
-		# writeToLog "Deleting backup export script $exportBackupScript"
-		# rm -f $exportBackupScript
-		# returnStatus
-		# rmExportBackupChk=$?
 
 		if [ -d "$idfDir" ]; then
 			writeToLog "Deleting $idfDir"
