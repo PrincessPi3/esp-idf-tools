@@ -359,7 +359,8 @@ handleWarnAllUsers() {
 
 		echo $loggedIn | while read line; do
 			writeToLog "\tWarning $line"
-			echo -e "$warningString" | sudo write
+			# echo -e "$warningString" | sudo write
+			sudo wall --nobanner "$warningString"
 			returnStatus
 		done
 		returnStatus
