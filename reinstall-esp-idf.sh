@@ -458,6 +458,18 @@ function handleEmptyLogs() {
 	echo -e "\tReturn status: ${?}\n"
 }
 
+function handleUninstall() {
+	echo -e "\n\nDeleting $espressifLocation"
+ 	rm -rf $espressifLocation
+	echo -e "\tReturn status: ${?}\n"
+
+	echo -e "Deleting $idfDir"
+ 	rm -rf $idfDir
+	echo -e "\tReturn status: ${?}\n"
+
+	handleEmptyLogs
+}
+
 function handleChk() {
 	retCodes="Error Checking:\n\tPackages install: $pkgInstallChk\n\tGit pull/clone: $gitChk\n\tInstall script: $installChk\n\tInstall tools: $toolsInstallChk\n\tExport append: $exportCatChk\n\tExport edit return: $exportSedReturnChk\n\tExport version: $exportSedVersionChk\n\tExport date: $exportSedDateChk\n\tExport git hash: $exportSedHashChk\n\trun_esp_reinstall alias: $aliasRunEspReinstallChk\n\tesp_monitor alias: $aliasEspMonitorchk\n\tesp_logs alias: $aliasEspLogsChk\n\tESPIDF_INSTALLDIR envvar: $aliasInstallDirChk\n\tWarned Users: $warnChk\n\tLogged out users: $logoutChk\n\tAppended git log to version-data.txt: $gitLogChk\n\tAcquired git hash: $gitHashChk\n\tDeleted esp-idf dir: $rmIdfDirChk\n\tDeleted .espressif dir: $rmEspressifChk\n\tCreated install dir: $mkInstallDirChk\n\tRestored export.sh.bak: $restoreExportScriptChk\n\tDeleted old export.sh: $rmExportScriptCh\n\tBacked up export.sh to export.sh.bak: $backupExportScriptChk\n\tDeleted backup export export.bak.sh: $rmExportBackupChk\n\tMade custom scripts executable: $customBinExecChk\n\tCopied custom scripts: $cpCustomBinChk\n\tDeleted old custom scripts dir: $rmCustomBinChk\n\tWoke from sleep: $sleepChk"
 
@@ -613,6 +625,11 @@ elif [[ "$arg" == "nuke" || "$arg" == "n" ]]; then # clear logs
 	handleAliasEnviron
 	handleEnd
 
+	exit
+
+elif [ "$arg" == "uninstall" ]; then # clear logs
+	handleUninstall
+	echo -e "\nAll done :3\n"
 	exit
 
 elif [ ! -z $arg ]; then 
