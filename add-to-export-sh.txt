@@ -13,7 +13,7 @@ installDate=installDateTAG
 
 if [ -z $ESPIDF_INSTALLDIR ]; then
     echo -e "\nFAIL: ESPIDF_INSTALLDIR environment variable not found!\nReinstall via script or manually add to ~/.zshrc\n"
-    exit
+    # exit
 fi
 
 binDir="$ESPIDF_INSTALLDIR/.custom_bin"
