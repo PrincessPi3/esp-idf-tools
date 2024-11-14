@@ -255,7 +255,7 @@ function handleAliasEnviron() {
 
 	if [ -z $ESPIDF_INSTALLDIR ]; then
 		writeToLog "ESPIDF_INSTALLDIR environment variable not found, appending to $rcFile"
-		echo -e "Export ESPIDF_INSTALLDIR=\"$installDir\"\n" >> $rcFile
+		echo -e "export ESPIDF_INSTALLDIR=\"$installDir\"\n" >> $rcFile
 		returnStatus
 		aliasInstallDirChk=$?
 	else
