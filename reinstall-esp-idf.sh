@@ -459,7 +459,7 @@ function handleEmptyLogs() {
 }
 
 function handleUninstall() {
-	echo -e "\n\nDeleting $espressifLocation"
+	echo -e "\nDeleting $espressifLocation"
  	rm -rf $espressifLocation
 	echo -e "\tReturn status: ${?}\n"
 
