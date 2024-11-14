@@ -29,7 +29,7 @@ x standardize the capatilization and format and content of notes
 x bug: duplicate export added to export.sh
 x     involves testExport prolly lol
 x     issue be in retool
-
+x remove the log writes at entry functions
 
 testan:
     x bash reinstall-esp-idf.sh help

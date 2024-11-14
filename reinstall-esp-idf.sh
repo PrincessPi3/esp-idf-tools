@@ -182,10 +182,14 @@ function handleExport() {
 #		restoreExportScriptChk=$?
 #	fi
 
-	writeToLog "Deleting $exportBackupScript"
-	rm -f $exportBackupScript
-	returnStatus
-	rmExportBackupChk=$?
+	if [ -f $exportBackupScript ]; then
+		writeToLog "Deleting $exportBackupScript"
+		rm -f $exportBackupScript
+		returnStatus
+		rmExportBackupChk=$?
+	else
+		writeToLog "$exportBackupScript not found, skipping delete\n"
+	fi
 
 	writeToLog "Backing up $exportScript to $exportBackupScript"
 	cp $exportScript $exportBackupScript
