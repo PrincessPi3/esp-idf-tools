@@ -162,27 +162,6 @@ function handleCustomBins() {
 }
 
 function handleExport() {
-#	# writeToLog "Handling $exportScript (function ran)\n"
-#	if [ -z $testExport ]; then
-#		writeToLog "testExport not set\n"
-#		writeToLog "Backing up $exportScript to $exportBackupScript"
-#		cp $exportScript $exportBackupScript 2>/dev/null
-#		returnStatus
-#		backupExportScriptChk=$?
-#	else
-#		writeToLog "testExport export is set\n"
-#
-#		writeToLog "Deleting $exportScript"
-#		rm -f $exportScript
-#		returnStatus
-#		rmExportScriptChk=$?
-#
-#		writeToLog "Restoring $exportScript from backup at $exportBackupScript"
-#		cp $exportBackupScript $exportScript
-#		returnStatus
-#		restoreExportScriptChk=$?
-#	fi
-
 	if [ -f $exportBackupScript ]; then
 		writeToLog "Deleting $exportBackupScript"
 		rm -f $exportBackupScript
@@ -596,7 +575,6 @@ elif [[ "$arg" == "cron" || "$arg" == "c" ]]; then # full install with warn, sle
 	action="REINSTALL (CRON)"
 	# sleepMins=3
 	sleepMins=0
-	rebootMins=3
 
 	handleStart
 	handleLogoutAllUsers
