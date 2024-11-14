@@ -32,7 +32,9 @@ scriptVers=$(cat $runningDir/version.txt) # make sure version.txt does NOT have 
 arg=$1 # just rename the argument var for clarity with the functions
 
 # commands
-gitCloneCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
+gitCloneCmd="git clone --recursive --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
+
+# gitCloneCmd="git clone --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
 
 # gitCloneCmd="git clone --recursive --single-branch --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
 
