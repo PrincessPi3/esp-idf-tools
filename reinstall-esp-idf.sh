@@ -5,6 +5,7 @@ startTime=$(date '+%s') # to time the (re)install time for the logs
 gitBranch=master # branch from github
 rcFile=$HOME/.zshrc # shell rc file
 gitJobs=5 # number of jobs to download from github with
+rebootMins=3 # minutes of warning before reboot
 
 # get us our FUCKING ALIASES HOLY FUCK GOD DAMN SHIT FUCK IT
 # 2?/dev/null is to redirect any errors
@@ -197,7 +198,7 @@ function handleExport() {
 	backupExportScriptChk=$?
 
 	writeToLog "Appending $runningDir/add-to-export-sh.txt to $exportScript"
-	echo cat $runningDir/add-to-export-sh.txt >> $exportScript
+	cat $runningDir/add-to-export-sh.txt >> $exportScript
 	returnStatus
 	exportCatChk=$?
 
