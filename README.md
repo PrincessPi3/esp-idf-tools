@@ -77,6 +77,9 @@ Modes:
 			bash reinstall-esp-idf.sh -h
 			bash reinstall-esp-idf.sh --help
 
+	uninstall:
+		uninstall esp-idf
+			bash reinstall-esp-idf.sh uninstall
 ```
 
 ## Ailases
