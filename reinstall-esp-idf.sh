@@ -354,6 +354,8 @@ handleWarnAllUsers() {
 		writeToLog "No users logged in to warn\n"
 		return
 	else
+		writeToLog "Skipping warning all logged in users: $loggedIn\n"
+	fi
 		# writeToLog "Warning all logged in users: $loggedIn"
 		# sudo wall --nobanner "$warningString"
 		# returnStatus
@@ -361,7 +363,6 @@ handleWarnAllUsers() {
 		#
 		# handleSleep
 
-	fi
 }
 
 # dis one sure af be workan tho lmfao
