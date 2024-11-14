@@ -355,14 +355,8 @@ handleWarnAllUsers() {
 		writeToLog "No users logged in to warn\n"
 		return
 	else
-		writeToLog "Warning all logged in users:" # make sure dis workan
-
-		echo $loggedIn | while read line; do
-			writeToLog "\tWarning $line"
-			# echo -e "$warningString" | sudo write
-			sudo wall --nobanner "$warningString"
-			returnStatus
-		done
+		writeToLog "Warning all logged in users: $loggedIn"
+		sudo wall --nobanner "$warningString"
 		returnStatus
 		warnChk=$?
 	fi
@@ -379,7 +373,7 @@ function handleLogoutAllUsers() {
 		writeToLog "No logged in users to log out\n"
 		return
 	else
-		writeToLog "Logging out all logged in users:"
+		writeToLog "Logging out all logged in users: $loggedIn"
 		echo $loggedIn | while read line; do
 		writeToLog "\tLogging out $line"
 			sudo loginctl terminate-user $line
