@@ -441,7 +441,7 @@ function handleStart() {
 }
 
 function handleEmptyLogs() {
-	echo -e "\n\nDeleting $log"
+	echo -e "\nDeleting $log"
  	rm -f $log
 	echo -e "\tReturn status: ${?}\n"
  
@@ -465,7 +465,7 @@ function handleUninstall() {
 
 	echo -e "Deleting $idfDir"
  	rm -rf $idfDir
-	echo -e "\tReturn status: ${?}\n"
+	echo -e "\tReturn status: ${?}"
 
 	handleEmptyLogs
 }
