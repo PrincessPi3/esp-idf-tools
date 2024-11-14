@@ -347,7 +347,6 @@ handleWarnAllUsers() {
 
 	writeToLog "$warningString"
 
-	handleSleep
 
 	loggedIn=$(who | awk '{print $1}' | uniq)
 
@@ -355,10 +354,13 @@ handleWarnAllUsers() {
 		writeToLog "No users logged in to warn\n"
 		return
 	else
-		writeToLog "Warning all logged in users: $loggedIn"
-		sudo wall --nobanner "$warningString"
-		returnStatus
-		warnChk=$?
+		# writeToLog "Warning all logged in users: $loggedIn"
+		# sudo wall --nobanner "$warningString"
+		# returnStatus
+		# warnChk=$?
+		#
+		# handleSleep
+
 	fi
 }
 
