@@ -49,7 +49,7 @@ testan:
     x bash reinstall-esp-idf.sh i
     x bash reinstall-esp-idf.sh nuke
     x bash reinstall-esp-idf.sh n
-    bash reinstall-esp-idf.sh uninstall
+    x bash reinstall-esp-idf.sh uninstall
     bash reinstall-esp-idf.sh cron
     bash reinstall-esp-idf.sh c
 

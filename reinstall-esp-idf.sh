@@ -357,7 +357,7 @@ function handleDownloadInstall() {
 
 handleReboot() {
 	# writeToLog "Handling reboot: (function ran)\n"
-	sudo reboot
+	eval "sudo shutdown -r +$rebootMins"
 }
 
 # warning not work how i make it work fuckin ell
@@ -595,6 +595,7 @@ elif [[ "$arg" == "cron" || "$arg" == "c" ]]; then # full install with warn, sle
 	action="REINSTALL (CRON)"
 	# sleepMins=3
 	sleepMins=0
+	rebootMins=3
 
 	handleStart
 	handleLogoutAllUsers
