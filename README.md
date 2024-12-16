@@ -4,7 +4,9 @@ pulls from master so its the very latest
 
 built for debian-like systems
 only currently tested on zsh
-some features require user to have passwordless sudo rights
+some features require user to have passwordless sudo rights  
+  
+Literally the most schizophrenically overengineered thing I have ever made. idk why I did that  
 
 ## Quick start
 `git clone https://github.com/PrincessPi3/esp-install-custom.git ~`  
