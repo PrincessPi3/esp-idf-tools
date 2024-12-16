@@ -1,6 +1,5 @@
-notes.txt
 scratch.txt
 *.bak
-next-*
+*.old
 old
 .vscode
