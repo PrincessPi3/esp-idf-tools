@@ -1,5 +1,5 @@
 #!/bin/bash
-# set -e # for testan, die on eelrror
+# set -e # uncomment for die on error
 startTime=$(date '+%s') # to time the (re)install time for the logs
 
 gitBranch=master # branch from github
@@ -19,7 +19,7 @@ else
 fi
 
 log=$installDir/install.log # log file
-versionData=$installDir/version-data.txt # version data log file
+versionData=$installDir/version-data.log # version data log file
 idfDir=$installDir/esp-idf # esp-idf path
 espressifLocation=$HOME/.espressif # espressif tools install location
 customBinLocation=$installDir/.custom_bin # where custom bin scripts are placed
@@ -83,6 +83,7 @@ rmExportBackupChk=0
 # set sleepMins int variable
 # redefine any other vars needed
 # handleStart
+# handleClearInstallLog
 # handleLogoutAllUsers
 # handleSetupEnvironment
 # handleCustomBins
@@ -461,6 +462,15 @@ function handleChk() {
 	fi
 }
 
+function handleClearInstallLog() {
+	if [ -f "$log" ]; then
+		echo -e "\nClearing install.log\n"
+		rm "$log"
+	else
+		echo "\n$log Not Found, Skipping Delete\n"
+	fi
+}
+
 
 function handleEnd() {
 	handleChk
@@ -575,6 +585,7 @@ elif [[ "$arg" == "cron" || "$arg" == "c" ]]; then # full install with warn, sle
 	sleepMins=0
 
 	handleStart
+	handleClearInstallLog
 	handleLogoutAllUsers
 	handleSetupEnvironment
 	handleCustomBins
@@ -595,7 +606,10 @@ elif [[ "$arg" == "nuke" || "$arg" == "n" ]]; then # clear logs
 	action="REINSTALL (NUKE)"
 	idfGet="download"
 
+
+
 	handleStart
+	handleClearInstallLog
 	handleSetupEnvironment
 	handleCustomBins
 	handleDownloadInstall
@@ -617,6 +631,7 @@ else # full noninteractive (re)install without logout, reboot, or sleeps
 	action="REINSTALL (DEFAULT)"
 
 	handleStart
+	handleClearInstallLog
 	handleSetupEnvironment
 	handleCustomBins
 	handleDownloadInstall
