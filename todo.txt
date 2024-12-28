@@ -63,3 +63,10 @@ verbosity levels?
     less verbose on git commands and installers?
     
 get current esp-idf version plox
+
+document:
+    run_esp_reinstall
+    esp_install_monitor
+    esp_install_logs
+
+possibly upgrade step-flash-monitor with better resets

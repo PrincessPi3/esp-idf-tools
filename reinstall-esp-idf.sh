@@ -253,9 +253,9 @@ function testAppendAlias() {
 
 function handleAliasEnviron() {
 	testAppendAlias "get_idf" "alias get_idf='. $exportScript'"
-	testAppendAlias "run_esp_reinstall" "alias run_esp_reinstall='git -C $runningDir pull;echo -e \"\nVersion:\";cat $runningDir/version.txt;echo -e \"\n\";bash $runningDir/reinstall-esp-idf.sh '"
-	testAppendAlias "esp_monitor" "alias esp_monitor='tail -n 75 -f $installDir/install.log'"
-	testAppendAlias "esp_logs" "alias esp_logs='less $installDir/install.log; less $installDir/version-data.txt'"
+	testAppendAlias "run_esp_reinstall" "alias run_esp_reinstall='git -C $runningDir pull;echo -e \"\nOld Version:\";tail -1 $versionData;echo -e \"\n\";bash $runningDir/reinstall-esp-idf.sh n'"
+	testAppendAlias "esp_install_monitor" "alias esp_monitor='tail -n 75 -f $log'"
+	testAppendAlias "esp_install_logs" "alias esp_logs='less $versionData;less $log'"
 
 	if [ -z $ESPIDF_INSTALLDIR ]; then
 		writeToLog "ESPIDF_INSTALLDIR environment variable not found, appending to $rcFile"

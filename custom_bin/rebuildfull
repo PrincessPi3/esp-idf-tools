@@ -19,14 +19,33 @@ read menuconfig
 if [ "$menuconfig" == "y" ]; then
 	echo -e "\nExecuting menuconfig\n"
 	idf.py menuconfig
+	echo -e "\nConfig Complete\n"
 fi
 
-echo -e "\nBuild now? y/n"
-read build
-if [ "$build" == "y" ]; then
-	echo -e "\nBuildan~\n"
-	idf.py build
-	echo -e "\nBuild complete\n"
+echo -e "\nSave as Default Config? y/n?\n"
+read defconfig
+if [ "$defconfig" == "y" ]; then
+	echo -e "\nExecuting save-defconfig\n"
+	idf.py save-defconfig
+	echo -e "\nDefault Config Saved\n"
+fi
+
+echo -e "\nBuild, Flash, and Monitor Now? y/n"
+read flashmon
+if [ "$flashmon" == "y" ]; then
+	echo -e "\nBuild, Flashing, and Monitoran~\n"
+	echo -e "\nFlashed... Short Delay Before Monitor\n"
+	idf.py flash
+	sleep 1
+	idf.py monitor
+else
+	echo -e "\nBuild Now? y/n"
+	read build
+	if [ "$build" == "y" ]; then
+		echo -e "\nBuildan~\n"
+		idf.py build
+		echo -e "\nBuild complete\n"
+	fi
 fi
 
 echo -e "\nAll done :3\n"
