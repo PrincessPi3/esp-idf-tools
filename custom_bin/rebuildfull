@@ -34,8 +34,8 @@ echo -e "\nBuild, Flash, and Monitor Now? y/n"
 read flashmon
 if [ "$flashmon" == "y" ]; then
 	echo -e "\nBuild, Flashing, and Monitoran~\n"
-	echo -e "\nFlashed... Short Delay Before Monitor\n"
 	idf.py flash
+	echo -e "\nFlashed... Short Delay Before Monitor\n"
 	sleep 1
 	idf.py monitor
 else

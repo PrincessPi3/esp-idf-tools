@@ -21,17 +21,16 @@ Literally the most schizophrenically overengineered thing I have ever made. idk 
 `changeport` opens a menu to select a serial port  
 `clean` idf.py clean  
 `fullclean` fully resets a project, 'idf.py fullclean' plus remove the build dir and delete some temp and backup files  
-`menuconfig` alias of `idf.py menuconfig` b 
 `rebuildfull` does a `fullclean` but also an `erase-flash` and also `setup`  
 `setup` same as running `idf.py set-target $ESPTARGET; idf.py menuconfig; idf.py build`  
-`flash` alias of `idf.py flash`  
-`flashmonitor` alias of `idf.py flash monitor`  
+`flash` idf.py flash  
 `monitor` idf.py monitor  
 `erase-flash` idf.py erase-flash  
 `save-defconfig` idf.py save-defconfig  
-`step-flash-monitor` attempt clean, build, flash, then monitor, dying on error. each ends before the next beings- found to be useful on the esp32c6  
-`chipinfo` get information about the chip  
-`imagesize` or gets the size of the binary to be uploaded, in genral, by componants, and by individual file
+`step-flash-monitor` attempt clean, build, flash, then monitor, dying on error  
+`imagesize` get binary size, broken down in various ways including total, by componant, and by file
+`chipinfo` get information from the esp board
+`menuconfig` run `idf.py menuconfig`
 
 ## Usage
 ```

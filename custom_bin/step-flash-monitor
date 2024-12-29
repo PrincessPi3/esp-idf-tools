@@ -4,7 +4,6 @@ set -e # die on error in theory
 echo -e "Clean, build, flash, monitor in steps, dying on error"
 
 echo -e "\ncleaning up first\n"
-# idf.py clean
 bash fullclean
 
 echo -e "\nBuilding\n"
