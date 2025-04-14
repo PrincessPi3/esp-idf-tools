@@ -29,7 +29,8 @@ Literally the most schizophrenically overengineered thing I have ever made. idk 
 `save-defconfig` idf.py save-defconfig  
 `step-flash-monitor` attempt clean, build, flash, then monitor, dying on error  
 `imagesize` get binary size, broken down in various ways including total, by componant, and by file
-`chipinfo` get information from the esp board
+`chipinfo` get information from the esp chip
+`espinfo` get detailed information about the esp chip
 `menuconfig` run `idf.py menuconfig`
 
 ## Usage
