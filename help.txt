@@ -54,6 +54,7 @@ Usage:
 
 
 Features:
+	`help-esp` show this help
 	`build` idf.py build  
 	`changebaud` prompts to enter a new baud  
 	`changeesp` prompts to type in esp32s3, esp32c6, etc  
