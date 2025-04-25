@@ -2,4 +2,5 @@ scratch.txt
 *.bak
 *.old
 old
+scratch
 .vscode
