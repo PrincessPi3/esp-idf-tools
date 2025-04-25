@@ -2,7 +2,12 @@
 # set -e # uncomment for die on error
 startTime=$(date '+%s') # to time the (re)install time for the logs
 
-gitBranch=master # branch from github
+if [ -z "$2" ]; then
+	gitBranch=master # branch from github
+else
+	gitBranch=$2
+fi
+
 rcFile=$HOME/.zshrc # shell rc file
 # gitJobs=5 # number of jobs to download from github with
 gitJobs=default # default for no --jobs x arg, integar for a number of jobs
