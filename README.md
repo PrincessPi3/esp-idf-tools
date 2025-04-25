@@ -100,6 +100,8 @@ run_esp_reinstall
 		run_esp_reinstall test
 		run_esp_reinstall help
 		run_esp_reinstall uninstall
+	Second optional argument specifies branch:
+		`run_esp_reinstall nuke v5.4.1`
 
 esp_monitor
 	monitors install.log
