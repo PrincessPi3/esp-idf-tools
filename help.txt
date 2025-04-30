@@ -81,19 +81,20 @@ Features:
 	
 
 Aliases:
-	run_esp_reinstall
+	run_esp_cmd
 		Updates the esp-install-custom code via git, displays the script version, then executes esp-idf-tools-cmd.sh with optional arument.
 		Takes identical arguments to running esp-idf-tools-cmd.sh manually
-			run_esp_reinstall
-			run_esp_reinstall clean
-			run_esp_reinstall nuke
-			run_esp_reinstall retool
-			run_esp_reinstall cron
-			run_esp_reinstall interactive
-			run_esp_reinstall test
-			run_esp_reinstall uninstall
+			run_esp_cmd
+			run_esp_cmd clean
+			run_esp_cmd nuke [branch]
+			run_esp_cmd retool [branch]
+			run_esp_cmd cron [branch]
+			run_esp_cmd update [branch]
+			run_esp_cmd interactive
+			run_esp_cmd test
+			run_esp_cmd uninstall
 		Second optional argument specifies branch (requires two arguments!):
-			`run_esp_reinstall nuke v5.4.1`
+			`run_esp_cmd nuke v5.4.1`
 
 	esp_install_monitor
 		monitors install.log
