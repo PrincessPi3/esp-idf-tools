@@ -264,7 +264,7 @@ function testAppendAlias() {
 
 function handleAliasEnviron() {
 	testAppendAlias "get_idf" "alias get_idf='. $exportScript'"
-	testAppendAlias "run_esp_reinstall" "alias run_esp_reinstall='git -C $runningDir pull;echo -e \"\nOld Version:\";tail -1 $versionData;echo -e \"\n\";bash $runningDir/reinstall-esp-idf.sh'"
+	testAppendAlias "run_esp_reinstall" "alias run_esp_reinstall='git -C $runningDir pull;echo -e \"\nOld Version:\";tail -1 $versionData;echo -e \"\n\";bash $runningDir/esp-idf-tools-cmd.sh'"
 	testAppendAlias "esp_install_monitor" "alias esp_install_monitor='tail -n 75 -f $log'"
 	testAppendAlias "esp_install_logs" "alias esp_install_logs='less $versionData;less $log'"
 
@@ -353,7 +353,7 @@ handleReboot() {
 # warning not work how i make it work fuckin ell
 handleWarnAllUsers() {
 	# writeToLog "Warning all users of impending logout (function called)\n"
-	warningString="\nWARNING:\n\tReinstalling esp-idf:\n\tForce logut in $sleepMins minutes!!\n\tSave and log out!\n\tmonitor with \`esp+monitor\`\n\tterminate with \`sudo killall reinstall-esp-idf.sh\`\n"
+	warningString="\nWARNING:\n\tReinstalling esp-idf:\n\tForce logut in $sleepMins minutes!!\n\tSave and log out!\n\tmonitor with \`esp+monitor\`\n\tterminate with \`sudo killall esp-idf-tools-cmd.sh\`\n"
 
 	writeToLog "$warningString"
 

@@ -1,25 +1,3 @@
-test:
-    bash reinstall-esp-idf.sh help
-    bash reinstall-esp-idf.sh --help
-    bash reinstall-esp-idf.sh -h
-    bash reinstall-esp-idf.sh h
-    bash reinstall-esp-idf.sh test
-    bash reinstall-esp-idf.sh t
-    bash reinstall-esp-idf.sh retool
-    bash reinstall-esp-idf.sh rt
-    bash reinstall-esp-idf.sh
-    bash reinstall-esp-idf.sh clearlogs
-    bash reinstall-esp-idf.sh clear
-    bash reinstall-esp-idf.sh clean
-    bash reinstall-esp-idf.sh cl
-    bash reinstall-esp-idf.sh interactive
-    bash reinstall-esp-idf.sh i
-    bash reinstall-esp-idf.sh nuke
-    bash reinstall-esp-idf.sh n
-    bash reinstall-esp-idf.sh uninstall
-    bash reinstall-esp-idf.sh cron
-    bash reinstall-esp-idf.sh c
-
 mayhaps support bash?
     # mayhaps it already works mayhaps? test
 
@@ -28,12 +6,6 @@ figure out how to message users properly
 
 verbosity levels?
     less verbose on git commands and installers?
-    
-get current esp-idf version plox
-
-document:
-    run_esp_reinstall
-    esp_install_monitor
     esp_install_logs
 
 possibly upgrade step-flash-monitor with better resets

@@ -9,8 +9,9 @@ some features require user to have passwordless sudo rights
 Literally the most schizophrenically overengineered thing I have ever made. idk why I did that  
 
 ## Quick start
-`git clone https://github.com/PrincessPi3/esp-install-custom.git ~`  
-`bash ~/reinstall-esp-idf.sh`
+`cd ~`
+`git clone https://github.com/PrincessPi3/esp-idf-tools.git ~/esp-idf-tools`  
+`bash ~/esp-idf-tools/esp-idf-tools-cmd.sh`
 `source ~/.zshrc`
 `get_idf`
 
@@ -40,57 +41,57 @@ Modes:
 	
 	default: 
 		reinstalls non-interactively with no delays, logouts, or reboots. run without any argument
-			bash reinstall-esp-idf.sh
+			bash esp-idf-tools-cmd.sh
 
 	test:
 		tests the script. very fast. minimal actions taken. no reinstall is done
-			bash reinstall-esp-idf.sh test
-			bash reinstall-esp-idf.sh t
+			bash esp-idf-tools-cmd.sh test
+			bash esp-idf-tools-cmd.sh t
 
 	retool:
 	    reinstalls bins and export.sh, nothing else
-		    bash reinstall-esp-idf.sh retool
-			bash reinstall-esp-idf.sh rt
+		    bash esp-idf-tools-cmd.sh retool
+			bash esp-idf-tools-cmd.sh rt
 
 	cron:
 		runs noninteractively with forced user logout and automatic reboot, plus delays
-		    bash reinstall-esp-idf.sh cron
-			bash reinstall-esp-idf.sh c
+		    bash esp-idf-tools-cmd.sh cron
+			bash esp-idf-tools-cmd.sh c
 
 	interactive:
 		interactively installs/reinstalls esp-idf
-		    bash reinstall-esp-idf.sh interactive
-			bash reinstall-esp-idf.sh i
+		    bash esp-idf-tools-cmd.sh interactive
+			bash esp-idf-tools-cmd.sh i
 
 	nuke:
 		full delete and re-download and install
-			bash reinstall-esp-idf.sh nuke
-			bash reinstall-esp-idf.sh n
+			bash esp-idf-tools-cmd.sh nuke
+			bash esp-idf-tools-cmd.sh n
     
 	clearlogs:
 		clear logs
-			bash reinstall-esp-idf.sh clearlogs
-			bash reinstall-esp-idf.sh clear
-			bash reinstall-esp-idf.sh clean
-			bash reinstall-esp-idf.sh cl
+			bash esp-idf-tools-cmd.sh clearlogs
+			bash esp-idf-tools-cmd.sh clear
+			bash esp-idf-tools-cmd.sh clean
+			bash esp-idf-tools-cmd.sh cl
 			
     help:
         display this help text
-            bash reinstall-esp-idf.sh help
-			bash reinstall-esp-idf.sh h
-			bash reinstall-esp-idf.sh -h
-			bash reinstall-esp-idf.sh --help
+            bash esp-idf-tools-cmd.sh help
+			bash esp-idf-tools-cmd.sh h
+			bash esp-idf-tools-cmd.sh -h
+			bash esp-idf-tools-cmd.sh --help
 
 	uninstall:
 		uninstall esp-idf
-			bash reinstall-esp-idf.sh uninstall
+			bash esp-idf-tools-cmd.sh uninstall
 ```
 
 ## Ailases
 ```
 run_esp_reinstall
-	Updates the esp-install-custom code via git, displays the script version, then executes reinstall-esp-idf.sh with optional arument.
-	Takes identical arguments to running reinstall-esp-idf.sh manually
+	Updates the esp-install-custom code via git, displays the script version, then executes esp-idf-tools-cmd.sh with optional arument.
+	Takes identical arguments to running esp-idf-tools-cmd.sh manually
 		run_esp_reinstall
 		run_esp_reinstall clean
 		run_esp_reinstall nuke
@@ -119,5 +120,5 @@ cron:
     reinstall from master everyday at 4am, logging out users with warn delays and rebooting after
 	    `crontab -e`
 
-	    0 4 * * * bash $HOME/esp/esp-install-custom/reinstall-esp-idf.sh cron
+	    0 4 * * * bash $HOME/esp/esp-install-custom/esp-idf-tools-cmd.sh cron
 ```
