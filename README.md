@@ -1,4 +1,4 @@
-# esp-idf custom installer/reinstaller
+# esp-idf Tools and Installer/Reinstaller
 installs/reinstalls full esp-idf with my own additions on linux.  
 pulls from master so its the very latest
 
