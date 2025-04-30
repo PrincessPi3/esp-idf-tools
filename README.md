@@ -103,12 +103,12 @@ run_esp_reinstall
 	Second optional argument specifies branch:
 		`run_esp_reinstall nuke v5.4.1`
 
-esp_monitor
+esp_install_monitor
 	monitors install.log
 	alias for tail -n 75 -f $ESPIDF_INSTALLDIR/install.log
 	no arguments
 
-esp_logs
+esp__install_logs
 	displays full text of install.log and version-data.txt
 	no arguments
 ```

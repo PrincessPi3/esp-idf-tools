@@ -295,7 +295,7 @@ function handleDownloadInstall() {
 		gitChk=$?
 		iendTime=$(date '+%s')
 		installerTime=$(($iendTime-$istartTime))
-		writeToLog "Git CLONE completed in $installerTime seconds\n"
+		writeToLog "Git CLONE completed in $installerTime seconds from branch $gitBranch\n"
 	else
 		writeToLog "Setting for update mode\n"
 
@@ -306,7 +306,7 @@ function handleDownloadInstall() {
 		gitChk=$?
 		iendTime=$(date '+%s')
 		installerTime=$(($iendTime-$istartTime))
-		writeToLog "Git UPDATE completed in $installerTime seconds\n"
+		writeToLog "Git UPDATE completed in $installerTime seconds from Branch $gitBranch\n"
 	fi
 
 	istartTime=$(date '+%s')
@@ -587,6 +587,7 @@ elif [[ "$arg" == "interactive" || "$arg" == "i" ]]; then
 elif [[ "$arg" == "cron" || "$arg" == "c" ]]; then # full install with warn, sleep, and reboot
 	action="REINSTALL (CRON)"
 	# sleepMins=3
+	idfGet="update"
 	sleepMins=0
 
 	handleStart
