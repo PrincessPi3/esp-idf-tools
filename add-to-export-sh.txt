@@ -11,6 +11,7 @@ versionData=versionTAG
 commitHash=commitTAG
 installDate=installDateTAG
 
+
 if [ -z $ESPIDF_INSTALLDIR ]; then
     echo -e "\nFAIL: ESPIDF_INSTALLDIR environment variable not found!\nReinstall via script or manually add to ~/.zshrc\n"
     exit
@@ -41,6 +42,7 @@ export ESPBAUD=460800
 export ESPTARGET=$esp
 
 echo -e "Installation Variables:"
+tail -1 "$ESPIDF_INSTALLDIR/version-data.log"
 echo -e "\tesp-install-custom version: $versionData"
 echo -e "\tesp-idf commmit hash: $commitHash"
 echo -e "\tinstall date: $installDate\n"
@@ -50,9 +52,10 @@ echo -e "\tESPBAUD = $ESPBAUD"
 echo -e "\tESPTARGET = $ESPTARGET"
 echo -e "\tESPPORT = $ESPPORT"
 echo -e "\tESPIDF_INSTALLDIR = $ESPIDF_INSTALLDIR"
+echo -e "\tESP_IDF_VERSION = $ESP_IDF_VERSION"
 echo -e "\tbinDir = $binDir"
 
-# echo -e "Setting alias"
+echo -e "\nSetting alias"
 alias changeport="source $binDir/changeport.sh"
 alias changebaud="source $binDir/changebaud.sh"
 alias changeesp="source $binDir/changeesp.sh"
@@ -60,6 +63,9 @@ alias exit_idf="source $binDir/exit_idf.sh"
 alias monitor="idf.py monitor"
 alias flashmonitor="idf.py flash monitor"
 alias menuconfig="idf.py menuconfig"
+
+
+
 
 echo -e "Changing dir to $ESPIDF_INSTALLDIR"
 cd $ESPIDF_INSTALLDIR
