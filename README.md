@@ -36,72 +36,76 @@ Literally the most schizophrenically overengineered thing I have ever made. idk 
 ## Usage
 ```
 Modes:
-	each of these arguments can be used identically on the alias run_esp_reinstall
+	each of these arguments can be used identically on the alias run_esp_cmd
 	
 	default: 
 		reinstalls non-interactively with no delays, logouts, or reboots. run without any argument
-			bash esp-idf-tools-cmd.sh
+			run_esp_cmd
 
 	test:
 		tests the script. very fast. minimal actions taken. no reinstall is done
-			bash esp-idf-tools-cmd.sh test
-			bash esp-idf-tools-cmd.sh t
+			run_esp_cmd test
+			run_esp_cmd t
 
 	retool:
 	    reinstalls bins and export.sh, nothing else
-		    bash esp-idf-tools-cmd.sh retool
-			bash esp-idf-tools-cmd.sh rt
+		    run_esp_cmd retool
+			run_esp_cmd rt
 
 	cron:
 		runs noninteractively with forced user logout and automatic reboot, plus delays
-		    bash esp-idf-tools-cmd.sh cron
-			bash esp-idf-tools-cmd.sh c
+		    run_esp_cmd cron
+			run_esp_cmd c
+	update:
+		runs update like cron but without logout or reboot
+			run_esp_cmd update
+			run_esp_cmd u
 
 	interactive:
 		interactively installs/reinstalls esp-idf
-		    bash esp-idf-tools-cmd.sh interactive
-			bash esp-idf-tools-cmd.sh i
+		    run_esp_cmd interactive
+			run_esp_cmd i
 
 	nuke:
 		full delete and re-download and install
-			bash esp-idf-tools-cmd.sh nuke
-			bash esp-idf-tools-cmd.sh n
+			run_esp_cmd nuke
+			run_esp_cmd n
     
 	clearlogs:
 		clear logs
-			bash esp-idf-tools-cmd.sh clearlogs
-			bash esp-idf-tools-cmd.sh clear
-			bash esp-idf-tools-cmd.sh clean
-			bash esp-idf-tools-cmd.sh cl
+			run_esp_cmd clearlogs
+			run_esp_cmd clear
+			run_esp_cmd clean
+			run_esp_cmd cl
 			
     help:
         display this help text
-            bash esp-idf-tools-cmd.sh help
-			bash esp-idf-tools-cmd.sh h
-			bash esp-idf-tools-cmd.sh -h
-			bash esp-idf-tools-cmd.sh --help
+            run_esp_cmd help
+			run_esp_cmd h
+			run_esp_cmd -h
+			run_esp_cmd --help
 
 	uninstall:
-		uninstall esp-idf
-			bash esp-idf-tools-cmd.sh uninstall
+		run_esp_cmd uninstall
 ```
 
 ## Ailases
 ```
-run_esp_reinstall
+run_esp_cmd
 	Updates the esp-install-custom code via git, displays the script version, then executes esp-idf-tools-cmd.sh with optional arument.
 	Takes identical arguments to running esp-idf-tools-cmd.sh manually
-		run_esp_reinstall
-		run_esp_reinstall clean
-		run_esp_reinstall nuke
-		run_esp_reinstall retool
-		run_esp_reinstall cron
-		run_esp_reinstall interactive
-		run_esp_reinstall test
-		run_esp_reinstall help
-		run_esp_reinstall uninstall
+		run_esp_cmd
+		run_esp_cmd clean
+		run_esp_cmd nuke
+		run_esp_cmd retool
+		run_esp_cmd cron
+		run_esp_cmd update
+		run_esp_cmd interactive
+		run_esp_cmd test
+		run_esp_cmd help
+		run_esp_cmd uninstall
 	Second optional argument specifies branch:
-		`run_esp_reinstall nuke v5.4.1`
+		`run_esp_cmd nuke v5.4.1`
 
 esp_install_monitor
 	monitors install.log
