@@ -47,7 +47,7 @@ tail -1 "$ESPIDF_INSTALLDIR/version-data.log"
 echo -e "\tesp-install-custom version: $versionData"
 echo -e "\tesp-idf version: $ESP_IDF_VERSION"
 echo -e "\tcommmit hash: $commitHash"
-echo -e "\tbranch: $branchData
+echo -e "\tbranch: $branchData"
 
 echo -e "\tinstall date: $installDate\n"
 
