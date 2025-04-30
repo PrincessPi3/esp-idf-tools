@@ -38,9 +38,9 @@ arg=$1 # just rename the argument var for clarity with the functions
 
 # commands
 if [ "$gitJobs" == "default" ]; then
-	gitCloneCmd="git clone --depth 1 --recursive --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
+	gitCloneCmd="git clone --single-branch --depth 1 --recursive --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
 else
-	gitCloneCmd="git clone --depth 1 --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
+	gitCloneCmd="git clone --single-branch --depth 1 --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
 fi
 
 # gitCloneCmd="git clone --recursive --single-branch --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
@@ -197,7 +197,7 @@ function handleExport() {
 	exportSedReturnChk=$?
 
 	writeToLog "Editing $exportScript with version information: $scriptVers"
-	sed -i "s/versionTAG/\'$scriptVers\'/g" $exportScript
+	sed -i "s/versionDataTAG/\'$scriptVers\'/g" $exportScript
 	returnStatus
 	exportSedVersionChk=$?
 
