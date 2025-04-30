@@ -10,9 +10,9 @@ Literally the most schizophrenically overengineered thing I have ever made. idk 
 
 ## Quick start
 `git clone https://github.com/PrincessPi3/esp-idf-tools.git ~/esp-idf-tools`  
-`bash ~/esp-idf-tools/esp-idf-tools-cmd.sh`
-`source ~/.zshrc`
-`get_idf`
+`bash ~/esp-idf-tools/esp-idf-tools-cmd.sh`  
+`source ~/.zshrc`  
+`get_idf`  
 
 ## Features
 `build` idf.py build  
