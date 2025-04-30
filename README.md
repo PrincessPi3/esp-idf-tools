@@ -9,7 +9,6 @@ some features require user to have passwordless sudo rights
 Literally the most schizophrenically overengineered thing I have ever made. idk why I did that  
 
 ## Quick start
-`cd ~`
 `git clone https://github.com/PrincessPi3/esp-idf-tools.git ~/esp-idf-tools`  
 `bash ~/esp-idf-tools/esp-idf-tools-cmd.sh`
 `source ~/.zshrc`
