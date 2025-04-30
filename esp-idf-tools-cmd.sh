@@ -38,9 +38,9 @@ arg=$1 # just rename the argument var for clarity with the functions
 
 # commands
 if [ "$gitJobs" == "default" ]; then
-	gitCloneCmd="git clone --single-branch --depth 1 --recursive --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
+	gitCloneCmd="git clone --depth 1 --recursive --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
 else
-	gitCloneCmd="git clone --single-branch --depth 1 --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
+	gitCloneCmd="git clone --depth 1 --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
 fi
 
 # gitCloneCmd="git clone --recursive --single-branch --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
@@ -264,7 +264,7 @@ function testAppendAlias() {
 
 function handleAliasEnviron() {
 	testAppendAlias "get_esp_tools" "alias get_esp_tools='. $exportScript'"
-	testAppendAlias "run_esp_cmd" "alias run_esp_reinstall='git -C $runningDir pull;echo -e \"\nOld Version:\";tail -1 $versionData;echo -e \"\n\";bash $runningDir/esp-idf-tools-cmd.sh'"
+	testAppendAlias "run_esp_cmd" "alias run_esp_cmd='git -C $runningDir pull;echo -e \"\nOld Version:\";tail -1 $versionData;echo -e \"\n\";bash $runningDir/esp-idf-tools-cmd.sh'"
 	testAppendAlias "esp_install_monitor" "alias esp_install_monitor='tail -n 75 -f $log'"
 	testAppendAlias "esp_install_logs" "alias esp_install_logs='less $versionData;less $log'"
 

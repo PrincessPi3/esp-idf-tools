@@ -1,50 +1,55 @@
 Modes:
 	default: 
 		reinstalls non-interactively with no delays, logouts, or reboots
-			`bash esp-idf-tools-cmd.sh`
+			`run_esp_cmd`
 
 	test:
 		tests the script. very fast. minimal actions taken. no reinstall is done
-			`bash esp-idf-tools-cmd.sh test`
-			`bash esp-idf-tools-cmd.sh t`
+			`run_esp_cmd test`
+			`run_esp_cmd t`
 
 	retool:
 	    reinstalls bins and export.sh, nothing else
-		    `bash esp-idf-tools-cmd.sh retool`
-			`bash esp-idf-tools-cmd.sh rt`
+		    `run_esp_cmd retool`
+			`run_esp_cmd rt`
 
 	cron:
 		runs noninteractively with forced user logout and automatic reboot, plus delays
-		    `bash esp-idf-tools-cmd.sh cron`
-			`bash esp-idf-tools-cmd.sh c`
+		    `run_esp_cmd cron`
+			`run_esp_cmd c`
+
+	update:
+		updates and installs latest without reboot or user logout
+			`run_esp_cmd update`
+			`run_esp_cmd u`
 
 	interactive:
 		interactively installs/reinstalls esp-idf
-		    `bash esp-idf-tools-cmd.sh interactive`
-			`bash esp-idf-tools-cmd.sh i`
+		    `run_esp_cmd interactive`
+			`run_esp_cmd i`
 
 	nuke:
 		full delete and re-download and install
-			`bash esp-idf-tools-cmd.sh nuke`
-			`bash esp-idf-tools-cmd.sh n`
+			`run_esp_cmd nuke`
+			`run_esp_cmd n`
 
 	clearlogs:
 		clear logs
-			`bash esp-idf-tools-cmd.sh clearlogs`
-			`bash esp-idf-tools-cmd.sh clear`
-			`bash esp-idf-tools-cmd.sh clean`
-			`bash esp-idf-tools-cmd.sh cl`
+			`run_esp_cmd clearlogs`
+			`run_esp_cmd clear`
+			`run_esp_cmd clean`
+			`run_esp_cmd cl`
 
     help:
         display this help text
-            `bash esp-idf-tools-cmd.sh help`
-			`bash esp-idf-tools-cmd.sh h`
-			`bash esp-idf-tools-cmd.sh -h`
-			`bash esp-idf-tools-cmd.sh --help`
+            `run_esp_cmd help`
+			`run_esp_cmd h`
+			`run_esp_cmd -h`
+			`run_esp_cmd --help`
 
 	uninstall:
 		uninstall esp-idf
-			`bash esp-idf-tools-cmd.sh uninstall`
+			`run_esp_cmd uninstall`
 
 
 Usage:
