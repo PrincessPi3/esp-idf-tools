@@ -9,7 +9,7 @@ else
 fi
 
 rcFile=$HOME/.zshrc # shell rc file
-gitJobs=3 # number of jobs to download from github with
+gitJobs=5 # number of jobs to download from github with
 # gitJobs=default # default for no --jobs x arg, integar for a number of jobs
 rebootMins=3 # minutes of warning before reboot
 
