@@ -40,6 +40,7 @@ export PATH="$ESPIDF_INSTALLDIR/.custom_bin:$PATH"
 export ESPPORT=$ttyselect
 export ESPBAUD=460800
 export ESPTARGET=$esp
+export examples="$ESPIDF_INSTALLDIR/esp-idf/examples"
 
 echo -e "Installation Variables:"
 tail -1 "$ESPIDF_INSTALLDIR/version-data.log"
@@ -57,6 +58,7 @@ echo -e "\tESPPORT = $ESPPORT"
 echo -e "\tESPIDF_INSTALLDIR = $ESPIDF_INSTALLDIR"
 echo -e "\tESP_IDF_VERSION = $ESP_IDF_VERSION"
 echo -e "\tbinDir = $binDir"
+echo -e "\texamples = $examples"
 
 echo -e "\nSetting alias"
 alias changeport="source $binDir/changeport.sh"
