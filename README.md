@@ -12,7 +12,7 @@ Literally the most schizophrenically overengineered thing I have ever made. idk 
 `git clone https://github.com/PrincessPi3/esp-idf-tools.git ~/esp-idf-tools`  
 `bash ~/esp-idf-tools/esp-idf-tools-cmd.sh`  
 `source ~/.zshrc`  
-`get_idf`  
+`get_esp_tools`  
 
 ## Features
 `build` idf.py build  
@@ -115,6 +115,9 @@ esp_install_monitor
 esp__install_logs
 	displays full text of install.log and version-data.txt
 	no arguments
+
+exit_esp_tools
+	exit and reset shell
 ```
 
 ## Helpful stuff

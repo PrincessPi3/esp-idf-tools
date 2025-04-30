@@ -50,11 +50,11 @@ Modes:
 Usage:
 	Once installed for the first time, restart your shell.
 	to activate esp-idf with the custom additions, run:
-		`get_idf`
+		`get_esp_tools`
 	exit with
-		`exit_idf`
+		`exit_esp_tools`
 	for help
-		`help-esp`
+		`help_esp_tools`
 
 
 Features:

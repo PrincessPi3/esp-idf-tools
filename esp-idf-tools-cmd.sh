@@ -263,7 +263,7 @@ function testAppendAlias() {
 }
 
 function handleAliasEnviron() {
-	testAppendAlias "get_idf" "alias get_idf='. $exportScript'"
+	testAppendAlias "get_esp_tools" "alias get_esp_tools='. $exportScript'"
 	testAppendAlias "run_esp_cmd" "alias run_esp_reinstall='git -C $runningDir pull;echo -e \"\nOld Version:\";tail -1 $versionData;echo -e \"\n\";bash $runningDir/esp-idf-tools-cmd.sh'"
 	testAppendAlias "esp_install_monitor" "alias esp_install_monitor='tail -n 75 -f $log'"
 	testAppendAlias "esp_install_logs" "alias esp_install_logs='less $versionData;less $log'"
