@@ -7,10 +7,10 @@
 
 echo -e "\n=======CUSTOM=======\n"
 
-versionData=versionTAG
+versionData=versionDataTAG
 commitHash=commitTAG
 installDate=installDateTAG
-
+branchData=branchDataTAG
 
 if [ -z $ESPIDF_INSTALLDIR ]; then
     echo -e "\nFAIL: ESPIDF_INSTALLDIR environment variable not found!\nReinstall via script or manually add to ~/.zshrc\n"
@@ -44,7 +44,10 @@ export ESPTARGET=$esp
 echo -e "Installation Variables:"
 tail -1 "$ESPIDF_INSTALLDIR/version-data.log"
 echo -e "\tesp-install-custom version: $versionData"
-echo -e "\tesp-idf commmit hash: $commitHash"
+echo -e "\tesp-idf version: $ESP_IDF_VERSION"
+echo -e "\tcommmit hash: $commitHash"
+echo -e "\tbranch: $branchData
+
 echo -e "\tinstall date: $installDate\n"
 
 echo -e "\nEnvironment Variables:"
@@ -64,13 +67,10 @@ alias monitor="idf.py monitor"
 alias flashmonitor="idf.py flash monitor"
 alias menuconfig="idf.py menuconfig"
 
-
-
-
-echo -e "Changing dir to $ESPIDF_INSTALLDIR"
+# echo -e "Changing dir to $ESPIDF_INSTALLDIR"
 cd $ESPIDF_INSTALLDIR
 
-echo -e "\nesp-idf version: $ESP_IDF_VERSION"
+echo -e "\nesp-idf version: $ESP_IDF_VERSION commit $commitHash from branch $branchData"
 
 echo -e "\nWelcome to esp-idf!\nAll done :3\n"
 

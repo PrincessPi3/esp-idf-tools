@@ -201,6 +201,11 @@ function handleExport() {
 	returnStatus
 	exportSedVersionChk=$?
 
+	writeToLog "Editing $exportScript with branch information: $gitBranch"
+	sed -i "s/branchDataTAG/\'$gitBranch\'/g" $exportScript
+	returnStatus
+	exportSedVersionChk=$?
+
 	dateStampInstall=$(date '+%d-%m-%Y %H:%M:%S %Z (%s)')
 
 	writeToLog "Editing $exportScript with install date information: $dateStampInstall"
