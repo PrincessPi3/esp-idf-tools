@@ -10,7 +10,7 @@ fi
 
 rcFile=$HOME/.zshrc # shell rc file
 gitJobs=3 # number of jobs to download from github with
-gitJobs=default # default for no --jobs x arg, integar for a number of jobs
+# gitJobs=default # default for no --jobs x arg, integar for a number of jobs
 rebootMins=3 # minutes of warning before reboot
 
 # get us our FUCKING ALIASES HOLY FUCK GOD DAMN SHIT FUCK IT\
