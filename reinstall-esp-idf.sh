@@ -603,6 +603,22 @@ elif [[ "$arg" == "cron" || "$arg" == "c" ]]; then # full install with warn, sle
 
 	exit
 
+elif [[ "$arg" == "update" || "$arg" == "u" ]]; then # update without logouts or reboot
+	action="UPDATE"
+	# sleepMins=3
+	idfGet="update"
+	sleepMins=0
+
+	handleStart
+	handleClearInstallLog
+	handleSetupEnvironment
+	handleCustomBins
+	handleDownloadInstall
+	handleExport
+	handleEnd
+
+	exit
+
 elif [[ "$arg" == "clearlogs" || "$arg" == "cl" || "$arg" == "clear" || "$arg" == "clean" ]]; then # clear logs
 	handleEmptyLogs
 
@@ -611,8 +627,6 @@ elif [[ "$arg" == "clearlogs" || "$arg" == "cl" || "$arg" == "clear" || "$arg" =
 elif [[ "$arg" == "nuke" || "$arg" == "n" ]]; then # clear logs
 	action="REINSTALL (NUKE)"
 	idfGet="download"
-
-
 
 	handleStart
 	handleClearInstallLog
