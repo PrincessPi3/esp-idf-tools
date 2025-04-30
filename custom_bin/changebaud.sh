@@ -18,6 +18,5 @@ subprocess
 ret=$?
 
 export ESPBAUD=$ret
-
 echo "\nBaudrate set to $ESPBAUD\n"
 echo "\nAll done :3\n"

@@ -56,6 +56,7 @@ echo -e "\tbinDir = $binDir"
 alias changeport="source $binDir/changeport.sh"
 alias changebaud="source $binDir/changebaud.sh"
 alias changeesp="source $binDir/changeesp.sh"
+alias exit_idf="source $binDir/exit_idf.sh"
 alias monitor="idf.py monitor"
 alias flashmonitor="idf.py flash monitor"
 alias menuconfig="idf.py menuconfig"
@@ -63,7 +64,7 @@ alias menuconfig="idf.py menuconfig"
 echo -e "Changing dir to $ESPIDF_INSTALLDIR"
 cd $ESPIDF_INSTALLDIR
 
-echo -e "esp-idf $ESP_IDF_VERSION"
+echo -e "\nesp-idf version: $ESP_IDF_VERSION"
 
 echo -e "\nWelcome to esp-idf!\nAll done :3\n"
 
