@@ -3,12 +3,12 @@ subprocess() {
     read baudRate
     echo -e "\n"
     case $baudRate in
-    1) selection=9600 ;;
-    2) selection=115200 ;;
-    3) selection=230400 ;;
-    4) selection=460800 ;;
-    5) selection=1152000 ;;
-    6) selection=1500000 ;;
+    1) selection=9600;;
+    2) selection=115200;;
+    3) selection=230400;;
+    4) selection=460800;;
+    5) selection=1152000;;
+    6) selection=1500000;;
     esac
 
     return $selection
@@ -17,10 +17,10 @@ subprocess() {
 if [ ! -z $1 ]; then
     ret="$1"
 else
-    ret=''
-    subprocess ret
+    ret=subprocess
 fi
 
+echo "ret: $ret"
 export ESPBAUD=$ret
 echo "\nBaudrate set to $ESPBAUD\n"
 echo "\nAll done :3\n"

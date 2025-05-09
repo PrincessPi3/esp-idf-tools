@@ -123,7 +123,9 @@ function messagePTY() {
 
 	for pts in $(ls -q /dev/pts); do
     	sudo echo -e "$message" > /dev/pts/$pts # requires passwordless sudo
+		writeToLog "messagePTY: $message send to $pts"
 	done
+
 }
 
 # this is not needed so long as warn doesnt god damned fucking work lmfao
@@ -459,7 +461,7 @@ function handleEnd() {
 	endTime=$(date '+%s')
 	timeElapsed=$(($endTime-$startTime))
 
-	echo -e "\nesp-idf (re)installed! run \`source $rcFile\` and then \`get_idf\`\n\nAll done :3\n\n"
+	echo -e "\nesp-idf (re)installed! run \`source $rcFile\` and then \`get-esp-tools\`\n\nAll done :3\n\n"
 
 	writeToLog "Reinstall completed in $timeElapsed seconds\n"
 	writeToLog " === Finished ===\n\n"
@@ -501,7 +503,6 @@ elif [[ "$arg" == "retool" || "$arg" == "rt" ]]; then # just reinstall bins and 
 
 	handleStart
 	handleCustomBins
-	handleExport
 	handleEnd
 
 	exit
@@ -565,7 +566,7 @@ elif [[ "$arg" == "cron" || "$arg" == "c" ]]; then # full install with warn, sle
 	idfGet="update"
 	sleepMins=0
 
-	messagePTY "esp-idf-tools action $action started!\nWill reboot with $sleepMins minutes delay when complete!"
+	messagePTY "\n\nesp-idf-tools action $action started!\nWill reboot with $sleepMins minutes delay when complete!\n\n"
 	handleStart
 	handleClearInstallLog
 	handleSetupEnvironment
@@ -617,7 +618,7 @@ elif [[ "$arg" == "nukereboot" || "$arg" == "nr" ]]; then
 	sleepMins=1
 	idfGet="download"
 
-	messagePTY "esp-idf-tools action $action started!\nWill reboot with $sleepMins minutes delay when complete!"
+	messagePTY "\n\nesp-idf-tools action $action started!\nWill reboot with $sleepMins minutes delay when complete!\n\n"
 	handleStart
 	handleClearInstallLog
 	handleSetupEnvironment

@@ -1,11 +1,11 @@
 test new pts messaging system
     integrate 
 test espinfo
-test all for bugs
 audit readme
     maybe pretty up
 test/fix changebaud/changebaud <baud>
-test menuconfig, monitor, flashmonitor
+test menuconfig, monitor, flashmonitor, exit-esp-tools
+test all for bugs
 
 mayhaps support bash?
     # mayhaps it already works mayhaps? test

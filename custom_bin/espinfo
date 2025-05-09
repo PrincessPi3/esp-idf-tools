@@ -1,4 +1,5 @@
 echo "esp-idf-tools install dir: $ESPIDF_INSTALLDIR"
+echo "esp-idf-tools version: $(cat $ESPIDF_INSTALLDIR/esp-idf-tools/version.txt)"
 echo "esp-idf-tools last install: $(tail -1 $ESPIDF_INSTALLDIR/version-data.log)"
 echo "esp-idf path: $IDF_PATH"
 echo "esp-idf version: $ESP_IDF_VERSION"
