@@ -1,5 +1,11 @@
-test new pts messaging system
-    integrate 
+test espinfo
+test retool flow
+test reboot thing
+audit readme
+    maybe pretty up
+test/fix changebaud/changebaud <baud>
+test menuconfig, monitor, flashmonitor, exit-esp-tools
+test all for bugs
 
 figure out esp32 disable sanity check
     create blank project as master
@@ -20,12 +26,6 @@ extern "C" int ieee80211_raw_frame_sanity_check(int32_t arg, int32_t arg2, int32
 }
     ```
     function: extern "C" int ieee80211_raw_frame_sanity_check(int32_t arg, int32_t arg2, int32_t arg3) { return 0; }
-test espinfo
-audit readme
-    maybe pretty up
-test/fix changebaud/changebaud <baud>
-test menuconfig, monitor, flashmonitor, exit-esp-tools
-test all for bugs
 
 mayhaps support bash?
     # mayhaps it already works mayhaps? test
