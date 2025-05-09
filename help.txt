@@ -76,7 +76,9 @@ Features:
 	`help-esp-tools` show this help
 	`exit-esp-tools` exit esp-idf and reset terminal
 	`build` idf.py build  
-	`changebaud` prompts to enter a new baud  
+	`changebaud` alone prompts to enter baudrate
+		`changebaud <baudrate>` sets baudrate manually
+			ex. `changebaud 115200`
 	`changeesp` change esp device
 		`changeesp` alone prompts to enter
 		`changeesp <esp device>` manually changes to <esp device>
@@ -96,7 +98,7 @@ Features:
 	`step-flash-monitor` attempt clean, build, flash, then monitor, dying on error  
 	`imagesize` get binary size, broken down in various ways including total, by componant, and by file
 	`chipinfo` get information from the esp chip
-	`espinfo` get detailed information from the esp chip
+	`espinfo` get detailed information about esp-idf and esp-idf-tools envrionment
 	`menuconfig` run `idf.py menuconfig`
 	`create-project <project name>` same as idf.py create-project <proejct name>
 		ex. `create-project hello-world`

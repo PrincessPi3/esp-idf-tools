@@ -81,7 +81,9 @@ Some take optional [branch] paramater
 * `help-esp-tools` show this help
 * `exit-esp-tools` exit esp-idf and reset terminal
 * `build` idf.py build  
-* `changebaud` prompts to enter a new baud  
+* `changebaud` alone prompts to enter baudrate
+	* `changebaud <baudrate>` sets baudrate manually
+		* ex. `changebaud 115200`
 * `changeesp` change esp device
 	* `changeesp` alone prompts to enter
 * 	`changeesp <esp device>` manually changes to <esp device>
