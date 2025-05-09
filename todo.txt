@@ -1,7 +1,3 @@
-test retool flow
-
-test/fix changebaud/changebaud <baud>
-test espinfo
 test menuconfig, monitor, flashmonitor, exit-esp-tools
 test reboot thing
 audit readme

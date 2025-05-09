@@ -86,8 +86,8 @@ Some take optional [branch] paramater
 		* ex. `changebaud 115200`
 * `changeesp` change esp device
 	* `changeesp` alone prompts to enter
-* 	`changeesp <esp device>` manually changes to <esp device>
-	* ex. `changeesp esp32p4`
+		* `changeesp <esp device>` manually changes to <esp device>
+		* ex. `changeesp esp32p4`
 * `changeport` change serial port
 	* `changeport` alone prompts to select
 	* `changeport <tty device path>` manually specifies path
@@ -105,8 +105,9 @@ Some take optional [branch] paramater
 * `chipinfo` get information from the esp chip
 * `espinfo` get detailed information from the esp chip
 * `menuconfig` run `idf.py menuconfig`
-* `create-project <project name>` same as idf.py create-project <proejct name>
-	* ex. `create-project hello-world`
+* `create-project` alone prompts for a project name
+	* `create-project <project name>` creates a project with <project name>
+		* ex. `create-project hello-world`
 * `esp-install-monitor` monitors install.log. alias for `tail -n 75 -f $ESPIDF_INSTALLDIR/install.log`
 * `esp-install-logs` displays full text of install.log and version-data.txt
 

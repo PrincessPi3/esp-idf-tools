@@ -100,8 +100,9 @@ Features:
 	`chipinfo` get information from the esp chip
 	`espinfo` get detailed information about esp-idf and esp-idf-tools envrionment
 	`menuconfig` run `idf.py menuconfig`
-	`create-project <project name>` same as idf.py create-project <proejct name>
-		ex. `create-project hello-world`
+	`create-project` alone prompts for a project name
+		`create-project <project name>` creates a project with <project name>
+			ex. `create-project hello-world`
 	`esp-install-monitor` monitors install.log. alias for `tail -n 75 -f $ESPIDF_INSTALLDIR/install.log`
 	`esp-install-logs` displays full text of install.log and version-data.txt
 	

@@ -1,0 +1,9 @@
+#!/bin/bash
+if [[ ! -z "$1" ]]; then
+    projname="$1"
+else
+    echo "Enter Project Name"
+    read projname;
+fi
+
+idf.py create-project "$projname"
