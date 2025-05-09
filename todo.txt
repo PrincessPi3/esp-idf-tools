@@ -1,5 +1,6 @@
+test espinfo
+test help on cmd, help-esp-tools
 test menuconfig, monitor, flashmonitor, exit-esp-tools
-test reboot thing
 audit readme
     maybe pretty up
 test all for bugs
