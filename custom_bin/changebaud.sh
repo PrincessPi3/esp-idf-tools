@@ -26,14 +26,16 @@ function selectBaud() {
     5) selection=1152000;;
     6) selection=1500000;;
     esac
-
-    echo $selection
+    
+    eval "$1=$selection"
+    return 0;
 }
 
-if [ ! -z $1 ]; then
+if [ ! -z "$1" ]; then
     ret="$1"
 else
-    ret=$(selectBaud)
+    ret=''
+    subprocess ret
 fi
 
 echo "ret: $ret"
