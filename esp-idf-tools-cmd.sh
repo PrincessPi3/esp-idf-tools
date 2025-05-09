@@ -621,7 +621,7 @@ elif [[ "$arg" == "nuke" || "$arg" == "n" ]]; then
 
 elif [[ "$arg" == "nukereboot" || "$arg" == "nr" ]]; then
 	action="REINSTALL (NUKEREBOOT)"
-	sleepMins=1
+	sleepMins=0 # restart right away
 	idfGet="download"
 
 	handleStart
