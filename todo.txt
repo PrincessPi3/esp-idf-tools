@@ -1,12 +1,12 @@
-test espinfo
 test retool flow
+
+test/fix changebaud/changebaud <baud>
+test espinfo
+test menuconfig, monitor, flashmonitor, exit-esp-tools
 test reboot thing
 audit readme
     maybe pretty up
-test/fix changebaud/changebaud <baud>
-test menuconfig, monitor, flashmonitor, exit-esp-tools
 test all for bugs
-
 figure out esp32 disable sanity check
     create blank project as master
     add Kconfig.projbuild sample
