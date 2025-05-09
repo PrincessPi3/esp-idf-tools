@@ -373,7 +373,7 @@ function handleDownloadInstall() {
 }
 
 handleReboot() {
-	messagePTY "\n\nRebooting in $sleepMins minutes!!\n\n"
+	messagePTY "\n\nRebooting in $sleepMins minutes\ncancel with 'shutdown -c'!!\n\n"
 	sudo shutdown -r +$rebootMins
 }
 

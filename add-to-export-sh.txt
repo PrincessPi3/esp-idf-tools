@@ -71,7 +71,7 @@ cd $ESPIDF_INSTALLDIR
 
 echo -e "\nesp-idf version: $ESP_IDF_VERSION commit $commitHash from branch $branchData"
 
-echo -e "\nrun with \`run-esp-cmd\`"
+echo -e "\nrun with 'get-esp-tools'"
 
 echo -e "\nWelcome to esp-idf!\nAll done :3\n"
 
