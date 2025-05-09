@@ -263,10 +263,10 @@ function testAppendAlias() {
 }
 
 function handleAliasEnviron() {
-	testAppendAlias "get_esp_tools" "alias get_esp_tools='. $exportScript'"
-	testAppendAlias "run_esp_cmd" "alias run_esp_cmd='git -C $runningDir pull;echo -e \"\nOld Version:\";tail -1 $versionData;echo -e \"\n\";bash $runningDir/esp-idf-tools-cmd.sh'"
-	testAppendAlias "esp_install_monitor" "alias esp_install_monitor='tail -n 75 -f $log'"
-	testAppendAlias "esp_install_logs" "alias esp_install_logs='less $versionData;less $log'"
+	testAppendAlias "get-esp-tools" "alias get-esp-tools='. $exportScript'"
+	testAppendAlias "run-esp-cmd" "alias run-esp-cmd='git -C $runningDir pull;echo -e \"\nOld Version:\";tail -1 $versionData;echo -e \"\n\";bash $runningDir/esp-idf-tools-cmd.sh'"
+	testAppendAlias "esp-install-monitor" "alias esp-install-monitor='tail -n 75 -f $log'"
+	testAppendAlias "esp-install-logs" "alias esp-install-logs='less $versionData;less $log'"
 
 	if [ -z $ESPIDF_INSTALLDIR ]; then
 		writeToLog "ESPIDF_INSTALLDIR environment variable not found, appending to $rcFile"
@@ -338,7 +338,14 @@ function handleDownloadInstall() {
 	returnStatus
 	gitHashChk=$?
 
-	gitDataLog="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)') commit $commitHash branch $gitBranch version $scriptVers action $action"
+	# if gitDataLog file doesnt exist, initialize with header
+	if [[ ! -f "$gitDataLog" ]]; then
+		writeToLog "$gitDataLog not found, initializing with header"
+		echo "date | esp-idf branch | esp-idf-tools version | action" > "$gitDataLog";
+	fi
+
+	# date | esp-idf branch | esp-idf-tools version | action
+	gitDataLog="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)') | $commitHash | $gitBranch | $scriptVers | $action"
 	writeToLog "$gitDataLog"
 	echo "$gitDataLog" >> $versionData
 	returnStatus
@@ -347,7 +354,7 @@ function handleDownloadInstall() {
 
 handleReboot() {
 	# writeToLog "Handling reboot: (function ran)\n"
-	eval "sudo shutdown -r +$rebootMins"
+	sudo shutdown -r +$rebootMins
 }
 
 # warning not work how i make it work fuckin ell
@@ -481,7 +488,6 @@ function handleClearInstallLog() {
 	fi
 }
 
-
 function handleEnd() {
 	handleChk
 
@@ -591,7 +597,7 @@ elif [[ "$arg" == "interactive" || "$arg" == "i" ]]; then
 
 elif [[ "$arg" == "cron" || "$arg" == "c" ]]; then # full install with warn, sleep, and reboot
 	action="REINSTALL (CRON)"
-	# sleepMins=3
+	sleepMins=1
 	idfGet="update"
 	sleepMins=0
 
@@ -610,9 +616,8 @@ elif [[ "$arg" == "cron" || "$arg" == "c" ]]; then # full install with warn, sle
 
 elif [[ "$arg" == "update" || "$arg" == "u" ]]; then # update without logouts or reboot
 	action="UPDATE"
-	# sleepMins=3
 	idfGet="update"
-	sleepMins=0
+	sleepMins=1
 
 	handleStart
 	handleClearInstallLog
@@ -624,12 +629,12 @@ elif [[ "$arg" == "update" || "$arg" == "u" ]]; then # update without logouts or
 
 	exit
 
-elif [[ "$arg" == "clearlogs" || "$arg" == "cl" || "$arg" == "clear" || "$arg" == "clean" ]]; then # clear logs
+elif [[ "$arg" == "clearlogs" || "$arg" == "cl" || "$arg" == "clear"]]; then
 	handleEmptyLogs
 
 	exit
 
-elif [[ "$arg" == "nuke" || "$arg" == "n" ]]; then # clear logs
+elif [[ "$arg" == "nuke" || "$arg" == "n" ]]; then
 	action="REINSTALL (NUKE)"
 	idfGet="download"
 
@@ -644,14 +649,34 @@ elif [[ "$arg" == "nuke" || "$arg" == "n" ]]; then # clear logs
 
 	exit
 
-elif [ "$arg" == "uninstall" ]; then # clear logs
+elif [[ "$arg" == "nukereboot" || "$arg" == "nr" ]]; then
+	action="REINSTALL (NUKEREBOOT)"
+	sleepMins=1
+	idfGet="download"
+
+	handleStart
+	handleClearInstallLog
+	handleSetupEnvironment
+	handleCustomBins
+	handleDownloadInstall
+	handleExport
+	handleAliasEnviron
+	handleEnd
+	handleReboot
+
+	exit
+
+elif [ "$arg" == "uninstall" ]; then
 	handleUninstall
+
 	echo -e "\nAll done :3\n"
 	exit
 
 elif [ ! -z $arg ]; then 
 	 writeToLog "FAIL: bad argument. Terminating"
+
 	 exit
+
 else # full noninteractive (re)install without logout, reboot, or sleeps
 	action="REINSTALL (DEFAULT)"
 

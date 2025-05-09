@@ -1,22 +1,12 @@
-#!/bin/bash
-echo -e "Getting ESP Chip Info...\n"
-# echo -e "Base MAC Address:"
-# esptool.py --port $ESPPORT --baud $ESPBAUD --chip auto read_mac
-echo -e "\nChip ID:"
-esptool.py --port $ESPPORT --baud $ESPBAUD --chip auto chip_id
-
-echo -e "\nFlash ID:"
-esptool.py --port $ESPPORT --baud $ESPBAUD --chip auto flash_id
-
-echo -e "\nFlash Status:"
-esptool.py --port $ESPPORT --baud $ESPBAUD --chip auto read_flash_status
-
-echo -e "\nSecurity Info:"
-esptool.py --port $ESPPORT --baud $ESPBAUD --chip auto get_security_info
-
-if [ -f "./CMakeLists.txt" ]; then
-	echo -e "\nEfuse Table:"
-	idf.py --port $ESPPORT --baud $ESPBAUD efuse-dump
-fi
-
-echo -e "\nAll donsies~ :3\n"
+echo "esp-idf install dir: $ESPIDF_INSTALLDIR"
+echo "esp-idf path: $IDF_PATH"
+echo  "esp-idf version: $ESP_IDF_VERSION"
+echo  "esp-idf python path: $IDF_PYTHON_ENV_PATH
+echo  "openocd scripts: $OPENOCD_SCRIPTS"
+echo  "esp-idf rom elf dir: $ESP_ROM_ELF_DIR"
+echo  "esp-idf-deactivate file path $IDF_DEACTIVATE_FILE_PATH"
+echo  "esp-idf tools install cmd: $IDF_TOOLS_INSTALL_CMD"
+echo  "esp-idf-tools export cmd: $IDF_TOOLS_EXPORT_CMD"
+echo  "port: $ESPPORT"
+echo  "baud: $ESPBAUD"
+echo  "target device $SPTARGET"

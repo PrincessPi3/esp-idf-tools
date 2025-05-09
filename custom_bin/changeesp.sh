@@ -6,8 +6,12 @@ subprocess() {
     return 0
 }
 
-ret=''
-subprocess ret
+if [ ! -z "$1" ]; then
+    ret="$1"
+else
+    ret=''
+    subprocess ret
+fi
 
 export ESPTARGET="${ret}"
 

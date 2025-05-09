@@ -1,76 +1,91 @@
 Modes:
+	Some take optional [branch] paramater
+	[branch] is the esp-idf branch you desire, defaults to master if not specified.
+
+
 	default: 
 		reinstalls non-interactively with no delays, logouts, or reboots
-			`run_esp_cmd`
+			`run-esp-cmd`
 
 	test:
 		tests the script. very fast. minimal actions taken. no reinstall is done
-			`run_esp_cmd test`
-			`run_esp_cmd t`
+			`run-esp-cmd test [branch]`
+			`run-esp-cmd t [branch]`
 
 	retool:
 	    reinstalls bins and export.sh, nothing else
-		    `run_esp_cmd retool`
-			`run_esp_cmd rt`
+		    `run-esp-cmd retool`
+			`run-esp-cmd rt`
 
 	cron:
 		runs noninteractively with forced user logout and automatic reboot, plus delays
-		    `run_esp_cmd cron`
-			`run_esp_cmd c`
+		    `run-esp-cmd cron [branch]`
+			`run-esp-cmd c [branch]`
 
 	update:
 		updates and installs latest without reboot or user logout
-			`run_esp_cmd update`
-			`run_esp_cmd u`
+			`run-esp-cmd update [branch]`
+			`run-esp-cmd u [branch]`
 
 	interactive:
 		interactively installs/reinstalls esp-idf
-		    `run_esp_cmd interactive`
-			`run_esp_cmd i`
+		    `run-esp-cmd interactive`
+			`run-esp-cmd i`
 
 	nuke:
 		full delete and re-download and install
-			`run_esp_cmd nuke`
-			`run_esp_cmd n`
+			`run-esp-cmd nuke [branch]`
+			`run-esp-cmd n [branch]`
+	
+	nukereboot
+		full delete and re-download and install, then reboot
+			`run-esp-cmd nukereboot [branch]`
+			`run-esp-cmd nr [branch]`
 
 	clearlogs:
 		clear logs
-			`run_esp_cmd clearlogs`
-			`run_esp_cmd clear`
-			`run_esp_cmd clean`
-			`run_esp_cmd cl`
+			`run-esp-cmd clearlogs`
+			`run-esp-cmd clear`
+			`run-esp-cmd cl`
 
     help:
         display this help text
-            `run_esp_cmd help`
-			`run_esp_cmd h`
-			`run_esp_cmd -h`
-			`run_esp_cmd --help`
+            `run-esp-cmd help`
+			`run-esp-cmd h`
+			`run-esp-cmd -h`
+			`run-esp-cmd --help`
+			`help-esp-tools`
 
 	uninstall:
 		uninstall esp-idf
-			`run_esp_cmd uninstall`
+			`run-esp-cmd uninstall`
 
 
 Usage:
 	Once installed for the first time, restart your shell.
 	to activate esp-idf with the custom additions, run:
-		`get_esp_tools`
+		`get-esp-tools`
 	exit with
-		`exit_esp_tools`
+		`exit-esp-tools`
 	for help
-		`help_esp_tools`
+		`help-esp-tools`
 
 
 Features:
-	`help-esp` show this help
-	`get_idf` enter esp-idf
-	`exit_idf` exit esp-idf and reset terminal
+	`get-idf-tools` enter esp-idf
+	`help-esp-tools` show this help
+	`exit-esp-tools` exit esp-idf and reset terminal
 	`build` idf.py build  
 	`changebaud` prompts to enter a new baud  
-	`changeesp` prompts to type in esp32s3, esp32c6, etc  
-	`changeport` opens a menu to select a serial port  
-	`clean` idf.py clean  
+	`changeesp` change esp device
+		`changeesp` alone prompts to enter
+		`changeesp <esp device>` manually changes to <esp device>
+			ex. `changeesp esp32p4`
+	`changeport` change serial port
+		`changeport` alone prompts to select
+		`changeport <tty device path>` manually specifies path
+			ex. `changeport /dev/ttyUSB0` changes to /dev/ttyUSB0
+ 	`clean` idf.py clean  
 	`fullclean` fully resets a project, 'idf.py fullclean' plus remove the build dir and delete some temp and backup files  
 	`rebuildfull` does a `fullclean` but also an `erase-flash` and also `setup`  
 	`setup` same as running `idf.py set-target $ESPTARGET; idf.py menuconfig; idf.py build`  
@@ -83,32 +98,15 @@ Features:
 	`chipinfo` get information from the esp chip
 	`espinfo` get detailed information from the esp chip
 	`menuconfig` run `idf.py menuconfig`
+	`create-project <project name>` same as idf.py create-project <proejct name>
+		ex. `create-project hello-world`
+	`esp-install-monitor` monitors install.log. alias for `tail -n 75 -f $ESPIDF_INSTALLDIR/install.log`
+	`esp-install-logs` displays full text of install.log and version-data.txt
 	
 
 Aliases:
-	run_esp_cmd
-		Updates the esp-install-custom code via git, displays the script version, then executes esp-idf-tools-cmd.sh with optional arument.
-		Takes identical arguments to running esp-idf-tools-cmd.sh manually
-			run_esp_cmd
-			run_esp_cmd clean
-			run_esp_cmd nuke [branch]
-			run_esp_cmd retool [branch]
-			run_esp_cmd cron [branch]
-			run_esp_cmd update [branch]
-			run_esp_cmd interactive
-			run_esp_cmd test
-			run_esp_cmd uninstall
-		Second optional argument specifies branch (requires two arguments!):
-			`run_esp_cmd nuke v5.4.1`
 
-	esp_install_monitor
-		monitors install.log
-		alias for tail -n 75 -f $ESPIDF_INSTALLDIR/install.log
-		no arguments
-
-	esp_install_logs
-		displays full text of install.log and version-data.txt
-		no arguments
+	
 
 Helpful Stuff:
 	cron:
@@ -116,9 +114,3 @@ Helpful Stuff:
 		    `crontab -e`
 		add below to bottom of file:
 		    0 4 * * * bash $HOME/esp/esp-install-custom/esp-idf-tools-cmd.sh cron
-
-	monitor log file during install:
-		`tail -n 75 $ESPIDF_INSTALLDIR/install.log;`
-
-	view both logs from beginning:
-		`less $ESPIDF_INSTALLDIR/install.log; less $ESPIDF_INSTALLDIR/version-data.txt`
