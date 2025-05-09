@@ -1,5 +1,25 @@
 test new pts messaging system
     integrate 
+
+figure out esp32 disable sanity check
+    create blank project as master
+    add Kconfig.projbuild sample
+    add notes to CMakelists.txt
+    compiler flags: -zmuldefs
+        set_source_files_properties(ieee80211_raw_frame_sanity_check.c
+               PROPERTIES COMPILE_FLAGS
+                -zmuldefs
+        )
+
+    ieee80211_raw_frame_sanity_check.c
+    ```
+// function to make the esp32 buildin rom function ieee80211_raw_frame_sanity_check always return 0 to kill it
+// requires -zmuldefs in compiler flags
+extern "C" int ieee80211_raw_frame_sanity_check(int32_t arg, int32_t arg2, int32_t arg3) {
+    return 0;
+}
+    ```
+    function: extern "C" int ieee80211_raw_frame_sanity_check(int32_t arg, int32_t arg2, int32_t arg3) { return 0; }
 test espinfo
 audit readme
     maybe pretty up

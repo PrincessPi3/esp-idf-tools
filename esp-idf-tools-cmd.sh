@@ -566,8 +566,8 @@ elif [[ "$arg" == "cron" || "$arg" == "c" ]]; then # full install with warn, sle
 	idfGet="update"
 	sleepMins=0
 
-	messagePTY "\n\nesp-idf-tools action $action started!\nWill reboot with $sleepMins minutes delay when complete!\n\n"
 	handleStart
+	messagePTY "\n\nesp-idf-tools action $action started!\nWill reboot with $sleepMins minutes delay when complete!\n\n"
 	handleClearInstallLog
 	handleSetupEnvironment
 	handleCustomBins
@@ -618,8 +618,8 @@ elif [[ "$arg" == "nukereboot" || "$arg" == "nr" ]]; then
 	sleepMins=1
 	idfGet="download"
 
-	messagePTY "\n\nesp-idf-tools action $action started!\nWill reboot with $sleepMins minutes delay when complete!\n\n"
 	handleStart
+	messagePTY "\n\nesp-idf-tools action $action started!\nWill reboot with $sleepMins minutes delay when complete!\n\n"
 	handleClearInstallLog
 	handleSetupEnvironment
 	handleCustomBins
