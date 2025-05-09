@@ -1,1 +1,1 @@
-cat $ESPIDF_INSTALLDIR/esp-idf-tools/help.txt
+cat $ESPIDF_INSTALLDIR/.custom_bin/help.txt

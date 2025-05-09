@@ -183,6 +183,12 @@ function handleCustomBins() {
 	chmod -R +x $customBinLocation
 	returnStatus
 	customBinExecChk=$?
+
+	writeToLog "Copying vertson.txt and help.txt from $runningDir to $customBinLocation"
+	cp $runningDir/help.txt $customBinLocation
+	returnStatus
+	cp $runningDir/version.txt $customBinLocation
+	returnStatus
 }
 
 function handleExport() {
