@@ -629,7 +629,7 @@ elif [[ "$arg" == "update" || "$arg" == "u" ]]; then # update without logouts or
 
 	exit
 
-elif [[ "$arg" == "clearlogs" || "$arg" == "cl" || "$arg" == "clear"]]; then
+elif [[ "$arg" == "clearlogs" || "$arg" == "cl" || "$arg" == "clear" ]]; then
 	handleEmptyLogs
 
 	exit
