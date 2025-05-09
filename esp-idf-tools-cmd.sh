@@ -114,6 +114,18 @@ function writeToLog() {
 	echo -e "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): $1" >> $log
 }
 
+function messagePTY() {
+	if [[ ! -z $1 ]]; then
+    	message="$1"
+	else
+    	message="Something happening! Maybe a shutdown!"
+	fi
+
+	for pts in $(ls -q /dev/pts); do
+    	sudo echo -e "$message" > /dev/pts/$pts # requires passwordless sudo
+	done
+}
+
 # this is not needed so long as warn doesnt god damned fucking work lmfao
 function handleSleep() {
 	# writeToLog "Handling sleep hold (function ran)\n"
@@ -353,55 +365,8 @@ function handleDownloadInstall() {
 }
 
 handleReboot() {
-	# writeToLog "Handling reboot: (function ran)\n"
+	messagePTY "\n\nRebooting in $sleepMins minutes!!\n\n"
 	sudo shutdown -r +$rebootMins
-}
-
-# warning not work how i make it work fuckin ell
-handleWarnAllUsers() {
-	# writeToLog "Warning all users of impending logout (function called)\n"
-	warningString="\nWARNING:\n\tReinstalling esp-idf:\n\tForce logut in $sleepMins minutes!!\n\tSave and log out!\n\tmonitor with \`esp+monitor\`\n\tterminate with \`sudo killall esp-idf-tools-cmd.sh\`\n"
-
-	writeToLog "$warningString"
-
-
-	loggedIn=$(who | awk '{print $1}' | uniq)
-
-	if [ -z $loggedIn ]; then
-		writeToLog "No users logged in to warn\n"
-		return
-	else
-		writeToLog "Skipping warning all logged in users: $loggedIn\n"
-	fi
-		# writeToLog "Warning all logged in users: $loggedIn"
-		# sudo wall --nobanner "$warningString"
-		# returnStatus
-		# warnChk=$?
-		#
-		# handleSleep
-
-}
-
-# dis one sure af be workan tho lmfao
-function handleLogoutAllUsers() {
-	# writeToLog "Handling user logout (function ran)\n"
-	handleWarnAllUsers
-
-	loggedIn=$(who | awk '{print $1}' | uniq)
-
-	if [ -z $loggedIn ]; then
-		writeToLog "No logged in users to log out\n"
-		return
-	else
-		writeToLog "Logging out all logged in users: $loggedIn"
-		echo $loggedIn | while read line; do
-		writeToLog "\tLogging out $line"
-			sudo loginctl terminate-user $line
-			returnStatus
-		done
-		returnStatus
-		logoutChk=$?
-	fi
 }
 
 function handleCheckEspIdf() {
@@ -508,7 +473,6 @@ if [[ "$arg" == "--help" || "$arg" == "help" || "$arg" == "-h" || "$arg" == "h" 
 elif [[ "$arg" == "test" || "$arg" == "t" ]]; then # minimal actions taken, echo the given commands and such
  	action="TEST"
 	sleepMins=0
-	# testExport=1
 
   	installCmdTemp="echo $installCmd"
 	toolsInstallCmdTemp="echo $toolsInstallCmd"
@@ -601,14 +565,13 @@ elif [[ "$arg" == "cron" || "$arg" == "c" ]]; then # full install with warn, sle
 	idfGet="update"
 	sleepMins=0
 
+	messagePTY "esp-idf-tools action $action started!\nWill reboot with $sleepMins minutes delay when complete!"
 	handleStart
 	handleClearInstallLog
-	handleLogoutAllUsers
 	handleSetupEnvironment
 	handleCustomBins
 	handleDownloadInstall
 	handleExport
-	handleLogoutAllUsers
 	handleEnd
 	handleReboot
 
@@ -654,6 +617,7 @@ elif [[ "$arg" == "nukereboot" || "$arg" == "nr" ]]; then
 	sleepMins=1
 	idfGet="download"
 
+	messagePTY "esp-idf-tools action $action started!\nWill reboot with $sleepMins minutes delay when complete!"
 	handleStart
 	handleClearInstallLog
 	handleSetupEnvironment

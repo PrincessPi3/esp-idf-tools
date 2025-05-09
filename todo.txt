@@ -1,8 +1,14 @@
+test new pts messaging system
+    integrate 
+test espinfo
+test all for bugs
+audit readme
+    maybe pretty up
+test/fix changebaud/changebaud <baud>
+test menuconfig, monitor, flashmonitor
+
 mayhaps support bash?
     # mayhaps it already works mayhaps? test
-
-figure out how to message users properly
-    x at leastt remove sleeps if cant message ig lol
 
 verbosity levels?
     less verbose on git commands and installers?

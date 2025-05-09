@@ -64,17 +64,14 @@ echo -e "\nSetting alias"
 alias changeport="source $binDir/changeport.sh"
 alias changebaud="source $binDir/changebaud.sh"
 alias changeesp="source $binDir/changeesp.sh"
-alias exit-esp-tools="source $binDir/exit-idf.sh"
-alias monitor="idf.py monitor"
-alias flashmonitor="idf.py flash monitor"
-alias menuconfig="idf.py menuconfig"
+alias exit-esp-tools="source $binDir/exit-esp-tools.sh"
 
 # echo -e "Changing dir to $ESPIDF_INSTALLDIR"
 cd $ESPIDF_INSTALLDIR
 
 echo -e "\nesp-idf version: $ESP_IDF_VERSION commit $commitHash from branch $branchData"
 
-echo -e "\nrun with `run_esp_cmd`"
+echo -e "\nrun with 'run_esp_cmd'"
 
 echo -e "\nWelcome to esp-idf!\nAll done :3\n"
 

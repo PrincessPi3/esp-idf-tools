@@ -14,8 +14,12 @@ subprocess() {
     return $selection
 }
 
-subprocess
-ret=$?
+if [ ! -z $1 ]; then
+    ret="$1"
+else
+    ret=''
+    subprocess ret
+fi
 
 export ESPBAUD=$ret
 echo "\nBaudrate set to $ESPBAUD\n"

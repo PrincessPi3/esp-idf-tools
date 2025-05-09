@@ -20,7 +20,7 @@ Some take optional [branch] paramater
 [branch] is the esp-idf branch you desire, defaults to master if not specified.
 	default:
 		reinstalls non-interactively with no delays, logouts, or reboots
-			* `run-esp-cmd`
+			`run-esp-cmd`
 
 	test:
 		tests the script. very fast. minimal actions taken. no reinstall is done
@@ -77,41 +77,40 @@ Some take optional [branch] paramater
 ```
 
 ## Features
-```
-`get-idf-tools` enter esp-idf
-`help-esp-tools` show this help
-`exit-esp-tools` exit esp-idf and reset terminal
-`build` idf.py build  
-`changebaud` prompts to enter a new baud  
-`changeesp` change esp device
-	`changeesp` alone prompts to enter
-	`changeesp <esp device>` manually changes to <esp device>
-		ex. `changeesp esp32p4`
-`changeport` change serial port
-	`changeport` alone prompts to select
-	`changeport <tty device path>` manually specifies path
-		ex. `changeport /dev/ttyUSB0` changes to /dev/ttyUSB0
-`clean` idf.py clean  
-`fullclean` fully resets a project, 'idf.py fullclean' plus remove the build dir and delete some temp and backup files  
-`rebuildfull` does a `fullclean` but also an `erase-flash` and also `setup`  
-`setup` same as running `idf.py set-target $ESPTARGET; idf.py menuconfig; idf.py build`  
-`flash` idf.py flash  
-`monitor` idf.py monitor  
-`erase-flash` idf.py erase-flash  
-`save-defconfig` idf.py save-defconfig  
-`step-flash-monitor` attempt clean, build, flash, then monitor, dying on error  
-`imagesize` get binary size, broken down in various ways including total, by componant, and by file
-`chipinfo` get information from the esp chip
-`espinfo` get detailed information from the esp chip
-`menuconfig` run `idf.py menuconfig`
-`create-project <project name>` same as idf.py create-project <proejct name>
-	ex. `create-project hello-world`
-`esp-install-monitor` monitors install.log. alias for `tail -n 75 -f $ESPIDF_INSTALLDIR/install.log`
-`esp-install-logs` displays full text of install.log and version-data.txt
-```
+* `get-idf-tools` enter esp-idf
+* `help-esp-tools` show this help
+* `exit-esp-tools` exit esp-idf and reset terminal
+* `build` idf.py build  
+* `changebaud` prompts to enter a new baud  
+* `changeesp` change esp device
+	* `changeesp` alone prompts to enter
+* 	`changeesp <esp device>` manually changes to <esp device>
+	* ex. `changeesp esp32p4`
+* `changeport` change serial port
+	* `changeport` alone prompts to select
+	* `changeport <tty device path>` manually specifies path
+		* ex. `changeport /dev/ttyUSB0` changes to /dev/ttyUSB0
+* `clean` idf.py clean  
+* `fullclean` fully resets a project, 'idf.py fullclean' plus remove the build dir and delete some temp and backup files  
+* `rebuildfull` does a `fullclean` but also an `erase-flash` and also `setup`  
+* `setup` same as running `idf.py set-target $ESPTARGET; idf.py menuconfig; idf.py build`  
+* `flash` idf.py flash  
+* `monitor` idf.py monitor  
+* `erase-flash` idf.py erase-flash  
+* `save-defconfig` idf.py save-defconfig  
+* `step-flash-monitor` attempt clean, build, flash, then monitor, dying on error  
+* `imagesize` get binary size, broken down in various ways including total, by componant, and by file
+* `chipinfo` get information from the esp chip
+* `espinfo` get detailed information from the esp chip
+* `menuconfig` run `idf.py menuconfig`
+* `create-project <project name>` same as idf.py create-project <proejct name>
+	* ex. `create-project hello-world`
+* `esp-install-monitor` monitors install.log. alias for `tail -n 75 -f $ESPIDF_INSTALLDIR/install.log`
+* `esp-install-logs` displays full text of install.log and version-data.txt
 
 ### Cronjob
-	reinstall from master everyday at 4am, logging out users with warn delays and rebooting after
-	    `crontab -e`
-	add below to bottom of file:
-		`0 4 * * * bash $HOME/esp/esp-install-custom/esp-idf-tools-cmd.sh cron
+
+reinstall from master everyday at 4am, logging out users with warn delays and rebooting after
+* `crontab -e`
+add below to bottom of file:
+* `0 4 * * * bash $HOME/esp/esp-install-custom/esp-idf-tools-cmd.sh cron`
