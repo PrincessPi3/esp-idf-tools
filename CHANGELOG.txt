@@ -1,4 +1,8 @@
-9-rc-11
+9-rc-12
     created CHANGELOG.txt
     fixed erase-flash
     changeesp and add-to-export.txt now dynamically pull targets from idf.py --list-targets
+    simplified alias for idf-tools-cmd
+
+9-rc-final
+    fixed and renamed ESPIDF_INSTALLDIR ESPIDFTOOLS_INSTALLDIR

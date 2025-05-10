@@ -12,26 +12,19 @@ rcFile=$HOME/.zshrc # shell rc file
 gitJobs=5 # number of jobs to download from github with
 # gitJobs=default # default for no --jobs x arg, integar for a number of jobs
 rebootMins=3 # minutes of warning before reboot
+defaultInstallDir="$HOME/esp"
 
 # get us our FUCKING ALIASES HOLY FUCK GOD DAMN SHIT FUCK IT\
 source $rcFile 2>/dev/null # >2?/dev/null is to redirect any errors
-# echo -e "\n\nSource $rcFile\n\t retval: $?\n\n"
 
-if [ -z $ESPIDF_INSTALLDIR ]; then
-	installDir=$HOME/esp # path to install to. $HOME/esp by default
-else
-	installDir=$ESPIDF_INSTALLDIR
-fi
-
-log=$installDir/install.log # log file
-versionData=$installDir/version-data.log # version data log file
-idfDir=$installDir/esp-idf # esp-idf path
+log="" # log file
+versionData="" # version data log file
+idfDir="" # esp-idf path
+customBinLocation="" # where custom bin scripts are placed
 espressifLocation=$HOME/.espressif # espressif tools install location
-customBinLocation=$installDir/.custom_bin # where custom bin scripts are placed
 runningDir="$( cd "$( dirname "$0" )" && pwd )"
 customBinFrom=$runningDir/custom_bin # dir where custom scripts are coming FROM
 helpText=$runningDir/help.txt
-exportScript=$idfDir/export.sh # export script
 exportBackupScript=$runningDir/export.sh.bak # back up to running dir
 scriptVers=$(cat $runningDir/version.txt) # make sure version.txt does NOT have newline
 arg=$1 # just rename the argument var for clarity with the functions
@@ -42,8 +35,6 @@ if [ "$gitJobs" == "default" ]; then
 else
 	gitCloneCmd="git clone --single-branch --depth 1 --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
 fi
-
-# gitCloneCmd="git clone --recursive --single-branch --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
 
 gitUpdateCmd="git -C $idfDir reset --hard; git -C $idfDir clean -df; git -C $idfDir pull $idfDir" # mayhapsnasst?
 
@@ -241,7 +232,7 @@ function handleExport() {
 }
 
 function handleSetupEnvironment() {
-	# writeToLog "Handling setup environment (function ran)\n"
+	# writeToLog "Handling setup environment (function ran)\n
 	if [ ! -d "$installDir" ]; then
 		writeToLog "creating $installDir"
 		mkdir $installDir
@@ -288,17 +279,8 @@ function handleAliasEnviron() {
 	testAppendAlias "run-esp-cmd" "alias run-esp-cmd='bash $runningDir/esp-idf-tools-cmd.sh'"
 	testAppendAlias "esp-install-monitor" "alias esp-install-monitor='tail -n 75 -f $log'"
 	testAppendAlias "esp-install-logs" "alias esp-install-logs='less $versionData;less $log'"
-
-	if [ -z $ESPIDF_INSTALLDIR ]; then
-		writeToLog "ESPIDF_INSTALLDIR environment variable not found, appending to $rcFile"
-		echo -e "export ESPIDF_INSTALLDIR=\"$installDir\"\n" >> $rcFile
-		returnStatus
-		aliasInstallDirChk=$?
-	else
-		writeToLog "ESPIDF_INSTALLDIR environment variable already installed, skipping\n"
-		aliasInstallDirChk=0
-	fi
 }
+
 
 function handleDownloadInstall() {
 	# writeToLog "Handling download and install (function ran)\n"
@@ -388,14 +370,25 @@ function handleCheckEspIdf() {
 }
 
 function handleStart() {
-	if [ -z $sleepMins ]; then 
-		sleepMins="disabled"
+	if [ -z $ESPIDFTOOLS_INSTALLDIR ]; then
+		writeToLog "ESPIDFTOOLS_INSTALLDIR environment variable not found, appending to $rcFile"
+		echo "export ESPIDFTOOLS_INSTALLDIR=\"$defaultInstallDir\"" >> $rcFile
+		installDir="$defaultInstallDir"
+		aliasInstallDirChk=$?
+	else
+		writeToLog "ESPIDFTOOLS_INSTALLDIR environment variable already installed, skipping\n"
+		installDir="$ESPIDFTOOLS_INSTALLDIR"
+		aliasInstallDirChk=0
 	fi
 
-	if [ -z $ESPIDF_INSTALLDIR ]; then
-		installDirEnvvar="not set"
-	else
-		installDirEnvvar=$ESPIDF_INSTALLDIR
+	log=$installDir/install.log # log file
+	versionData=$installDir/version-data.log # version data log file
+	idfDir=$installDir/esp-idf # esp-idf path
+	exportScript=$idfDir/export.sh # export script
+	customBinLocation=$installDir/.custom_bin # where custom bin scripts are placed
+
+	if [ -z $sleepMins ]; then 
+		sleepMins="disabled"
 	fi
 
 	if [ "$arg" != "interactive" -a "$arg" != "i" ]; then
@@ -407,7 +400,7 @@ function handleStart() {
 	handleCheckEspIdf
 	handleCheckInstallPackages
 
-	writeToLog "\n\tvars:\n\t\tuser: $USER\n\t\tscriptVers: $scriptVers\n\t\tversionData: $versionData\n\t\tlog: $log\n\t\tsleepMins: $sleepMins\n\t\tinstallDir: $installDir\n\t\tgitJobs: $gitJobs\n\t\tgitBranch: $gitBranch\n\t\tgitCloneCmd: $gitCloneCmd\n\t\tgitUpdateCmd: $gitUpdateCmd\n\t\t\tGitrunningDir: $runningDir\n\t\tidfDir: $idfDir\n\t\tespressifLocation: $espressifLocation\n\t\tcustomBinLocation: $customBinLocation\n\t\tcustomBinFrom: $customBinFrom\n\t\tinstallCmd: $installCmd\n\t\ttoolsInstallCmd: $toolsInstallCmd\n\t\trcFile: $rcFile\n\t\t(envvar) ESPIDF_INSTALLDIR: $installDirEnvvar\n\t\tidfGet: $idfGet\n"
+	writeToLog "\n\tvars:\n\t\tuser: $USER\n\t\tscriptVers: $scriptVers\n\t\tversionData: $versionData\n\t\tlog: $log\n\t\tsleepMins: $sleepMins\n\t\tinstallDir: $installDir\n\t\tgitJobs: $gitJobs\n\t\tgitBranch: $gitBranch\n\t\tgitCloneCmd: $gitCloneCmd\n\t\tgitUpdateCmd: $gitUpdateCmd\n\t\t\tGitrunningDir: $runningDir\n\t\tidfDir: $idfDir\n\t\tespressifLocation: $espressifLocation\n\t\tcustomBinLocation: $customBinLocation\n\t\tcustomBinFrom: $customBinFrom\n\t\tinstallCmd: $installCmd\n\t\ttoolsInstallCmd: $toolsInstallCmd\n\t\trcFile: $rcFile\n\t\t(envvar) ESPIDFTOOLS_INSTALLDIR: $installDir\n\t\tidfGet: $idfGet\n"
 }
 
 function handleEmptyLogs() {
@@ -433,7 +426,7 @@ function handleUninstall() {
 }
 
 function handleChk() {
-	retCodes="Error Checking:\n\tPackages install: $pkgInstallChk\n\tGit pull/clone: $gitChk\n\tInstall script: $installChk\n\tInstall tools: $toolsInstallChk\n\tExport append: $exportCatChk\n\tExport edit return: $exportSedReturnChk\n\tExport version: $exportSedVersionChk\n\tExport date: $exportSedDateChk\n\tExport git hash: $exportSedHashChk\n\trun-esp-reinstall alias: $aliasRunEspReinstallChk\n\tesp-monitor alias: $aliasEspMonitorchk\n\tesp-logs alias: $aliasEspLogsChk\n\tESPIDF_INSTALLDIR envvar: $aliasInstallDirChk\n\tWarned Users: $warnChk\n\tLogged out users: $logoutChk\n\tAppended git log to version-data.txt: $gitLogChk\n\tAcquired git hash: $gitHashChk\n\tDeleted esp-idf dir: $rmIdfDirChk\n\tDeleted .espressif dir: $rmEspressifChk\n\tCreated install dir: $mkInstallDirChk\n\tRestored export.sh.bak: $restoreExportScriptChk\n\tDeleted old export.sh: $rmExportScriptCh\n\tBacked up export.sh to export.sh.bak: $backupExportScriptChk\n\tDeleted backup export export.bak.sh: $rmExportBackupChk\n\tMade custom scripts executable: $customBinExecChk\n\tCopied custom scripts: $cpCustomBinChk\n\tDeleted old custom scripts dir: $rmCustomBinChk\n\tWoke from sleep: $sleepChk"
+	retCodes="Error Checking:\n\tPackages install: $pkgInstallChk\n\tGit pull/clone: $gitChk\n\tInstall script: $installChk\n\tInstall tools: $toolsInstallChk\n\tExport append: $exportCatChk\n\tExport edit return: $exportSedReturnChk\n\tExport version: $exportSedVersionChk\n\tExport date: $exportSedDateChk\n\tExport git hash: $exportSedHashChk\n\trun-esp-reinstall alias: $aliasRunEspReinstallChk\n\tesp-monitor alias: $aliasEspMonitorchk\n\tesp-logs alias: $aliasEspLogsChk\n\tESPIDFTOOLS_INSTALLDIR envvar: $installDir\n\tWarned Users: $warnChk\n\tLogged out users: $logoutChk\n\tAppended git log to version-data.txt: $gitLogChk\n\tAcquired git hash: $gitHashChk\n\tDeleted esp-idf dir: $rmIdfDirChk\n\tDeleted .espressif dir: $rmEspressifChk\n\tCreated install dir: $mkInstallDirChk\n\tRestored export.sh.bak: $restoreExportScriptChk\n\tDeleted old export.sh: $rmExportScriptCh\n\tBacked up export.sh to export.sh.bak: $backupExportScriptChk\n\tDeleted backup export export.bak.sh: $rmExportBackupChk\n\tMade custom scripts executable: $customBinExecChk\n\tCopied custom scripts: $cpCustomBinChk\n\tDeleted old custom scripts dir: $rmCustomBinChk\n\tWoke from sleep: $sleepChk"
 
 	totalErrorLoad=$(($pkgInstallChk+$gitChk+$gitChk+$installChk+$toolsInstallChk+$exportSedHashChk+$exportCatChk+$exportSedReturnChk+$aliasRunEspReinstallChk+$aliasEspMonitorchk+$aliasEspLogsChk+$aliasInstallDirChk+$warnChk+$logoutChk+$gitLogChk+$gitHashChk+$rmIdfDirChk+$rmEspressifChk+$mkInstallDirChk+$restoreExportScriptChk+$rmExportScriptChk+$backupExportScriptChk+$customBinExecChk+$rmCustomBinChk+$sleepChk+$rmExportBackupChk))
 

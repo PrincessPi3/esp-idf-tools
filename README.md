@@ -108,7 +108,7 @@ Some take optional [branch] paramater
 * `create-project` alone prompts for a project name
 	* `create-project <project name>` creates a project with <project name>
 		* ex. `create-project hello-world`
-* `esp-install-monitor` monitors install.log. alias for `tail -n 75 -f $ESPIDF_INSTALLDIR/install.log`
+* `esp-install-monitor` monitors install.log. alias for `tail -n 75 -f $ESPIDFTOOLS_INSTALLDIR/install.log`
 * `esp-install-logs` displays full text of install.log and version-data.txt
 * `$examples` is a shortcut for examples directory in esp-idf
 	* ex. cd `$examples`

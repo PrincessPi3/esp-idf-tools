@@ -2,9 +2,14 @@ text export and changeesp
 test help on cmd, help-esp-tools
 test sourced scrips changebaud, changeesp, changeport
 test menuconfig, monitor, flashmonitor, exit-esp-tools
+test / fix / remove esp-idf-tools-cmd.sh options
+remove unneeded code
 audit readme
     maybe pretty up
 test all for bugs
+
+add error handling to changeesp, changeport, and export on esp and port functions
+
 figure out esp32 disable sanity check
     create blank project as master
     add Kconfig.projbuild sample

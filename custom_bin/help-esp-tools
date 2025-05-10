@@ -1,1 +1,1 @@
-cat $ESPIDF_INSTALLDIR/.custom_bin/help.txt
+cat $ESPIDFTOOLS_INSTALLDIR/.custom_bin/help.txt
