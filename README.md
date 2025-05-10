@@ -10,7 +10,7 @@ Literally the most schizophrenically overengineered thing I have ever made. idk 
 
 ## Quick start
 1. `git clone https://github.com/PrincessPi3/esp-idf-tools.git ~/esp-idf-tools`  
-2. `bash ~/esp-idf-tools/esp-idf-tools-cmd.sh`  
+2. `bash ~/esp-idf-tools/esp-idf-tools-cmd.sh install`  
 3. `source ~/.zshrc`
 4. `get-esp-tools`  
 

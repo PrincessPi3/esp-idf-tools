@@ -27,6 +27,7 @@ if [[ "$1" == "--help" || "$1" == "help" || "$1" == "-h" || "$1" == "h" ]]; then
 	cat "$helpText"
 
 	exit
+fi
 
 defShell=$(awk -F: -v user="$USER" '$1 == user {print $NF}' /etc/passwd)
 
@@ -123,7 +124,7 @@ function returnStatus() {
 	ret=$?
 	strii="\tReturn status: $ret"
 	echo -e "$strii\n"
-	echo -e "$strii\n" >> $log
+	echo -e "$strii\n" >> "$log"
 	
 	return $ret
 }
@@ -160,7 +161,7 @@ function handleSleep() {
 }
 
 function handleCheckInstallPackages() {
-	# writeToLog "Handling check and install packages (function ran)\n"
+	writeToLog "Handling check and install packages (function ran)"
 	packages=(git wget flex bison gperf python3 python3-pip python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0)
 
 	for package in "${packages[@]}"; do
@@ -205,10 +206,14 @@ function handleCustomBins() {
 	customBinExecChk=$?
 
 	writeToLog "Copying vertson.txt and help.txt from $runningDir to $customBinLocation"
-	cp "$runningDir/help.txt $customBinLocation"
+	cp "$runningDir/help.txt" "$customBinLocation"
 	returnStatus
+	helpExecChk=$?
+
 	cp "$runningDir/version.txt" "$customBinLocation"
 	returnStatus
+	versuibExecChk=$?
+
 }
 
 function handleExport() {
@@ -510,7 +515,7 @@ elif [[ "$arg" == "retool" || "$arg" == "rt" ]]; then # just reinstall bins and 
 
 	exit
 
-elif [[ "$arg" == "interactive" || "$arg" == "i" ]]; then
+elif [[ "$arg" == "interactive" || "$arg" == "install" || "$arg" == "i" ]]; then
 	action="REINSTALL (INTERACTIVE)"
 
 	echo "Enter full path to install dir, default: $installDir"
@@ -525,7 +530,7 @@ elif [[ "$arg" == "interactive" || "$arg" == "i" ]]; then
 	echo "Enter numeber of jobs to download from github with, default: $gitJobs"
 	read readgitJobs
 
-	echo "Enter mode: update or download, deafult: update"
+	echo "Enter mode: update or download, deafult: download"
 	read readIdfGet
 
 	if [ ! -z $readInstallDir ]; then
@@ -554,6 +559,7 @@ elif [[ "$arg" == "interactive" || "$arg" == "i" ]]; then
 	writeToLog "Interactive vars set:\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trcFile: $rcFile\n\tgitJobs: $gitJobs\n\tidfGet: $idfGet\n"
 
 	handleStart
+	handleCheckInstallPackages
 	handleSetupEnvironment
 	handleCustomBins
 	handleDownloadInstall

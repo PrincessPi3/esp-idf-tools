@@ -1,27 +1,27 @@
-x export
-x changeport
-x erase-flash
-x setup
-x espinfo
-x changetarget
-x changebaud
-x clean
-x fullclean
-x help-esp-tools
-x run-esp-cmd [help h -h --help]
-
-x flashmonitor
-x monitor
-x step-flash-monitor
-x menuconfig
-x imagesize
-x create-project
-x rebuildfull
-x chipinfo
-x esp-install-monitor
-x esp-install-logs
-x run-esp-cmd n
-x fresh install from nothing
+export
+changeport
+erase-flash
+setup
+espinfo
+changetarget
+changebaud
+clean
+fullclean
+help-esp-tools
+run-esp-cmd [help h -h --help]
+flashmonitor
+monitor
+step-flash-monitor
+menuconfig
+imagesize
+create-project
+rebuildfull
+chipinfo
+esp-install-monitor
+esp-install-logs
+run-esp-cmd n
+fresh install from nothing
+run-esp-cmd interactive
 
 audit readme
     maybe pretty up
