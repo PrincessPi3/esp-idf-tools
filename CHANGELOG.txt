@@ -17,3 +17,10 @@
 1.0-prerelease
     versioning number reset
     cleaned up and updated README
+
+1.0-prerelease-2
+    testing completed
+    updated README
+    various spelling and appearance fixes
+    various bug fixes
+    cleaned up the repo

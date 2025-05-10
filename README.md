@@ -118,4 +118,5 @@ Some take optional [branch] paramater
 reinstall from master everyday at 4am, logging out users with warn delays and rebooting after
 * `crontab -e`
 add below to bottom of file:
-* `0 4 * * * bash $HOME/esp/esp-install-custom/esp-idf-tools-cmd.sh cron`
+( just replace the path with your own)
+* `0 4 * * * bash /home/username/esp/esp-install-custom/esp-idf-tools-cmd.sh cron`
