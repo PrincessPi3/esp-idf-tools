@@ -20,7 +20,6 @@ startTime=$(date '+%s') # to time the (re)install time for the logs
 # exit
 
 # always run globals and boilerplate
-
 # check for help first
 if [[ "$1" == "--help" || "$1" == "help" || "$1" == "-h" || "$1" == "h" ]]; then
 	helpText=$ESPIDFTOOLS_INSTALLDIR/.custom_bin/help.txt
@@ -29,7 +28,7 @@ if [[ "$1" == "--help" || "$1" == "help" || "$1" == "-h" || "$1" == "h" ]]; then
 	exit
 fi
 
-defShell=$(awk -F: -v user="$USER" '$1 == user {print $NF}' /etc/passwd)
+defShell=$(awk -F: -v user="$(whoami)" '$1 == user {print $NF}' /etc/passwd)
 
 if [[ "$defShell" =~ zsh$ ]]; then
 	echo -e "\nSelected zsh shell automatically\n"
@@ -37,13 +36,17 @@ if [[ "$defShell" =~ zsh$ ]]; then
 elif [[ "$defShell" =~ bash$ ]]; then 
 	echo -e "\nSelected bash shell automatically\n"
 	rcFile="$HOME/.bashrc"
+elif [[ "$defShell" =~ sh$ ]]; then
+	rcFile="" # no need for rcFile var when run as cron
 else
 	echo "unsupported shell $defShell"
 	exit
 fi
 
+rcFile="$HOME/.zshrc" # absolute path only
+
 # get us our FUCKING ALIASES HOLY FUCK GOD DAMN SHIT FUCK IT\
-source $rcFile 2>/dev/null # >2?/dev/null is to redirect any errors
+source "$rcFile" 2>/dev/null # >2?/dev/null is to redirect any errors
 defaultInstallDir="$HOME/esp"
 
 if [ -z "$2" ]; then
@@ -564,10 +567,10 @@ elif [[ "$arg" == "interactive" || "$arg" == "install" || "$arg" == "i" ]]; then
 	handleStart
 	handleCheckInstallPackages
 	handleSetupEnvironment
+	handleAliasEnviron
 	handleCustomBins
 	handleDownloadInstall
 	handleExport
-	handleAliasEnviron
 	handleEnd
 
 	exit
@@ -597,6 +600,7 @@ elif [[ "$arg" == "update" || "$arg" == "u" ]]; then # update without logouts or
 	handleStart
 	handleClearInstallLog
 	handleSetupEnvironment
+	handleAliasEnviron
 	handleCustomBins
 	handleDownloadInstall
 	handleExport
@@ -616,10 +620,10 @@ elif [[ "$arg" == "nuke" || "$arg" == "n" ]]; then
 	handleStart
 	handleClearInstallLog
 	handleSetupEnvironment
+	handleAliasEnviron
 	handleCustomBins
 	handleDownloadInstall
 	handleExport
-	handleAliasEnviron
 	handleEnd
 
 	exit
@@ -633,10 +637,10 @@ elif [[ "$arg" == "nukereboot" || "$arg" == "nr" ]]; then
 	messagePTS "\n\nesp-idf-tools action $action started!\nWill reboot with $sleepMins minutes delay when complete!\n\n"
 	handleClearInstallLog
 	handleSetupEnvironment
+	handleAliasEnviron
 	handleCustomBins
 	handleDownloadInstall
 	handleExport
-	handleAliasEnviron
 	handleEnd
 	handleReboot
 
