@@ -34,12 +34,12 @@ for line in $(dmesg | tail -50 | grep -o -E "tty[A-Z]{3}[0-9]{0,2}" | sort -u); 
                 COUNTER=$((COUNTER+1))
 done
 
-if [ -z "$devArr" ]; then
-    echo -e "\nNo Serial Devices Found, Select one later with 'changeport'\n"
-else 
+if [ $COUNTER -gt 0 ]; then
     echo -e "\nEnter TTY Number You'd Like:"
     read tty
     ttyselect=$devarr[(($tty+1))]
+else 
+    echo -e "\nNo Serial Devices Found, Select one later with 'changeport'\n"
 fi
 
 echo -e "Set esp target:\n\tOne of: $(getTargets)"

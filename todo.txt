@@ -6,25 +6,39 @@ x espinfo
 x changetarget
 x changebaud
 x clean
+x fullclean
 x help-esp-tools
 x run-esp-cmd [help h -h --help]
 
-flashmonitor
-monitor
+x flashmonitor
+x monitor
+x step-flash-monitor
+x menuconfig
+x imagesize
+x create-project
+x rebuildfull
+x chipinfo
+x esp-install-monitor
+x esp-install-logs
+run-esp-cmd n
+fresh install from nothing
 
-text export and changeesp
-test help on cmd, help-esp-tools
-test sourced scrips changebaud, changeesp, changeport
-test menuconfig, monitor, flashmonitor, exit-esp-tools
-test / fix / remove esp-idf-tools-cmd.sh options
-reboot immediately when reset is set to 0 mins
-remove unneeded code
-check header on install version log
 audit readme
     maybe pretty up
-test all for bugs
 
-add error handling to changeesp, changeport, and export on esp and port functions
+remove unneeded code
+
+add new stuff to error checking
+
+x text export and changeesp
+x test help on cmd, help-esp-tools
+x test sourced scrips changebaud, changeesp, changeport
+x test menuconfig, monitor, flashmonitor, exit-esp-tools
+x test / fix / remove esp-idf-tools-cmd.sh options
+x reboot immediately when reset is set to 0 mins
+x check header on install version lo
+
+x add error handling to changeesp, changeport, and export on esp and port functions
 
 figure out esp32 disable sanity check
     create blank project as master
