@@ -285,7 +285,7 @@ function testAppendAlias() {
 
 function handleAliasEnviron() {
 	testAppendAlias "get-esp-tools" "alias get-esp-tools='. $exportScript'"
-	testAppendAlias "run-esp-cmd" "alias run-esp-cmd='git -C $runningDir pull;echo -e \"\nOld Version:\";tail -1 $versionData;echo -e \"\n\";bash $runningDir/esp-idf-tools-cmd.sh'"
+	testAppendAlias "run-esp-cmd" "alias run-esp-cmd='bash $runningDir/esp-idf-tools-cmd.sh'"
 	testAppendAlias "esp-install-monitor" "alias esp-install-monitor='tail -n 75 -f $log'"
 	testAppendAlias "esp-install-logs" "alias esp-install-logs='less $versionData;less $log'"
 
@@ -362,7 +362,7 @@ function handleDownloadInstall() {
 	# if gitDataLog file doesnt exist, initialize with header
 	if [[ ! -f "$versionData" ]]; then
 		writeToLog "date&time ddmmYYYY H:M:S (unix seconds) | esp-idf branch | esp-idf-tools version | action"
-		echo "date | esp-idf branch | esp-idf-tools version | action" > "$versionData";
+		echo "date&time ddmmYYYY H:M:S (unix seconds) | esp-idf branch | esp-idf-tools version | actio" > "$versionData";
 	fi
 
 	# date&time ddmmYYYY H:M:S (unix seconds) | esp-idf branch | esp-idf-tools version | action
