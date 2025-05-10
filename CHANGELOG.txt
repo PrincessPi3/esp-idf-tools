@@ -10,5 +10,10 @@
     various bug fixes
     various error checking added
     various stability improvements
+    updated and cleaned up README
     added bash shell support (experimental)
     full testing done
+
+1.0-prerelease
+    versioning number reset
+    cleaned up and updated README
