@@ -119,6 +119,8 @@ cpCustomBinChk=0
 rmCustomBinChk=0
 sleepChk=0
 rmExportBackupChk=0
+helpExecChk=0
+versionExecChk=0
 
 function returnStatus() {
 	ret=$?
@@ -212,7 +214,7 @@ function handleCustomBins() {
 
 	cp "$runningDir/version.txt" "$customBinLocation"
 	returnStatus
-	versuibExecChk=$?
+	versionExecChk=$?
 
 }
 
@@ -447,7 +449,7 @@ function handleUninstall() {
 }
 
 function handleChk() {
-	retCodes="Error Checking:\n\tPackages install: $pkgInstallChk\n\tGit pull/clone: $gitChk\n\tInstall script: $installChk\n\tInstall tools: $toolsInstallChk\n\tExport append: $exportCatChk\n\tExport edit return: $exportSedReturnChk\n\tExport version: $exportSedVersionChk\n\tExport date: $exportSedDateChk\n\tExport git hash: $exportSedHashChk\n\trun-esp-reinstall alias: $aliasRunEspReinstallChk\n\tesp-monitor alias: $aliasEspMonitorchk\n\tesp-logs alias: $aliasEspLogsChk\n\tESPIDFTOOLS_INSTALLDIR envvar: $installDir\n\tWarned Users: $warnChk\n\tLogged out users: $logoutChk\n\tAppended git log to version-data.txt: $gitLogChk\n\tAcquired git hash: $gitHashChk\n\tDeleted esp-idf dir: $rmIdfDirChk\n\tDeleted .espressif dir: $rmEspressifChk\n\tCreated install dir: $mkInstallDirChk\n\tRestored export.sh.bak: $restoreExportScriptChk\n\tDeleted old export.sh: $rmExportScriptCh\n\tBacked up export.sh to export.sh.bak: $backupExportScriptChk\n\tDeleted backup export export.bak.sh: $rmExportBackupChk\n\tMade custom scripts executable: $customBinExecChk\n\tCopied custom scripts: $cpCustomBinChk\n\tDeleted old custom scripts dir: $rmCustomBinChk\n\tWoke from sleep: $sleepChk"
+	retCodes="Error Checking:\n\tPackages install: $pkgInstallChk\n\tGit pull/clone: $gitChk\n\tInstall script: $installChk\n\tInstall tools: $toolsInstallChk\n\tExport append: $exportCatChk\n\tExport edit return: $exportSedReturnChk\n\tExport version: $exportSedVersionChk\n\tExport date: $exportSedDateChk\n\tExport git hash: $exportSedHashChk\n\trun-esp-reinstall alias: $aliasRunEspReinstallChk\n\tesp-monitor alias: $aliasEspMonitorchk\n\tesp-logs alias: $aliasEspLogsChk\n\tESPIDFTOOLS_INSTALLDIR envvar: $installDir\n\tWarned Users: $warnChk\n\tLogged out users: $logoutChk\n\tAppended git log to version-data.txt: $gitLogChk\n\tAcquired git hash: $gitHashChk\n\tDeleted esp-idf dir: $rmIdfDirChk\n\tDeleted .espressif dir: $rmEspressifChk\n\tCreated install dir: $mkInstallDirChk\n\tRestored export.sh.bak: $restoreExportScriptChk\n\tDeleted old export.sh: $rmExportScriptCh\n\tBacked up export.sh to export.sh.bak: $backupExportScriptChk\n\tDeleted backup export export.bak.sh: $rmExportBackupChk\n\tMade custom scripts executable: $customBinExecChk\n\tCopied custom scripts: $cpCustomBinChk\n\tDeleted old custom scripts dir: $rmCustomBinChk\n\tWoke from sleep: $sleepChk\n\tHelp text copied: $helpExecChk\n\tversion text copied: $versionExecChk"
 
 	totalErrorLoad=$(($pkgInstallChk+$gitChk+$gitChk+$installChk+$toolsInstallChk+$exportSedHashChk+$exportCatChk+$exportSedReturnChk+$aliasRunEspReinstallChk+$aliasEspMonitorchk+$aliasEspLogsChk+$aliasInstallDirChk+$warnChk+$logoutChk+$gitLogChk+$gitHashChk+$rmIdfDirChk+$rmEspressifChk+$mkInstallDirChk+$restoreExportScriptChk+$rmExportScriptChk+$backupExportScriptChk+$customBinExecChk+$rmCustomBinChk+$sleepChk+$rmExportBackupChk))
 

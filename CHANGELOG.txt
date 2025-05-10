@@ -9,5 +9,6 @@
     removed install branch command
     various bug fixes
     various error checking added
+    various stability improvements
     added bash shell support (experimental)
     full testing done

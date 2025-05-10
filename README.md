@@ -18,52 +18,53 @@ Literally the most schizophrenically overengineered thing I have ever made. idk 
 ```
 Some take optional [branch] paramater  
 [branch] is the esp-idf branch you desire, defaults to master if not specified.
-	default:
+	run-esp-cmd:
 		reinstalls non-interactively with no delays, logouts, or reboots
 			`run-esp-cmd`
 
-	test:
+	run-esp-cmd test:
 		tests the script. very fast. minimal actions taken. no reinstall is done
 			`run-esp-cmd test [branch]`
 			`run-esp-cmd t [branch]`
 
-	retool:
+	run-esp-cmd retool:
 	    reinstalls bins and export.sh, nothing else
 		    `run-esp-cmd retool`
 			`run-esp-cmd rt`
 
-	cron:
+	run-esp-cmd cron:
 		runs noninteractively with forced user logout and automatic reboot, plus delays
 		    `run-esp-cmd cron [branch]`
 			`run-esp-cmd c [branch]`
 
-	update:
+	run-esp-cmd update:
 		updates and installs latest without reboot or user logout
 			`run-esp-cmd update [branch]`
 			`run-esp-cmd u [branch]`
 
-	interactive:
+	run-esp-cmd interactive:
 		interactively installs/reinstalls esp-idf
 		    `run-esp-cmd interactive`
 			`run-esp-cmd i`
+			`run-esp-cmd install`
 
-	nuke:
+	run-esp-cmd nuke:
 		full delete and re-download and install
 			`run-esp-cmd nuke [branch]`
 			`run-esp-cmd n [branch]`
 	
-	nukereboot
+	run-esp-cmd nukereboot
 		full delete and re-download and install, then reboot
 			`run-esp-cmd nukereboot [branch]`
 			`run-esp-cmd nr [branch]`
 
-	clearlogs:
+	run-esp-cmd clearlogs:
 		clear logs
 			`run-esp-cmd clearlogs`
 			`run-esp-cmd clear`
 			`run-esp-cmd cl`
 
-	help:
+	run-esp-cmd help:
         display this help text
             `run-esp-cmd help`
 			`run-esp-cmd h`
@@ -71,7 +72,7 @@ Some take optional [branch] paramater
 			`run-esp-cmd --help`
 			`help-esp-tools`
 
-	uninstall:
+	run-esp-cmd uninstall:
 		uninstall esp-idf
 			`run-esp-cmd uninstall`
 ```
@@ -114,7 +115,6 @@ Some take optional [branch] paramater
 	* ex. cd `$examples`
 
 ### Cronjob
-
 reinstall from master everyday at 4am, logging out users with warn delays and rebooting after
 * `crontab -e`
 add below to bottom of file:
