@@ -1,5 +1,5 @@
 #!/bin/bash
-echo -e "Getting ESP Chip Info...\n"
+echo -e "\nGetting ESP Chip Info...\n"
 # echo -e "Base MAC Address:"
 # esptool.py --port $ESPPORT --baud $ESPBAUD --chip auto read_mac
 echo -e "\nChip ID:"

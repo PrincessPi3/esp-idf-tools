@@ -6,3 +6,4 @@
 
 9-rc-final
     fixed and renamed ESPIDF_INSTALLDIR ESPIDFTOOLS_INSTALLDIR
+    removed install branch command

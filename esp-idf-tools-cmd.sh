@@ -2,25 +2,55 @@
 # set -e # uncomment for die on error
 startTime=$(date '+%s') # to time the (re)install time for the logs
 
+# full order:
+# set action string variable
+# set sleepMins int variable
+# redefine any other vars needed
+# handleStart
+# handleClearInstallLog
+# handleLogoutAllUsers
+# handleSetupEnvironment
+# handleCustomBins
+# handleDownloadInstall
+# handleExport
+# handleAliasEnviron
+# handleLogoutAllUsers
+# handleEnd
+# handleReboot
+# exit
+
+# always run globals and boilerplate
+
+# get us our FUCKING ALIASES HOLY FUCK GOD DAMN SHIT FUCK IT\
+source $rcFile 2>/dev/null # >2?/dev/null is to redirect any errors
+rcFile="$HOME/.zshrc" # shell rc file
+defaultInstallDir="$HOME/esp"
+
 if [ -z "$2" ]; then
 	gitBranch=master # branch from github
 else
 	gitBranch=$2
 fi
 
-rcFile=$HOME/.zshrc # shell rc file
+if [ -z "$ESPIDFTOOLS_INSTALLDIR" ]; then
+	# cant seem to get this one to use writeToLog
+	echo "ESPIDFTOOLS_INSTALLDIR environment variable not found, appending to $rcFile"
+	echo "export ESPIDFTOOLS_INSTALLDIR=\"$defaultInstallDir\"" >> $rcFile
+	installDir="$defaultInstallDir"
+	aliasInstallDirChk=$?
+else
+	echo "ESPIDFTOOLS_INSTALLDIR environment variable found, skipping"
+	installDir="$ESPIDFTOOLS_INSTALLDIR"
+	aliasInstallDirChk=0
+fi
+
 gitJobs=5 # number of jobs to download from github with
-# gitJobs=default # default for no --jobs x arg, integar for a number of jobs
 rebootMins=3 # minutes of warning before reboot
-defaultInstallDir="$HOME/esp"
-
-# get us our FUCKING ALIASES HOLY FUCK GOD DAMN SHIT FUCK IT\
-source $rcFile 2>/dev/null # >2?/dev/null is to redirect any errors
-
-log="" # log file
-versionData="" # version data log file
-idfDir="" # esp-idf path
-customBinLocation="" # where custom bin scripts are placed
+log=$installDir/install.log # log file
+versionData=$installDir/version-data.log # version data log file
+idfDir=$installDir/esp-idf # esp-idf path
+exportScript=$idfDir/export.sh # export script
+customBinLocation=$installDir/.custom_bin # where custom bin scripts are placed
 espressifLocation=$HOME/.espressif # espressif tools install location
 runningDir="$( cd "$( dirname "$0" )" && pwd )"
 customBinFrom=$runningDir/custom_bin # dir where custom scripts are coming FROM
@@ -29,7 +59,6 @@ exportBackupScript=$runningDir/export.sh.bak # back up to running dir
 scriptVers=$(cat $runningDir/version.txt) # make sure version.txt does NOT have newline
 arg=$1 # just rename the argument var for clarity with the functions
 
-# commands
 if [ "$gitJobs" == "default" ]; then
 	gitCloneCmd="git clone --single-branch --depth 1 --recursive --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
 else
@@ -37,11 +66,8 @@ else
 fi
 
 gitUpdateCmd="git -C $idfDir reset --hard; git -C $idfDir clean -df; git -C $idfDir pull $idfDir" # mayhapsnasst?
-
 installCmd="$idfDir/install.sh all"
-
 toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
-
 idfGet="update" # default method
 
 # default values for retcodes
@@ -73,23 +99,6 @@ cpCustomBinChk=0
 rmCustomBinChk=0
 sleepChk=0
 rmExportBackupChk=0
-
-# full order:
-# set action string variable
-# set sleepMins int variable
-# redefine any other vars needed
-# handleStart
-# handleClearInstallLog
-# handleLogoutAllUsers
-# handleSetupEnvironment
-# handleCustomBins
-# handleDownloadInstall
-# handleExport
-# handleAliasEnviron
-# handleLogoutAllUsers
-# handleEnd
-# handleReboot
-# exit
 
 function returnStatus() {
 	ret=$?
@@ -356,8 +365,13 @@ function handleDownloadInstall() {
 }
 
 handleReboot() {
-	messagePTS "\n\nRebooting in $sleepMins minutes\ncancel with 'shutdown -c'!!\n\n"
-	sudo shutdown -r +$rebootMins
+	if [ $sleepMins -eq 0 ]; then
+		messagePTS "Rebooting NOW"
+		sudo reboot
+	else
+		messagePTS "\n\nRebooting in $sleepMins minutes\ncancel with 'shutdown -c'!!\n\n"
+		sudo shutdown -r +$rebootMins
+	fi
 }
 
 function handleCheckEspIdf() {
@@ -370,23 +384,6 @@ function handleCheckEspIdf() {
 }
 
 function handleStart() {
-	if [ -z $ESPIDFTOOLS_INSTALLDIR ]; then
-		writeToLog "ESPIDFTOOLS_INSTALLDIR environment variable not found, appending to $rcFile"
-		echo "export ESPIDFTOOLS_INSTALLDIR=\"$defaultInstallDir\"" >> $rcFile
-		installDir="$defaultInstallDir"
-		aliasInstallDirChk=$?
-	else
-		writeToLog "ESPIDFTOOLS_INSTALLDIR environment variable already installed, skipping\n"
-		installDir="$ESPIDFTOOLS_INSTALLDIR"
-		aliasInstallDirChk=0
-	fi
-
-	log=$installDir/install.log # log file
-	versionData=$installDir/version-data.log # version data log file
-	idfDir=$installDir/esp-idf # esp-idf path
-	exportScript=$idfDir/export.sh # export script
-	customBinLocation=$installDir/.custom_bin # where custom bin scripts are placed
-
 	if [ -z $sleepMins ]; then 
 		sleepMins="disabled"
 	fi

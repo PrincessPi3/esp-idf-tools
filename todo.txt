@@ -1,9 +1,25 @@
+x export
+x changeport
+x erase-flash
+x setup
+x espinfo
+x changetarget
+x changebaud
+x clean
+x help-esp-tools
+x run-esp-cmd [help h -h --help]
+
+flashmonitor
+monitor
+
 text export and changeesp
 test help on cmd, help-esp-tools
 test sourced scrips changebaud, changeesp, changeport
 test menuconfig, monitor, flashmonitor, exit-esp-tools
 test / fix / remove esp-idf-tools-cmd.sh options
+reboot immediately when reset is set to 0 mins
 remove unneeded code
+check header on install version log
 audit readme
     maybe pretty up
 test all for bugs

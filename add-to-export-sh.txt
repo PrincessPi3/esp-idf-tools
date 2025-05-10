@@ -19,14 +19,13 @@ commitHash=commitTAG
 installDate=installDateTAG
 branchData=branchDataTAG
 
-if [ -z $ESPIDTOOLS_INSTALLDIR ]; then
+if [ -z "$ESPIDTOOLS_INSTALLDIR" ]; then
     echo -e "\nFAIL: ESPIDFTOOLS_INSTALLDIR environment variable not found!\nReinstall via script or manually add to ~/.zshrc\n"
-    exit
 fi
 
 binDir="$ESPIDFTOOLS_INSTALLDIR/.custom_bin"
 
-echo -e "\nTTY devices found in dmesg:"
+echo -e "\nChecking for Serial Devices in dmesg\n"
 COUNTER=0
 devarr=()
 for line in $(dmesg | tail -50 | grep -o -E "tty[A-Z]{3}[0-9]{0,2}" | sort -u); do
@@ -35,9 +34,13 @@ for line in $(dmesg | tail -50 | grep -o -E "tty[A-Z]{3}[0-9]{0,2}" | sort -u); 
                 COUNTER=$((COUNTER+1))
 done
 
-echo -e "\nEnter TTY Number You'd Like:"
-read tty
-ttyselect=$devarr[(($tty+1))]
+if [ -z "$devArr" ]; then
+    echo -e "\nNo Serial Devices Found, Select one later with 'changeport'\n"
+else 
+    echo -e "\nEnter TTY Number You'd Like:"
+    read tty
+    ttyselect=$devarr[(($tty+1))]
+fi
 
 echo -e "Set esp target:\n\tOne of: $(getTargets)"
 read esp

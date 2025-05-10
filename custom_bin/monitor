@@ -1,1 +1,4 @@
+#!/bin/bash
+echo -e "\nMonitoring on $ESPPORT\n"
 idf.py monitor
+echo -e "\nAll done :3\n"
