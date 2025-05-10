@@ -122,8 +122,10 @@ function messagePTY() {
 	fi
 
 	for pts in $(ls -q /dev/pts); do
-    	sudo echo -e "$message" > /dev/pts/$pts # requires passwordless sudo
-		writeToLog "PTS Message: $message send to $pts"
+		if [[ $pts =~ '^[0-9]+$' ]]; then
+    		sudo echo -e "$message" > /dev/pts/$pts # requires passwordless sudo
+			writeToLog "PTS Message: $message send to /dev/$pts"
+		fi
 	done
 
 }
