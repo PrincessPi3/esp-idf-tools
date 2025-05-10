@@ -123,7 +123,7 @@ function messagePTY() {
 
 	for pts in $(ls -q /dev/pts); do
     	sudo echo -e "$message" > /dev/pts/$pts # requires passwordless sudo
-		writeToLog "$0: $message send to $pts"
+		writeToLog "PTS Message: $message send to $pts"
 	done
 
 }
