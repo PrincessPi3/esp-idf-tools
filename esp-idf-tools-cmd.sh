@@ -114,7 +114,7 @@ function writeToLog() {
 	echo -e "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): $1" >> $log
 }
 
-function messagePTY() {
+function messagePTS() {
 	if [[ ! -z $1 ]]; then
     	message="$1"
 	else
@@ -122,7 +122,7 @@ function messagePTY() {
 	fi
 
 	for pts in $(ls -q /dev/pts); do
-		if [[ $pts =~ '^[0-9]+$' ]]; then
+		if [[ $pts =~ '^[0-9]+$' ]] && [[ "/dev/pts/$pts" != "$(tty)" ]]; then
     		sudo echo -e "$message" > /dev/pts/$pts # requires passwordless sudo
 			writeToLog "PTS Message: $message send to /dev/$pts"
 		fi
@@ -375,7 +375,7 @@ function handleDownloadInstall() {
 }
 
 handleReboot() {
-	messagePTY "\n\nRebooting in $sleepMins minutes\ncancel with 'shutdown -c'!!\n\n"
+	messagePTS "\n\nRebooting in $sleepMins minutes\ncancel with 'shutdown -c'!!\n\n"
 	sudo shutdown -r +$rebootMins
 }
 
@@ -567,7 +567,7 @@ elif [[ "$arg" == "cron" || "$arg" == "c" ]]; then # full install with warn, sle
 	sleepMins=0
 
 	handleStart
-	messagePTY "\n\nesp-idf-tools action $action started!\nWill reboot with $sleepMins minutes delay when complete!\n\n"
+	messagePTS "\n\nesp-idf-tools action $action started!\nWill reboot with $sleepMins minutes delay when complete!\n\n"
 	handleClearInstallLog
 	handleSetupEnvironment
 	handleCustomBins
@@ -619,7 +619,7 @@ elif [[ "$arg" == "nukereboot" || "$arg" == "nr" ]]; then
 	idfGet="download"
 
 	handleStart
-	messagePTY "\n\nesp-idf-tools action $action started!\nWill reboot with $sleepMins minutes delay when complete!\n\n"
+	messagePTS "\n\nesp-idf-tools action $action started!\nWill reboot with $sleepMins minutes delay when complete!\n\n"
 	handleClearInstallLog
 	handleSetupEnvironment
 	handleCustomBins
