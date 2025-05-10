@@ -3,8 +3,6 @@ echo -e "\nCleaning up Fully\n"
 
 echo -e "\nRunning fullclean\n"
 
-idf.py fullclean
-
 if [ -d build ]; then
 	echo -e "\nDeleting build dir\n"
 	rm -rf build
@@ -35,6 +33,6 @@ if [ -f dependencies.lock ]; then
 	rm -f dependencies.lock
 fi
 
-echo -e "\nAll done :3\n"
+idf.py fullclean
 
-dependencies 
+echo -e "\nAll done :3\n"

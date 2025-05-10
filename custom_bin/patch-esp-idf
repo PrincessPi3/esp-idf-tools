@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+echo -e "\napplyan a patch~ $1 to $ESPIDFTOOLS_INSTALLDIR/esp-idf\n"
+cp "$1" "$ESPIDFTOOLS_INSTALLDIR/esp-idf"
+git -C "$ESPIDFTOOLS_INSTALLDIR/esp-idf" apply "$1"
+echo -e "\nall donseies~\n"

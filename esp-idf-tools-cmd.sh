@@ -88,6 +88,8 @@ else
 fi
 
 gitUpdateCmd="git -C $idfDir reset --hard; git -C $idfDir clean -df; git -C $idfDir pull $idfDir" # mayhapsnasst?
+gitDevKits="git clone --recursive https://github.com/espressif/esp-dev-kits.git $installDir/esp-dev-kits"
+gitDevKitsUpdate="git -C $installDir/esp-dev-kits reset --hard; git -C $installDir/esp-dev-kits clean -df; git -C $installDir/esp-dev-kits pull"
 installCmd="$idfDir/install.sh all"
 toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
 idfGet="update" # default method
@@ -294,6 +296,8 @@ function handleSetupEnvironment() {
 			writeToLog "$espressifLocation not found, skipping delete for reinstall\n"
 		fi
 	fi
+
+
 }
 
 function testAppendAlias() {
@@ -333,22 +337,43 @@ function handleDownloadInstall() {
 			writeToLog "$idfDir not found, skipping delete\n"
 		fi
 
+		if [ -d "$installDir/esp-dev-kits" ]; then
+			writeToLog "$installDir/esp-dev-kits found, deleting for reinstall\n"
+			rm -rf "$installDir/esp-dev-kits"
+			returnStatus
+		else
+			writeToLog "$installDir/esp-dev-kits not found, skipping delete for reinstall\n"
+		fi
+
 		istartTime=$(date '+%s')
 		writeToLog "CLONING esp-idf, branch $gitBranch with $gitJobs jobs to $idfDir\n\tCommand: $gitCloneCmd"
+		
 		eval "$gitCloneCmd"
 		returnStatus
 		gitChk=$?
+
+		writeToLog "CLONING esp-dev-kits\n\tCommand: '$gitDevKits'"
+		eval "$gitDevKits"
+		returnStatus
+		gitChk=$?
+
 		iendTime=$(date '+%s')
 		installerTime=$(($iendTime-$istartTime))
 		writeToLog "Git CLONE completed in $installerTime seconds from branch $gitBranch\n"
 	else
+		istartTime=$(date '+%s')
 		writeToLog "Setting for update mode\n"
 
-		istartTime=$(date '+%s')
 		writeToLog "UPDATING esp-idf, branch $gitBranch with $gitJobs jobs to $idfDir\n\tCommand: $gitUpdateCmd"
 		eval "$gitUpdateCmd"
 		returnStatus
 		gitChk=$?
+
+		writeToLog "UPDATING esp-dev-kits\n\tCommand: '$gitDevKitsUpdate'"
+		eval "$gitDevKitsUpdate"
+		returnStatus
+		gitChk=$?
+
 		iendTime=$(date '+%s')
 		installerTime=$(($iendTime-$istartTime))
 		writeToLog "Git UPDATE completed in $installerTime seconds from Branch $gitBranch\n"
@@ -628,9 +653,9 @@ elif [[ "$arg" == "nuke" || "$arg" == "n" ]]; then
 
 	exit
 
-elif [[ "$arg" == "nukereboot" || "$arg" == "nr" ]]; then
+elif [[ "$arg" == "nukereboot" || "$arg" == "nr" || "$arg" == "rebootnuke" || "$arg" == "rn" ]]; then
 	action="REINSTALL (NUKEREBOOT)"
-	sleepMins=0 # restart right away
+	sleepMins=1
 	idfGet="download"
 
 	handleStart

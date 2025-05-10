@@ -36,3 +36,8 @@
 
 1.0-release-r2
     fixed fullclean bug
+
+1.1-dev-1
+    added downloads and updates of espressif's esp-dev-kits repo (https://github.com/espressif/esp-dev-kits)
+    patch-esp-idf added
+        a shortcut for applying esp-idf patches
