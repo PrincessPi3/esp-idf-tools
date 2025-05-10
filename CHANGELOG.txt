@@ -33,3 +33,6 @@
 
 1.0-release-r1
     fixed cron bug
+
+1.0-release-r2
+    fixed fullclean bug

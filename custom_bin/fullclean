@@ -8,29 +8,33 @@ idf.py fullclean
 if [ -d build ]; then
 	echo -e "\nDeleting build dir\n"
 	rm -rf build
-else
-	echo -e "\nNo build dir, skipping delete\n"
+fi
+
+if [ -d managed_components ]; then
+	echo -e "\nDeleting managed_components dir\n"
+	rm -rf managed_components
 fi
 
 if [ -f sdkconfig ]; then
 	echo -e "\nDeleting sdkconfig\n"
 	rm -f sdkconfig
-else
-	echo -e "\nNo sdkconfig, skipping delete\n"
 fi
 
 if [ -f *.old ]; then
 	echo -e "\nDeleting *.old\n"
 	rm -f *.old
-else
-	echo -e "\nNo *.old, skipping delete\n"
 fi
 
 if [ -f *.bak ]; then
 	echo -e "\nDeleting *.bak\n"
 	rm -f *.bak
-else
-	echo -e "\nNo *.bak, skipping delete\n"
+fi
+
+if [ -f dependencies.lock ]; then
+	echo -e "\nDeleting dependencies.lock\n"
+	rm -f dependencies.lock
 fi
 
 echo -e "\nAll done :3\n"
+
+dependencies 
