@@ -1,38 +1,37 @@
-export
-changeport
-erase-flash
-setup
-espinfo
-changetarget
-changebaud
-clean
-fullclean
-help-esp-tools
-flashmonitor
-monitor
-step-flash-monitor
-menuconfig
-imagesize
-create-project
-rebuildfull
-chipinfo
-esp-install-monitor
-esp-install-logs
-run-esp-cmd [help h -h --help]
-run-esp-cmd [t test]
+x export [with and without uart in dmesg]
+x changeport [/dev/ttyX]
+x erase-flash
+x setup
+x build
+x espinfo
+x changeesp [esp chip]
+x changebaud [baud]
+x clean
+x fullclean
+x flashmonitor
+x monitor
+x step-flash-monitor
+x menuconfig
+x imagesize
+x create-project
+x rebuildfull
+x chipinfo
+x esp-install-monitor
+x esp-install-logs
+x help-esp-tools
+x run-esp-cmd [help h -h --help]
+x run-esp-cmd [t test]
 run-esp-cmd [n nuke]
-run-esp-cmd [i interactive install]
-run-esp-cmd [c cron]
+x run-esp-cmd [i interactive install]
+x run-esp-cmd [c cron]
 fresh install from nothing
 
-x audit readme
-    x maybe pretty up
-
+next:
 remove unneeded code
-
 add new stuff to error checking
-
-x support bashhhh (experimental)
+    esp device
+parse chipinfo to be pretty
+support bashhhh (experimental)
 
 x text export and changeesp
 x test help on cmd, help-esp-tools

@@ -378,7 +378,7 @@ function handleDownloadInstall() {
 	# if gitDataLog file doesnt exist, initialize with header
 	if [[ ! -f "$versionData" ]]; then
 		writeToLog "date&time ddmmYYYY H:M:S (unix seconds) | esp-idf branch | esp-idf-tools version | action"
-		echo "date&time ddmmYYYY H:M:S (unix seconds) | esp-idf branch | esp-idf-tools version | actio" > "$versionData";
+		echo "date&time ddmmYYYY H:M:S (unix seconds) | esp-idf branch | esp-idf-tools version | action" > "$versionData";
 	fi
 
 	# date&time ddmmYYYY H:M:S (unix seconds) | esp-idf branch | esp-idf-tools version | action
@@ -552,6 +552,8 @@ elif [[ "$arg" == "interactive" || "$arg" == "install" || "$arg" == "i" ]]; then
 
 	if [ ! -z $readIdfGet ]; then
 		idfGet="$readIdfGet"
+	else
+		idfGet="download"
 	fi
 	
 	writeToLog "\n === New $action ===\n"
