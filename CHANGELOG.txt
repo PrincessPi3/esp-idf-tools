@@ -7,3 +7,7 @@
 9-rc-final
     fixed and renamed ESPIDF_INSTALLDIR ESPIDFTOOLS_INSTALLDIR
     removed install branch command
+    various bug fixes
+    various error checking added
+    added bash shell support (experimental)
+    full testing done

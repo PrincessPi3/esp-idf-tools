@@ -30,6 +30,8 @@ remove unneeded code
 
 add new stuff to error checking
 
+support bashhhh
+
 x text export and changeesp
 x test help on cmd, help-esp-tools
 x test sourced scrips changebaud, changeesp, changeport

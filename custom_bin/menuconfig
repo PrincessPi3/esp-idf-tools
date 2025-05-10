@@ -1,1 +1,4 @@
+#!/bin/bash
+echo -e "\nRunning Menuconfig\n"
 idf.py menuconfig
+echo -e "\nAll done :3\n"

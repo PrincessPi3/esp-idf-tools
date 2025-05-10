@@ -21,9 +21,22 @@ startTime=$(date '+%s') # to time the (re)install time for the logs
 
 # always run globals and boilerplate
 
+defShell=$(awk -F: -v user="$USER" '$1 == user {print $NF}' /etc/passwd)
+
+if [[ "$defShell" =~ zsh$ ]]; then
+	echo -e "\nSelected zsh shell automatically\n"
+	rcFile="$HOME/.zshrc"
+elif [[ "$defShell" =~ bash$ ]]; then 
+	echo -e "\nSelected bash shell automatically\n"
+	rcFile="$HOME/.bashrc"
+else
+	echo "unsupported shell $defShell"
+	exit
+fi
+
 # get us our FUCKING ALIASES HOLY FUCK GOD DAMN SHIT FUCK IT\
-source $rcFile 2>/dev/null # >2?/dev/null is to redirect any errors
 rcFile="$HOME/.zshrc" # shell rc file
+source $rcFile 2>/dev/null # >2?/dev/null is to redirect any errors
 defaultInstallDir="$HOME/esp"
 
 if [ -z "$2" ]; then

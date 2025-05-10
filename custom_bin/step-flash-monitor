@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e # die on error in theory
+set -e # die on error
 
 echo -e "Clean, build, flash, monitor in steps, dying on error"
 
