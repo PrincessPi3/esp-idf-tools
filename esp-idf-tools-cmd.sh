@@ -21,6 +21,13 @@ startTime=$(date '+%s') # to time the (re)install time for the logs
 
 # always run globals and boilerplate
 
+# check for help first
+if [[ "$1" == "--help" || "$1" == "help" || "$1" == "-h" || "$1" == "h" ]]; then
+	helpText=$ESPIDFTOOLS_INSTALLDIR/.custom_bin/help.txt
+	cat "$helpText"
+
+	exit
+
 defShell=$(awk -F: -v user="$USER" '$1 == user {print $NF}' /etc/passwd)
 
 if [[ "$defShell" =~ zsh$ ]]; then
@@ -42,13 +49,13 @@ defaultInstallDir="$HOME/esp"
 if [ -z "$2" ]; then
 	gitBranch=master # branch from github
 else
-	gitBranch=$2
+	gitBranch="$2"
 fi
 
 if [ -z "$ESPIDFTOOLS_INSTALLDIR" ]; then
 	# cant seem to get this one to use writeToLog
 	echo "ESPIDFTOOLS_INSTALLDIR environment variable not found, appending to $rcFile"
-	echo "export ESPIDFTOOLS_INSTALLDIR=\"$defaultInstallDir\"" >> $rcFile
+	echo "export ESPIDFTOOLS_INSTALLDIR=\"$defaultInstallDir\"" >> "$rcFile"
 	installDir="$defaultInstallDir"
 	aliasInstallDirChk=$?
 else
@@ -59,17 +66,16 @@ fi
 
 gitJobs=5 # number of jobs to download from github with
 rebootMins=3 # minutes of warning before reboot
-log=$installDir/install.log # log file
-versionData=$installDir/version-data.log # version data log file
-idfDir=$installDir/esp-idf # esp-idf path
+log="$installDir/install.log" # log file
+versionData="$installDir/version-data.log" # version data log file
+idfDir="$installDir/esp-idf" # esp-idf path
 exportScript=$idfDir/export.sh # export script
-customBinLocation=$installDir/.custom_bin # where custom bin scripts are placed
-espressifLocation=$HOME/.espressif # espressif tools install location
+customBinLocation="$installDir/.custom_bin" # where custom bin scripts are placed
+espressifLocation="$HOME/.espressif" # espressif tools install location
 runningDir="$( cd "$( dirname "$0" )" && pwd )"
-customBinFrom=$runningDir/custom_bin # dir where custom scripts are coming FROM
-helpText=$runningDir/help.txt
-exportBackupScript=$runningDir/export.sh.bak # back up to running dir
-scriptVers=$(cat $runningDir/version.txt) # make sure version.txt does NOT have newline
+customBinFrom="$runningDir/custom_bin" # dir where custom scripts are coming FROM
+exportBackupScript="$runningDir/export.sh.bak" # back up to running dir
+scriptVers=$(cat "$runningDir/version.txt") # make sure version.txt does NOT have newline
 arg=$1 # just rename the argument var for clarity with the functions
 
 if [ "$gitJobs" == "default" ]; then
@@ -181,7 +187,7 @@ function handleCustomBins() {
 	# writeToLog "Handling custon bins (function ran)\n"
 	if [ -d $customBinLocation ]; then
 		writeToLog "Deleting $customBinLocation"
-		rm -rf $customBinLocation
+		rm -rf "$customBinLocation"
 		returnStatus
 		rmCustomBinChk=$?
 	else
@@ -189,26 +195,26 @@ function handleCustomBins() {
 	fi
 
 	writeToLog "Copying scripts from $customBinFrom to $customBinLocation"
-	cp -r $customBinFrom $customBinLocation
+	cp -r "$customBinFrom" "$customBinLocation"
 	returnStatus
 	cpCustomBinChk=$?
 
 	writeToLog "Making scripts executable at $customBinLocation"
-	chmod -R +x $customBinLocation
+	chmod -R +x "$customBinLocation"
 	returnStatus
 	customBinExecChk=$?
 
 	writeToLog "Copying vertson.txt and help.txt from $runningDir to $customBinLocation"
-	cp $runningDir/help.txt $customBinLocation
+	cp "$runningDir/help.txt $customBinLocation"
 	returnStatus
-	cp $runningDir/version.txt $customBinLocation
+	cp "$runningDir/version.txt" "$customBinLocation"
 	returnStatus
 }
 
 function handleExport() {
-	if [ -f $exportBackupScript ]; then
+	if [ -f "$exportBackupScript" ]; then
 		writeToLog "Deleting $exportBackupScript"
-		rm -f $exportBackupScript
+		rm -f "$exportBackupScript"
 		returnStatus
 		rmExportBackupChk=$?
 	else
@@ -216,39 +222,39 @@ function handleExport() {
 	fi
 
 	writeToLog "Backing up $exportScript to $exportBackupScript"
-	cp $exportScript $exportBackupScript
+	cp "$exportScript" "$exportBackupScript"
 	returnStatus
 	backupExportScriptChk=$?
 
 	writeToLog "Appending $runningDir/add-to-export-sh.txt to $exportScript"
-	cat $runningDir/add-to-export-sh.txt >> $exportScript
+	cat "$runningDir/add-to-export-sh.txt" >> "$exportScript"
 	returnStatus
 	exportCatChk=$?
 
 	writeToLog "Editing $exportScript to remove ending \`return 0\`"
-	sed -i 's/return 0/# return 0/g' $exportScript
+	sed -i 's/return 0/# return 0/g' "$exportScript"
 	returnStatus
 	exportSedReturnChk=$?
 
 	writeToLog "Editing $exportScript with version information: $scriptVers"
-	sed -i "s/versionDataTAG/\'$scriptVers\'/g" $exportScript
+	sed -i "s/versionDataTAG/\'$scriptVers\'/g" "$exportScript"
 	returnStatus
 	exportSedVersionChk=$?
 
 	writeToLog "Editing $exportScript with branch information: $gitBranch"
-	sed -i "s/branchDataTAG/\'$gitBranch\'/g" $exportScript
+	sed -i "s/branchDataTAG/\'$gitBranch\'/g" "$exportScript"
 	returnStatus
 	exportSedVersionChk=$?
 
 	dateStampInstall=$(date '+%d-%m-%Y %H:%M:%S %Z (%s)')
 
 	writeToLog "Editing $exportScript with install date information: $dateStampInstall"
-	sed -i "s/installDateTAG/\'$dateStampInstall\'/g" $exportScript
+	sed -i "s/installDateTAG/\'$dateStampInstall\'/g" "$exportScript"
 	returnStatus
 	exportSedDateChk=$?
 
 	writeToLog "Editing $exportScript with git commit hash data: $commitHash"
-	sed -i "s/commitTAG/\'$commitHash\'/g" $exportScript
+	sed -i "s/commitTAG/\'$commitHash\'/g" "$exportScript"
 	returnStatus
 	exportSedHashChk=$?
 }
@@ -257,7 +263,7 @@ function handleSetupEnvironment() {
 	# writeToLog "Handling setup environment (function ran)\n
 	if [ ! -d "$installDir" ]; then
 		writeToLog "creating $installDir"
-		mkdir $installDir
+		mkdir "$installDir"
 		returnStatus
 		mkInstallDirChk=$?
 	else
@@ -272,7 +278,7 @@ function handleSetupEnvironment() {
 
 		if [ -d "$espressifLocation" ]; then
 			writeToLog "$espressifLocation found, deleting for reinstall"
-			rm -rf $espressifLocation
+			rm -rf "$espressifLocation"
 			returnStatus
 			rmEspressifChk=$?
 		else
@@ -311,7 +317,7 @@ function handleDownloadInstall() {
 
 		if [ -d "$idfDir" ]; then
 			writeToLog "Deleting $idfDir"
-			rm -rf $idfDir
+			rm -rf "$idfDir"
 			returnStatus
 			rmIdfDirChk=$?
 		else
@@ -372,7 +378,7 @@ function handleDownloadInstall() {
 	# date&time ddmmYYYY H:M:S (unix seconds) | esp-idf branch | esp-idf-tools version | action
 	gitDataLog="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)') | $commitHash | $gitBranch | $scriptVers | $action"
 	writeToLog "$gitDataLog"
-	echo "$gitDataLog" >> $versionData
+	echo "$gitDataLog" >> "$versionData"
 	returnStatus
 	gitLogChk=$?
 }
@@ -415,21 +421,21 @@ function handleStart() {
 
 function handleEmptyLogs() {
 	echo -e "\nDeleting $log"
- 	rm -f $log
+ 	rm -f "$log"
 	echo -e "\tReturn status: ${?}\n"
  
 	echo "Deleting $versionData"
- 	rm -f $versionData
+ 	rm -f "$versionData"
 	echo -e "\tReturn status: ${?}\n"
 }
 
 function handleUninstall() {
 	echo -e "\nDeleting $espressifLocation"
- 	rm -rf $espressifLocation
+ 	rm -rf "$espressifLocation"
 	echo -e "\tReturn status: ${?}\n"
 
 	echo -e "Deleting $idfDir"
- 	rm -rf $idfDir
+ 	rm -rf "$idfDir"
 	echo -e "\tReturn status: ${?}"
 
 	handleEmptyLogs
@@ -469,12 +475,7 @@ function handleEnd() {
 	writeToLog " === Finished ===\n\n"
 }
 
-if [[ "$arg" == "--help" || "$arg" == "help" || "$arg" == "-h" || "$arg" == "h" ]]; then
-	cat $helpText;
-
-	exit
-
-elif [[ "$arg" == "test" || "$arg" == "t" ]]; then # minimal actions taken, echo the given commands and such
+if [[ "$arg" == "test" || "$arg" == "t" ]]; then # minimal actions taken, echo the given commands and such
  	action="TEST"
 	sleepMins=0
 
@@ -528,23 +529,23 @@ elif [[ "$arg" == "interactive" || "$arg" == "i" ]]; then
 	read readIdfGet
 
 	if [ ! -z $readInstallDir ]; then
-		installDir=$readInstallDir
+		installDir="$readInstallDir"
 	fi
 
 	if [ ! -z $readGitBranch ]; then
-		gitBranch=$readGitBranch
+		gitBranch="$readGitBranch"
 	fi
 
 	if [ ! -z $readRcFile ]; then
-		rcFile=$readRcFile
+		rcFile="$readRcFile"
 	fi
 
 	if [ ! -z $readGitJobs ]; then
-		gitJobs=$readGitJobs
+		gitJobs="$readGitJobs"
 	fi
 
 	if [ ! -z $readIdfGet ]; then
-		idfGet=$readIdfGet
+		idfGet="$readIdfGet"
 	fi
 	
 	writeToLog "\n === New $action ===\n"
@@ -564,9 +565,8 @@ elif [[ "$arg" == "interactive" || "$arg" == "i" ]]; then
 
 elif [[ "$arg" == "cron" || "$arg" == "c" ]]; then # full install with warn, sleep, and reboot
 	action="REINSTALL (CRON)"
-	sleepMins=1
+	sleepMins=5
 	idfGet="update"
-	sleepMins=0
 
 	handleStart
 	messagePTS "\n\nesp-idf-tools action $action started!\nWill reboot with $sleepMins minutes delay when complete!\n\n"
@@ -583,7 +583,7 @@ elif [[ "$arg" == "cron" || "$arg" == "c" ]]; then # full install with warn, sle
 elif [[ "$arg" == "update" || "$arg" == "u" ]]; then # update without logouts or reboot
 	action="UPDATE"
 	idfGet="update"
-	sleepMins=1
+	sleepMins=0
 
 	handleStart
 	handleClearInstallLog
@@ -635,14 +635,9 @@ elif [[ "$arg" == "nukereboot" || "$arg" == "nr" ]]; then
 
 elif [ "$arg" == "uninstall" ]; then
 	handleUninstall
-
 	echo -e "\nAll done :3\n"
+
 	exit
-
-elif [ ! -z $arg ]; then 
-	 writeToLog "FAIL: bad argument. Terminating"
-
-	 exit
 
 else # full noninteractive (re)install without logout, reboot, or sleeps
 	action="REINSTALL (DEFAULT)"

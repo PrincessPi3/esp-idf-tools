@@ -20,8 +20,8 @@ x rebuildfull
 x chipinfo
 x esp-install-monitor
 x esp-install-logs
-run-esp-cmd n
-fresh install from nothing
+x run-esp-cmd n
+x fresh install from nothing
 
 audit readme
     maybe pretty up
