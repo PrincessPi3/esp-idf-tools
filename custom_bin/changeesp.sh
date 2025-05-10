@@ -1,6 +1,13 @@
+function getTargets() {
+    tmpFile='/tmp/targets.tmp'
+    idf.py --list-targets > "$tmpFile"
+    tr '\n' ' ' < "$tmpFile"
+    rm "$tmpFile"
+}
+
 function subprocess() {
     echo -e "\nChanging ESPTARGET\n"
-    echo -e "Set esp target (one of esp32, esp32s2, esp32c3, esp32s3, esp32c2, esp32c6, esp32h2, esp32p4, esp32c5, esp32c61, or linux)"
+    echo -e "Set esp target (one of $(getTargets))"
     read esp
     eval "$1=$esp"
     return 0

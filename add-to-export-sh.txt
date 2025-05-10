@@ -5,6 +5,13 @@
 # begin esp-idf stuffss I made ################
 ###############################################
 
+function getTargets() {
+    tmpFile='/tmp/targets.tmp'
+    idf.py --list-targets > "$tmpFile"
+    tr '\n' ' ' < "$tmpFile"
+    rm "$tmpFile"
+}
+
 echo -e "\n=======CUSTOM=======\n"
 
 versionData=versionDataTAG
@@ -32,7 +39,7 @@ echo -e "\nEnter TTY Number You'd Like:"
 read tty
 ttyselect=$devarr[(($tty+1))]
 
-echo -e "Set esp target:\n\tOne of: esp32, esp32s2, esp32c3, esp32s3, esp32c2, esp32c6, esp32h2, esp32p4, esp32c5, esp32c61, or linux"
+echo -e "Set esp target:\n\tOne of: $(getTargets)"
 read esp
 
 # echo -e "\nSetting environment variables\n"
