@@ -122,6 +122,7 @@ function messagePTS() {
 	fi
 
 	for pts in $(ls -q /dev/pts); do
+		echo -e "\n\npts $pts\ntty: $(tty)\n\n";
 		if [[ $pts =~ '^[0-9]+$' ]] && [[ "/dev/pts/$pts" != "$(tty)" ]]; then
     		sudo echo -e "$message" > /dev/pts/$pts # requires passwordless sudo
 			writeToLog "PTS Message: $message send to /dev/$pts"
