@@ -66,7 +66,7 @@ Some take optional [branch] paramater
 
 	run-esp-cmd help
 		display this help text
-            `run-esp-cmd help`
+			`run-esp-cmd help`
 			`run-esp-cmd h`
 			`run-esp-cmd -h`
 			`run-esp-cmd --help`
