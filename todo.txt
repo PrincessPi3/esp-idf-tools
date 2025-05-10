@@ -1,4 +1,4 @@
-test espinfo
+text export and changeesp
 test help on cmd, help-esp-tools
 test sourced scrips changebaud, changeesp, changeport
 test menuconfig, monitor, flashmonitor, exit-esp-tools
