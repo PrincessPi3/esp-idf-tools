@@ -21,7 +21,7 @@ x esp-install-logs
 x help-esp-tools
 x run-esp-cmd [help h -h --help]
 x run-esp-cmd [t test]
-run-esp-cmd [n nuke]
+x run-esp-cmd [n nuke]
 x run-esp-cmd [i interactive install]
 x run-esp-cmd [c cron]
 fresh install from nothing
