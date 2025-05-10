@@ -120,18 +120,13 @@ function messagePTS() {
 	else
     	message="Something happening! Maybe a shutdown!"
 	fi
-
-	echo -e "\n\npts $(ls -q /dev/pts)\n\n"
-
+	
 	for pts in $(ls -q /dev/pts); do
-		if [[ $pts =~ '^[0-9]+$' ]] && [[ "/dev/pts/$pts" != "$(tty)" ]]; then
-			echo -e "\n\npts running $pts\ntty running: $(tty)\n\n";
-
+		if [[ "$pts" =~ ^[0-9]+$ ]] && [[ "/dev/pts/$pts" != "$(tty)" ]]; then
     		sudo echo -e "$message" > /dev/pts/$pts # requires passwordless sudo
 			writeToLog "PTS Message: $message send to /dev/$pts"
 		fi
 	done
-
 }
 
 # this is not needed so long as warn doesnt god damned fucking work lmfao

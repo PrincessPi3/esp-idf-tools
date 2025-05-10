@@ -1,4 +1,4 @@
-subprocess() {
+function subprocess() {
     echo -e "\nChanging ESPBAUD\n\t1: 9600\n\t2: 115200\n\t3: 230400\n\t4: 460800\n\t5: 1152000\n\t6: 1500000\n\nEnter Selection: "
     read baudRate
     echo -e "\n"
@@ -12,7 +12,7 @@ subprocess() {
     esac
 
     eval "$1=$selection"
-    return 0;
+    return 0
 }
 
 if [ ! -z "$1" ]; then
@@ -22,7 +22,6 @@ else
     subprocess ret
 fi
 
-echo "ret: $ret"
 export ESPBAUD=$ret
-echo "\nBaudrate set to $ESPBAUD\n"
-echo "\nAll done :3\n"
+echo -e "\nBaudrate set to $ESPBAUD\n"
+echo -e "\nAll done :3\n"

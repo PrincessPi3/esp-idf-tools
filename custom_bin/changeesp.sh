@@ -1,4 +1,4 @@
-subprocess() {
+function subprocess() {
     echo -e "\nChanging ESPTARGET\n"
     echo -e "Set esp target (esp32, esp32s3, esp32c6, esp8266, etc)"
     read esp

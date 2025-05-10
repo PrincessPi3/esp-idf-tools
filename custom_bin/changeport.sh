@@ -1,4 +1,4 @@
-subprocess() {
+function subprocess() {
     echo -e "\nChanging ESPPORT\n"
     echo -e "TTY devices found in dmesg:"
     COUNTER=0

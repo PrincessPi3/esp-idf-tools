@@ -1,19 +1,28 @@
 #!/bin/bash
+function subprocess() {
+    echo -e "\nChanging ESPBAUD\n\t1: 9600\n\t2: 115200\n\t3: 230400\n\t4: 460800\n\t5: 1152000\n\t6: 1500000\n\nEnter Selection: "
+    read baudRate
+    echo -e "\n"
+    case $baudRate in
+    1) selection=9600;;
+    2) selection=115200;;
+    3) selection=230400;;
+    4) selection=460800;;
+    5) selection=1152000;;
+    6) selection=1500000;;
+    esac
 
-function test_fun() {
-    echo "function name? $0"
+    eval "$1=$selection"
+    return 0
 }
 
-echo "script name? $0"
-test_fun
-test_fun "one" "two" 3
-
-if [[ ! -z $1 ]]; then
-    message="$1"
+if [ ! -z "$1" ]; then
+    ret="$1"
 else
-    message="PTS Default Message"
+    ret=''
+    subprocess ret
 fi
 
-for pts in $(ls -q /dev/pts); do
-    sudo echo "$message" > /dev/pts/$pts
-done
+export ESPBAUD=$ret
+echo -e "\nBaudrate set to $ESPBAUD\n"
+echo -e "\nAll done :3\n"
