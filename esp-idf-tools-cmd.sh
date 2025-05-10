@@ -43,7 +43,6 @@ else
 fi
 
 # get us our FUCKING ALIASES HOLY FUCK GOD DAMN SHIT FUCK IT\
-rcFile="$HOME/.zshrc" # shell rc file
 source $rcFile 2>/dev/null # >2?/dev/null is to redirect any errors
 defaultInstallDir="$HOME/esp"
 
@@ -55,12 +54,12 @@ fi
 
 if [ -z "$ESPIDFTOOLS_INSTALLDIR" ]; then
 	# cant seem to get this one to use writeToLog
-	echo "ESPIDFTOOLS_INSTALLDIR environment variable not found, appending to $rcFile"
+	echo -e "ESPIDFTOOLS_INSTALLDIR environment variable not found, appending to $rcFile\n"
 	echo "export ESPIDFTOOLS_INSTALLDIR=\"$defaultInstallDir\"" >> "$rcFile"
 	installDir="$defaultInstallDir"
 	aliasInstallDirChk=$?
 else
-	echo "ESPIDFTOOLS_INSTALLDIR environment variable found, skipping"
+	echo -e "ESPIDFTOOLS_INSTALLDIR environment variable found, skipping\n"
 	installDir="$ESPIDFTOOLS_INSTALLDIR"
 	aliasInstallDirChk=0
 fi
