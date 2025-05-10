@@ -362,11 +362,11 @@ function handleDownloadInstall() {
 
 	# if gitDataLog file doesnt exist, initialize with header
 	if [[ ! -f "$versionData" ]]; then
-		writeToLog "$versionData not found, initializing with header"
+		writeToLog "date&time ddmmYYYY H:M:S (unix seconds) | esp-idf branch | esp-idf-tools version | action"
 		echo "date | esp-idf branch | esp-idf-tools version | action" > "$versionData";
 	fi
 
-	# date ddmmYYYY H:M:S (unix seconds) | esp-idf branch | esp-idf-tools version | action
+	# date&time ddmmYYYY H:M:S (unix seconds) | esp-idf branch | esp-idf-tools version | action
 	gitDataLog="$(date '+%d/%m/%Y %H:%M:%S %Z (%s)') | $commitHash | $gitBranch | $scriptVers | $action"
 	writeToLog "$gitDataLog"
 	echo "$gitDataLog" >> $versionData
@@ -419,14 +419,6 @@ function handleEmptyLogs() {
 	echo "Deleting $versionData"
  	rm -f $versionData
 	echo -e "\tReturn status: ${?}\n"
-
-	# echo "Creating empty file at $log"
- 	# touch $log
-	# echo -e "\tReturn status: ${?}\n"
-
-	# echo "Creating empty file at $versionData"
- 	# touch $versionData
-	# echo -e "\tReturn status: ${?}\n"
 }
 
 function handleUninstall() {
