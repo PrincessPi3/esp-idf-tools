@@ -121,6 +121,8 @@ function messagePTS() {
     	message="Something happening! Maybe a shutdown!"
 	fi
 
+	echo -e "\n\npts $(ls -q /dev/pts)\n\n"
+
 	for pts in $(ls -q /dev/pts); do
 		if [[ $pts =~ '^[0-9]+$' ]] && [[ "/dev/pts/$pts" != "$(tty)" ]]; then
 			echo -e "\n\npts running $pts\ntty running: $(tty)\n\n";
