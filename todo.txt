@@ -8,7 +8,6 @@ changebaud
 clean
 fullclean
 help-esp-tools
-run-esp-cmd [help h -h --help]
 flashmonitor
 monitor
 step-flash-monitor
@@ -19,18 +18,21 @@ rebuildfull
 chipinfo
 esp-install-monitor
 esp-install-logs
-run-esp-cmd n
+run-esp-cmd [help h -h --help]
+run-esp-cmd [t test]
+run-esp-cmd [n nuke]
+run-esp-cmd [i interactive install]
+run-esp-cmd [c cron]
 fresh install from nothing
-run-esp-cmd interactive
 
-audit readme
-    maybe pretty up
+x audit readme
+    x maybe pretty up
 
 remove unneeded code
 
 add new stuff to error checking
 
-support bashhhh
+x support bashhhh (experimental)
 
 x text export and changeesp
 x test help on cmd, help-esp-tools
