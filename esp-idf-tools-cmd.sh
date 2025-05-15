@@ -88,7 +88,7 @@ else
 fi
 
 gitUpdateCmd="git -C $idfDir reset --hard; git -C $idfDir clean -df; git -C $idfDir pull $idfDir" # mayhapsnasst?
-gitDevKits="git clone --recursive https://github.com/espressif/esp-dev-kits.git $installDir/esp-dev-kits"
+gitDevKits="git clone --single-branch --depth 1 --jobs $gitJobs --recursive https://github.com/espressif/esp-dev-kits.git $installDir/esp-dev-kits"
 gitDevKitsUpdate="git -C $installDir/esp-dev-kits reset --hard; git -C $installDir/esp-dev-kits clean -df; git -C $installDir/esp-dev-kits pull"
 installCmd="$idfDir/install.sh all"
 toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
