@@ -111,6 +111,8 @@ Some take optional [branch] paramater
 		* ex. `create-project hello-world`
 * `esp-install-monitor` monitors install.log. alias for `tail -n 75 -f $ESPIDFTOOLS_INSTALLDIR/install.log`
 * `esp-install-logs` displays full text of install.log and version-data.txt
+* `patch-esp-idf <patch path>` patches esp-idf with `<patch path>` patch file
+	* ex. `patch-esp-idf ./some.patch`
 * `$examples` is a shortcut for examples directory in esp-idf
 	* ex. cd `$examples`
 
