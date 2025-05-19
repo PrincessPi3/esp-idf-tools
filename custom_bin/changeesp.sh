@@ -1,6 +1,6 @@
 function getTargets() {
     tmpFile='/tmp/targets.tmp'
-    idf.py --list-targets > "$tmpFile"
+    idf.py --preview --list-targets > "$tmpFile"
     tr '\n' ' ' < "$tmpFile"
     rm "$tmpFile"
 }

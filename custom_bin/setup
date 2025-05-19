@@ -1,5 +1,5 @@
 #!/bin/bash
 echo -e "\nSetting up for $ESPTARGET\n"
-idf.py set-target $ESPTARGET
-idf.py menuconfig
+idf.py --preview set-target $ESPTARGET
+idf.py --preview menuconfig
 echo -e "\nAll done :3\n"

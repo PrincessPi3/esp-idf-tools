@@ -6,4 +6,4 @@ else
     read projname;
 fi
 
-idf.py create-project "$projname"
+idf.py --preview create-project "$projname"

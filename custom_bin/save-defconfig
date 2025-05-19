@@ -10,7 +10,7 @@ fi
 
 echo -e "\nRunning save-defconfig\n"
 
-idf.py save-defconfig
+idf.py --preview save-defconfig
 
 echo -e "\nDefaults saved to sdkconfig.defaults\n"
 echo -e "\nAll done :3\n"

@@ -9,7 +9,7 @@ some features require user to have passwordless sudo rights
 Literally the most schizophrenically overengineered thing I have ever made. idk why I did that  
 
 ## Quick start
-1. `git clone https://github.com/PrincessPi3/esp-idf-tools.git ~/esp-idf-tools`  
+1. `git clone --recursive https://github.com/PrincessPi3/esp-idf-tools.git ~/esp-idf-tools`  
 2. `bash ~/esp-idf-tools/esp-idf-tools-cmd.sh install`  
 3. `source ~/.zshrc`
 4. `get-esp-tools`  
@@ -115,6 +115,9 @@ Some take optional [branch] paramater
 	* ex. `patch-esp-idf ./some.patch`
 * `$examples` is a shortcut for examples directory in esp-idf
 	* ex. cd `$examples`
+
+### Sillyfilly-espdumper
+todo: integrate
 
 ### Cronjob
 reinstall from master everyday at 4am, logging out users with warn delays and rebooting after

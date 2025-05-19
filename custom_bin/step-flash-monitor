@@ -3,16 +3,16 @@ set -e # die on error
 
 echo -e "Clean, build, flash, monitor in steps, dying on error"
 
-echo -e "\ncleaning up first\n"
-bash fullclean
+# echo -e "\ncleaning up first\n"
+# bash fullclean
 
 echo -e "\nBuilding\n"
-idf.py build
+idf.py --preview build
 
 echo -e "\nFlashing to $ESPPORT\n"
-idf.py flash
+idf.py --preview flash
 
 echo -e "\nMonitor time on $ESPPORT for target $ESPTARGET at $ESPBAUD\n"
-idf.py monitor
+idf.py --preview monitor
 
 echo -e "\nAll done :3\n"

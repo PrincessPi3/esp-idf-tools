@@ -1,4 +1,4 @@
 #!/bin/bash
 echo -e "\nBuilding\n"
-idf.py build
+idf.py --preview build
 echo -e "\nAll done :3\n"

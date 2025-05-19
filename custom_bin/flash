@@ -1,4 +1,4 @@
 #!/bin/bash
 echo -e "\nFlashing an $ESPTARGET on $ESPPORT\n"
-idf.py flash
+idf.py --preview flash
 echo -e "\nAll done :3\n"

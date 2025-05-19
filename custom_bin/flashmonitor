@@ -1,4 +1,4 @@
 #!/bin/bash
 echo -e "\nFlashing and Monitoring for $ESPTARGET on $ESPPORT\n"
-idf.py flash monitor
+idf.py --preview flash monitor
 echo -e "\nAll done :3\n"

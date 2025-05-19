@@ -4,13 +4,13 @@ echo -e "\nFully Rebuildan~\n"
 bash fullclean
 
 echo -e "\nSetting up project for $ESPTARGET\n"
-idf.py set-target $ESPTARGET
+idf.py --preview set-target $ESPTARGET
 
 echo -e "\nErase flash? y/n"
 read wipe
 if [ "$wipe" == "y" ]; then
 	echo -e "\nExecuting erase-flash\n"
-	idf.py erase-flash
+	idf.py --preview erase-flash
 	echo -e "\nFlash wiped\n"
 fi
 
@@ -18,7 +18,7 @@ echo -e "\nRun menuconfig y/n?\n"
 read menuconfig
 if [ "$menuconfig" == "y" ]; then
 	echo -e "\nExecuting menuconfig\n"
-	idf.py menuconfig
+	idf.py --preview menuconfig
 	echo -e "\nConfig Complete\n"
 fi
 
@@ -26,7 +26,7 @@ echo -e "\nSave as Default Config? y/n?\n"
 read defconfig
 if [ "$defconfig" == "y" ]; then
 	echo -e "\nExecuting save-defconfig\n"
-	idf.py save-defconfig
+	idf.py --preview save-defconfig
 	echo -e "\nDefault Config Saved\n"
 fi
 
@@ -34,16 +34,16 @@ echo -e "\nBuild, Flash, and Monitor Now? y/n"
 read flashmon
 if [ "$flashmon" == "y" ]; then
 	echo -e "\nBuild, Flashing, and Monitoran~\n"
-	idf.py flash
+	idf.py --preview flash
 	echo -e "\nFlashed... Short Delay Before Monitor\n"
 	sleep 1
-	idf.py monitor
+	idf.py --preview monitor
 else
 	echo -e "\nBuild Now? y/n"
 	read build
 	if [ "$build" == "y" ]; then
 		echo -e "\nBuildan~\n"
-		idf.py build
+		idf.py --preview build
 		echo -e "\nBuild complete\n"
 	fi
 fi

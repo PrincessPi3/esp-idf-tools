@@ -2,12 +2,13 @@
 echo -e "\nProject sizes\n"
 
 echo -e "\nGeneral:\n"
-idf.py size
+idf.py --preview fullclean
+idf.py --preview size
 
 echo -e "\nComponants:\n"
-idf.py size-components
+idf.py --preview size-components
 
 echo -e "\nFiles:\n"
-idf.py size-files
+idf.py --preview size-files
 
 echo -e "\nAll done :3\n"

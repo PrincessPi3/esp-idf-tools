@@ -1,4 +1,4 @@
 #!/bin/bash
 echo -e "\nCleaning...\n"
-idf.py clean
+idf.py --preview clean
 echo -e "\nAll done :3\n"

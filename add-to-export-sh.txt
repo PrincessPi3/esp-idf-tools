@@ -7,7 +7,7 @@
 
 function getTargets() {
     tmpFile='/tmp/targets.tmp'
-    idf.py --list-targets > "$tmpFile"
+    idf.py --preview --list-targets > "$tmpFile"
     tr '\n' ' ' < "$tmpFile"
     rm "$tmpFile"
 }
@@ -80,8 +80,6 @@ alias exit-esp-tools="source $binDir/exit-esp-tools.sh"
 # cd $ESPIDFTOOLS_INSTALLDIR
 
 echo -e "\nesp-idf version: $ESP_IDF_VERSION commit $commitHash from branch $branchData"
-
-echo -e "\nrun with 'get-esp-tools'"
 
 echo -e "\nWelcome to esp-idf!\nAll done :3\n"
 

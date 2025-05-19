@@ -44,3 +44,8 @@
 
 1.1-dev-2
     improved speed of downloading esp-dev-kits
+
+1.2-dev-1
+    fixed small presentation bugs
+    added Sillyfilly-espdumper submodule
+    added `--preview` to several idf.py commands to use the very latest and esp32c5

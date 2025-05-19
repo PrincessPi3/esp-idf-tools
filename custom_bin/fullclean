@@ -33,6 +33,6 @@ if [ -f dependencies.lock ]; then
 	rm -f dependencies.lock
 fi
 
-idf.py fullclean
+idf.py --preview fullclean
 
 echo -e "\nAll done :3\n"

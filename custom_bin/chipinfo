@@ -16,7 +16,7 @@ esptool.py --port $ESPPORT --baud $ESPBAUD --chip auto get_security_info
 
 if [ -f "./CMakeLists.txt" ]; then
 	echo -e "\nEfuse Table:"
-	idf.py --port $ESPPORT --baud $ESPBAUD efuse-dump
+	idf.py --preview --port $ESPPORT --baud $ESPBAUD efuse-dump
 fi
 
 echo -e "\nAll donsies~ :3\n"
