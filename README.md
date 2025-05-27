@@ -95,7 +95,8 @@ Some take optional [branch] paramater
 		* ex. `changeport /dev/ttyUSB0` changes to /dev/ttyUSB0
 * `clean` idf.py clean  
 * `fullclean` fully resets a project, 'idf.py fullclean' plus remove the build dir and delete some temp and backup files  
-* `rebuildfull` does a `fullclean` but also an `erase-flash` and also `setup`  
+* `rebuild-interactive` interactively does a `fullclean` then optionally an `erase-flash` and `setup` optionally save-defconfig optionally build or flashmonitor
+* `rebuild-auto-flashmonitor` noninteractively
 * `setup` same as running `idf.py set-target $ESPTARGET; idf.py menuconfig; idf.py build`  
 * `flash` idf.py flash  
 * `monitor` idf.py monitor  
