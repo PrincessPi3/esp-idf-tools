@@ -90,6 +90,7 @@ Features:
  	`clean` idf.py clean  
 	`fullclean` fully resets a project, 'idf.py fullclean' plus remove the build dir and delete some temp and backup files  
 	`rebuildfull` does a `fullclean` but also an `erase-flash` and also `setup`  
+	rebuild-flash-monitor does a `fullclean` then `idf.py set-target` and finally `flashmonitor`
 	`setup` same as running `idf.py set-target $ESPTARGET; idf.py menuconfig; idf.py build`  
 	`flash` idf.py flash  
 	`monitor` idf.py monitor  

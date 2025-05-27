@@ -1,4 +1,12 @@
 #!/bin/bash
+set -e # no continue on errrrrrrr
+
 echo -e "\nFlashing and Monitoring for $ESPTARGET on $ESPPORT\n"
+
+# if tehre is no CMakeLists.txt in cwd, setup to defaults with idf.py set-target and not setup as that goes through menuconfig
+if [ ! -f "./CMakeLists.txt" ]; then
+    idf.py set-target $ESPTARGET
+done
+
 idf.py --preview flash monitor
 echo -e "\nAll done :3\n"

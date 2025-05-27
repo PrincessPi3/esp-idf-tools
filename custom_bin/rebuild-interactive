@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e # fail on any error
+
 echo -e "\nFully Rebuildan~\n"
 
 bash fullclean

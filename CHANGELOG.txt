@@ -49,3 +49,9 @@
     fixed small presentation bugs
     added Sillyfilly-espdumper submodule
     added `--preview` to several idf.py commands to use the very latest and esp32c5
+
+1.3-dev-0
+    renamed rebuildfull to rebuild-interactive
+    set rebuild-interactive to fail on any error
+    added rebuild-auto-flashmonitor to quickly fullclean, set up with defaults and $ESPTARGET, then flashmonitor, failing on any error
+    more information and better details on espinfo
