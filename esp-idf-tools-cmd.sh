@@ -306,7 +306,7 @@ function testAppendAlias() {
 	ret=$?
 	if [ ! $ret -eq 0 ]; then
 		writeToLog "ailas $1 not found, appending to $rcFile"
-		echo "$2" >> "$rcFile"
+		echo -e "$2" >> "$rcFile"
 		returnStatus
 	else
 		writeToLog "$1 found in $rcFile, skipping\n"

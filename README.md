@@ -2,8 +2,7 @@
 installs/reinstalls full esp-idf with my own additions on linux.  
 pulls from master so its the very latest
 
-built for debian-like systems
-only currently tested on zsh bash theoretically supported
+only currently tested on zsh and bash under debian-like, your mileage may vary depending on what features are used
 some features require user to have passwordless sudo rights  
   
 Literally the most schizophrenically overengineered thing I have ever made. idk why I did that  
