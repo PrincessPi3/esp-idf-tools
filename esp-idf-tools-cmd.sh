@@ -319,6 +319,7 @@ function handleAliasEnviron() {
 	grep -q '# esp-idf-tools' $rcFile
 	ret=$?
 
+	# add the friendly comment to the rcfile if its not there :3
 	if [ ! $ret -eq 0 ]; then
 		writeToLog "Adding esp-idf-tools aliases to $rcFile"
 		echo -e "\n# esp-idf-tools\n" >> $rcFile

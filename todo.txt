@@ -1,12 +1,25 @@
-add an "\n# esp-idf-tools" comment  to rcfile if none present before appending aliases and shit
-get a list of branches to view when inputting branch name in interactive/install/i
-install.sh for curl -s github/install.sh | "$SHELL" installation
-interactive/install/i seems to not work properly. variable scope?
-get update properly workan frong
-option on the other two repos
+esp-idf-cools-cmd.sh
+    add an "\n# esp-idf-tools" comment  to rcfile if none present before appending aliases and shit
+    get a list of branches to view when inputting branch name in interactive/install/i
+    check if run by root and if so, fail
+    option on download two other repos
+    interactive/install/i seems to not work properly. variable scope?
+    get update properly workan frong
+    some kinda more meaningful status indication instead of endless terminal spam?
+install.sh for curl -s github/install.sh | exec $SHELL installation
+    interactive by default or defaults mode
 test da shit proper in bash finafrickingly lmfao
     changeport/changeport.sh
-    recheck espinfo
-    recheck changeesp/changeesp.sh
-    recheck changebaud/changebaud.sh
-some kinda more meaningful status indication instead of endless terminal spam?
+    x recheck espinfo
+    x recheck changeesp/changeesp.sh
+    x recheck changebaud/changebaud.sh
+    x recheck exit-esp-info
+README/help
+    add install size to README
+    add installer to README
+    add uninstaller to README
+uninstaller
+    make uninstaller interactive by default to make sure of paths
+    check envvars for info
+    unset envvars if need be
+    option for default nuke
