@@ -48,6 +48,7 @@ echo -e "\tRemoving directories"
 rm -rf "$installDir/esp-idf" 2>/dev/null
 rm -rf "$installDir/esp-dev-kits" 2>/dev/null
 rm -rf "$installDir/esp-idf-tools" 2>/dev/null
+rm -rf "$installDir/.custom_bin" 2>/dev/null
 rm -rf "$installDir/.espressif" 2>/dev/null
 
 # nuke logs and supress errors
