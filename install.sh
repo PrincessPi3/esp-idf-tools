@@ -17,9 +17,9 @@ else
     installDir="$defaultInstallDir"
 fi
 
+# i dont think i actually need this lmfaso
 # detect shell and act accordingly
 defShell=$(awk -F: -v user="$(whoami)" '$1 == user {print $NF}' /etc/passwd)
-
 if [[ "$defShell" =~ zsh$ ]]; then
 	echo -e "\nSelected zsh shell automatically\n"
 	rcFile="$HOME/.zshrc"
