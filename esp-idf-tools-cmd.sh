@@ -124,8 +124,7 @@ function returnStatus() {
 }
 
 function writeToLog() {
-	echo -e "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): $1"
-	echo -e "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): $1" >> $log
+	echo -e "$(date '+%d/%m/%Y %H:%M:%S %Z (%s)'): $1" | tee -a "$log"
 }
 
 function messagePTS() {
@@ -421,8 +420,21 @@ handleReboot() {
 
 function handleCheckEspIdf() {
 	if [ ! -z $IDF_PYTHON_ENV_PATH ]; then
-		writeToLog "FAIL: Sanity check failed!\n\tesp-idf environment varibles found!\n\tPelase run from a fresh termnal that has not had get_idf ran!\n"
-		exit
+		writeToLog "esp-idf environment varibles found! Unsetting them"
+		# unset esp-idf/-tools envvars, just like exit-esp-tools
+		unset IDF_PYTHON_ENV_PATH
+		unset ESPIDFTOOLS_INSTALLDIR
+		unset IDF_PATH
+		unset ESP_IDF_VERSION
+		unset IDF_PYTHON_ENV_PATH
+		unset OPENOCD_SCRIPTS
+		unset ESP_ROM_ELF_DIR
+		unset IDF_DEACTIVATE_FILE_PATH
+		unset IDF_TOOLS_INSTALL_CMD
+		unset IDF_TOOLS_EXPORT_CMD
+		unset ESPPORT
+		unset ESPBAUD
+		unset ESPTARGET
 	else
 		writeToLog "Sanity check: Environment correct\n\tNo esp-idf environment variables found, proceeding\n"
 	fi
