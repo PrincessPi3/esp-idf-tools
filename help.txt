@@ -119,3 +119,6 @@ Cronjob:
 	    `crontab -e`
 	add below to bottom of file:
 		`0 4 * * * bash $HOME/esp/esp-install-custom/esp-idf-tools-cmd.sh cron`
+
+Uninstall:
+	curl -s https://raw.githubusercontent.com/PrincessPi3/esp-idf-tools/refs/heads/master/uninstall.sh | exec "$SHELL"; exec "$SHELL"

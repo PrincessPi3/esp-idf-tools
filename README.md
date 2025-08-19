@@ -10,11 +10,7 @@ Literally the most schizophrenically overengineered thing I have ever made. idk 
 Total install size (discounting needed packages) is about 9GiB  
 
 ## Quick start
-1. `mkdir ~/esp`
-2. `git clone --recursive https://github.com/PrincessPi3/esp-idf-tools.git ~/esp/esp-idf-tools`  
-2. `bash ~/esp/esp-idf-tools/esp-idf-tools-cmd.sh install`  
-3. `source ~/.bashrc`
-4. `get-esp-tools`  
+`curl -s https://raw.githubusercontent.com/PrincessPi3/esp-idf-tools/refs/heads/master/install.sh | exec "$SHELL"; exec "$SHELL"`
 
 ## Usage
 ```
@@ -77,6 +73,9 @@ Some take optional [branch] paramater
 	run-esp-cmd uninstall
 		uninstall esp-idf
 			`run-esp-cmd uninstall`
+
+Uninstall:
+	curl -s https://raw.githubusercontent.com/PrincessPi3/esp-idf-tools/refs/heads/master/uninstall.sh | exec "$SHELL"; exec "$SHELL"
 ```
 
 ## Features
