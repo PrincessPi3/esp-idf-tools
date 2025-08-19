@@ -44,10 +44,13 @@ else
 fi
 
 rcFile="$HOME/.bashrc" # absolute path only
-
 # get us our FUCKING ALIASES HOLY FUCK GOD DAMN SHIT FUCK IT\
 source "$rcFile" 2>/dev/null # >2?/dev/null is to redirect any errors
-defaultInstallDir="$HOME/esp"
+if [ -z $ESPIDFTOOLS_INSTALLDIR ]; then
+	installDir="$HOME/esp"
+else
+	installDir="$ESPIDFTOOLS_INSTALLDIR"
+fi
 
 if [ -z "$2" ]; then
 	gitBranch=master # branch from github
@@ -57,11 +60,11 @@ fi
 
 gitJobs=5 # number of jobs to download from github with
 rebootMins=3 # minutes of warning before reboot
-log="$defaultInstallDir/install.log" # log file
-versionData="$defaultInstallDir/version-data.log" # version data log file
-idfDir="$defaultInstallDir/esp-idf" # esp-idf path
+log="$installDir/install.log" # log file
+versionData="$installDir/version-data.log" # version data log file
+idfDir="$installDir/esp-idf" # esp-idf path
 exportScript=$idfDir/export.sh # export script
-customBinLocation="$defaultInstallDir/.custom_bin" # where custom bin scripts are placed
+customBinLocation="$installDir/.custom_bin" # where custom bin scripts are placed
 espressifLocation="$HOME/.espressif" # espressif tools install location
 runningDir="$( cd "$( dirname "$0" )" && pwd )"
 customBinFrom="$runningDir/custom_bin" # dir where custom scripts are coming FROM
@@ -306,7 +309,7 @@ function handleAliasEnviron() {
 	cp $rcFile $rcFile.bak # backup da thing first frong
 	# the pretty comment and such first
 	testAppendAlias "# esp-idf-tools aliases" "\n# esp-idf-tools"
-	testAppendAlias "ESPIDFTOOLS_INSTALLDIR" "export ESPIDFTOOLS_INSTALLDIR=\"$defaultInstallDir\""
+	testAppendAlias "ESPIDFTOOLS_INSTALLDIR" "export ESPIDFTOOLS_INSTALLDIR=\"$installDir\""
 	testAppendAlias "get-esp-tools" "alias get-esp-tools='. $exportScript'"
 	testAppendAlias "run-esp-cmd" "alias run-esp-cmd='bash $runningDir/esp-idf-tools-cmd.sh'"
 	testAppendAlias "esp-install-monitor" "alias esp-install-monitor='tail -n 75 -f $log'"
