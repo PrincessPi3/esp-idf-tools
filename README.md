@@ -7,6 +7,8 @@ some features require user to have passwordless sudo rights
   
 Literally the most schizophrenically overengineered thing I have ever made. idk why I did that  
 
+Total install size (discounting needed packages) is about 9GiB  
+
 ## Quick start
 1. `mkdir ~/esp`
 2. `git clone --recursive https://github.com/PrincessPi3/esp-idf-tools.git ~/esp/esp-idf-tools`  
