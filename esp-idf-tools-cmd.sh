@@ -82,13 +82,13 @@ scriptVers=$(cat "$runningDir/version.txt") # make sure version.txt does NOT hav
 arg=$1 # just rename the argument var for clarity with the functions
 
 if [ "$gitJobs" == "default" ]; then
-	gitCloneCmd="git clone --single-branch --depth 1 --recursive --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
+	gitCloneCmd="git clone --single-branch --depth=1 --recursive --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
 else
-	gitCloneCmd="git clone --single-branch --depth 1 --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
+	gitCloneCmd="git clone --single-branch --depth=1 --recursive --jobs $gitJobs --branch $gitBranch https://github.com/espressif/esp-idf $idfDir"
 fi
 
 gitUpdateCmd="git -C $idfDir reset --hard; git -C $idfDir clean -df; git -C $idfDir pull $idfDir" # mayhapsnasst?
-gitDevKits="git clone --single-branch --depth 1 --jobs $gitJobs --recursive https://github.com/espressif/esp-dev-kits.git $installDir/esp-dev-kits"
+gitDevKits="git clone --single-branch --depth=1 --jobs $gitJobs --recursive https://github.com/espressif/esp-dev-kits.git $installDir/esp-dev-kits"
 gitDevKitsUpdate="git -C $installDir/esp-dev-kits reset --hard; git -C $installDir/esp-dev-kits clean -df; git -C $installDir/esp-dev-kits pull"
 installCmd="$idfDir/install.sh all"
 toolsInstallCmd="python $idfDir/tools/idf_tools.py install all"
