@@ -7,7 +7,12 @@ esp-idf-cools-cmd.sh
     get update properly workan frong
     some kinda more meaningful status indication instead of endless terminal spam?
 x install.sh for curl -s github/install.sh | exec $SHELL installation
+    make it handle shit like
+        detecting existing dirs and erroring
+        working with other shells
+    verify the default mode works
     m (seems to go noninteractive by default?) interactive by default or defaults mode
+        get interactive mode workan
 x test da shit proper in bash finafrickingly lmfao
     x changeport/changeport.sh
     x recheck espinfo
