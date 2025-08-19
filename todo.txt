@@ -6,6 +6,7 @@ esp-idf-cools-cmd.sh
     interactive/install/i seems to not work properly. variable scope?
     get update properly workan frong
     some kinda more meaningful status indication instead of endless terminal spam?
+    think i brope interaCTIVE lol
 x install.sh for curl -s github/install.sh | exec $SHELL installation
     make it handle shit like
         detecting existing dirs and erroring

@@ -57,11 +57,11 @@ fi
 
 gitJobs=5 # number of jobs to download from github with
 rebootMins=3 # minutes of warning before reboot
-log="$installDir/install.log" # log file
-versionData="$installDir/version-data.log" # version data log file
-idfDir="$installDir/esp-idf" # esp-idf path
+log="$defaultInstallDir/install.log" # log file
+versionData="$defaultInstallDir/version-data.log" # version data log file
+idfDir="$defaultInstallDir/esp-idf" # esp-idf path
 exportScript=$idfDir/export.sh # export script
-customBinLocation="$installDir/.custom_bin" # where custom bin scripts are placed
+customBinLocation="$defaultInstallDir/.custom_bin" # where custom bin scripts are placed
 espressifLocation="$HOME/.espressif" # espressif tools install location
 runningDir="$( cd "$( dirname "$0" )" && pwd )"
 customBinFrom="$runningDir/custom_bin" # dir where custom scripts are coming FROM
