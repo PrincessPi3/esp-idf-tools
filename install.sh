@@ -59,6 +59,6 @@ git clone --recursive https://github.com/PrincessPi3/esp-idf-tools.git "$install
 # do da install
 ## tryan nuke mode for lulz
 echo -e "\n\nRunning install script!\n\n"
-bash -c "$installDir/esp-idf-tools/esp-idf-tools-cmd.sh nuke"
+bash $installDir/esp-idf-tools/esp-idf-tools-cmd.sh nuke
 
 echo -e "\n\nINSTALL COMPLETE\n\n"
