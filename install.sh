@@ -1,5 +1,6 @@
 #!/bin/bash
 echo -e "\n\nBEGINNING AUTOMATED INSTALL WITH DEFAULTS\n\n"
+installDir="$HOME/esp"
 
 # possible package manager shit for later
 # sudo apt update
@@ -36,13 +37,13 @@ unset ESPBAUD
 unset ESPTARGET
 
 # make installDir or fail silently if exists
-mkdir -p ~/esp
+mkdir -p "$installDir"
 
 # download da tools
-git clone --recursive https://github.com/PrincessPi3/esp-idf-tools.git ~/esp/esp-idf-tools
+git clone --recursive https://github.com/PrincessPi3/esp-idf-tools.git "$installDir/esp-idf-tools"
 
 # do da install
 ## tryan nuke mode for lulz
-bash -c "$HOME/esp/esp-idf-tools/esp-idf-tools-cmd.sh nuke"
+bash -c "$installDir/esp-idf-tools/esp-idf-tools-cmd.sh nuke"
 
 echo -e "\n\nINSTALL COMPLETE\n\n"
