@@ -11,5 +11,5 @@ unset ESPPORT
 unset ESPBAUD
 unset ESPTARGET
 exec "$SHELL" --login
-source $HOME/.zshrc
+source $HOME/.bashrc
 reset

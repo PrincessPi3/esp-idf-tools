@@ -1,5 +1,5 @@
 #!/bin/bash
-echo STARTING UNINSTALLATION
+echo "STARTING UNINSTALLATION"
 # nuke dirs
 rm -rf ~/esp/esp-idf 2>/dev/null
 rm -rf ~/esp/esp-dev-kits 2>/dev/null
@@ -18,3 +18,4 @@ sed -i '/get-esp-tools/d' ~/.bashrc
 sed -i '/run-esp-cmd/d' ~/.bashrc
 sed -i '/esp-install-monitor/d' ~/.bashrc
 sed -i '/esp-install-logs/d' ~/.bashrc
+echo "DONE UNINSTALLING"
