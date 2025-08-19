@@ -28,8 +28,8 @@ if [[ "$1" == "--help" || "$1" == "help" || "$1" == "-h" || "$1" == "h" ]]; then
 	exit
 fi
 
+# check for running shell and set rcFile accordingly
 defShell=$(awk -F: -v user="$(whoami)" '$1 == user {print $NF}' /etc/passwd)
-
 if [[ "$defShell" =~ zsh$ ]]; then
 	echo -e "\nSelected zsh shell automatically\n"
 	rcFile="$HOME/.zshrc"
