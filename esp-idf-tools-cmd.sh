@@ -316,6 +316,14 @@ function testAppendAlias() {
 }
 
 function handleAliasEnviron() {
+	grep -q '# esp-idf-tools' $rcFile
+	ret=$?
+
+	if [ ! $ret -eq 0 ]; then
+		writeToLog "Adding esp-idf-tools aliases to $rcFile"
+		echo -e "\n# esp-idf-tools\n" >> $rcFile
+	fi
+
 	testAppendAlias "get-esp-tools" "alias get-esp-tools='. $exportScript'"
 	testAppendAlias "run-esp-cmd" "alias run-esp-cmd='bash $runningDir/esp-idf-tools-cmd.sh'"
 	testAppendAlias "esp-install-monitor" "alias esp-install-monitor='tail -n 75 -f $log'"

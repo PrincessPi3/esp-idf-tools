@@ -9,3 +9,4 @@ test da shit proper in bash finafrickingly lmfao
     recheck espinfo
     recheck changeesp/changeesp.sh
     recheck changebaud/changebaud.sh
+some kinda more meaningful status indication instead of endless terminal spam?
