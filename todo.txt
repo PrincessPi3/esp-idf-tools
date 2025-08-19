@@ -5,3 +5,7 @@ interactive/install/i seems to not work properly. variable scope?
 get update properly workan frong
 option on the other two repos
 test da shit proper in bash finafrickingly lmfao
+    changeport/changeport.sh
+    recheck espinfo
+    recheck changeesp/changeesp.sh
+    recheck changebaud/changebaud.sh

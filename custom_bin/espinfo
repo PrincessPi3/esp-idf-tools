@@ -1,3 +1,4 @@
+#!/bin/bash
 echo "esp-idf-tools install dir (\$ESPIDFTOOLS_INSTALLDIR): $ESPIDFTOOLS_INSTALLDIR"
 echo "esp-idf-tools custom_bin dir: $ESPIDFTOOLS_INSTALLDIR/.custom_bin/"
 echo "tools:"

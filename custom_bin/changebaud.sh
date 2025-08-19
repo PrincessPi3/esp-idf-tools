@@ -1,3 +1,4 @@
+#!/bin/bash
 function subprocess() {
     echo -e "\nChanging ESPBAUD\n\t1: 9600\n\t2: 115200\n\t3: 230400\n\t4: 460800\n\t5: 1152000\n\t6: 1500000\n\nEnter Selection: "
     read baudRate

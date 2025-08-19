@@ -1,3 +1,4 @@
+#!/bin/bash
 function getTargets() {
     tmpFile='/tmp/targets.tmp'
     idf.py --preview --list-targets > "$tmpFile"
