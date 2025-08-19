@@ -33,3 +33,4 @@ uninstaller
     option for default nuke
 export
     check for existance of esp model before allowing on export and changesp
+tool to git pull recursive, retool, update, install as needed

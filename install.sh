@@ -1,6 +1,25 @@
 #!/bin/bash
+echo -e "\n\nBEGINNING AUTOMATED INSTALL WITH DEFAULTS\n\n"
+
+# possible package manager shit for later
 # sudo apt update
 # sudo apt install git wget flex bison gperf python3 python3-pip python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0
+
+# detect shell and act accordingly
+defShell=$(awk -F: -v user="$(whoami)" '$1 == user {print $NF}' /etc/passwd)
+
+if [[ "$defShell" =~ zsh$ ]]; then
+	echo -e "\nSelected zsh shell automatically\n"
+	rcFile="$HOME/.zshrc"
+elif [[ "$defShell" =~ bash$ ]]; then 
+	echo -e "\nSelected bash shell automatically\n"
+	rcFile="$HOME/.bashrc"
+elif [[ "$defShell" =~ sh$ ]]; then
+	rcFile="" # no need for rcFile var when run as cron
+else
+	echo "unsupported shell $defShell"
+	exit
+fi
 
 # unset any esp-idf/-tools envvars
 unset ESPIDFTOOLS_INSTALLDIR
@@ -16,6 +35,13 @@ unset ESPPORT
 unset ESPBAUD
 unset ESPTARGET
 
+# make installDir or fail silently if exists
 mkdir -p ~/esp
+
+# download da tools
 git clone --recursive https://github.com/PrincessPi3/esp-idf-tools.git ~/esp/esp-idf-tools
+
+# do da install
 bash ~/esp/esp-idf-tools/esp-idf-tools-cmd.sh # run as default noninteractive mode
+
+echo -e "\n\nINSTALL COMPLETE\n\n"
