@@ -27,18 +27,19 @@ binDir="$ESPIDFTOOLS_INSTALLDIR/.custom_bin"
 
 echo -e "\nChecking for Serial Devices in dmesg\n"
 COUNTER=0
-devarr=()
+# devarr=()
+declare -a devarr
 for line in $(dmesg | tail -50 | grep -o -E "tty[A-Z]{3}[0-9]{0,2}" | sort -u); do
                 echo -e "$COUNTER  /dev/$line"
                 devarr[$COUNTER]="/dev/$line"
-                COUNTER=$((COUNTER+1))
+                COUNTER=$(($COUNTER+1))
 done
 
 if [ $COUNTER -gt 0 ]; then
     echo -e "\nEnter TTY Number You'd Like:"
     read tty
-    ttyselect=${devarr[$tty]}
-else 
+    ttyselect="${devarr[$tty]}"
+else
     echo -e "\nNo Serial Devices Found, Select one later with 'changeport'\n"
 fi
 
@@ -47,9 +48,9 @@ read esp
 
 # echo -e "\nSetting environment variables\n"
 export PATH="$ESPIDFTOOLS_INSTALLDIR/.custom_bin:$PATH"
-export ESPPORT=$ttyselect
+export ESPPORT="$ttyselect"
 export ESPBAUD=460800
-export ESPTARGET=$esp
+export ESPTARGET="$esp"
 export examples="$ESPIDFTOOLS_INSTALLDIR/esp-idf/examples"
 
 echo -e "Installation Variables:"

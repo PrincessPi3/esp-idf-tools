@@ -31,3 +31,5 @@ uninstaller
     check envvars for info
     unset envvars if need be
     option for default nuke
+export
+    check for existance of esp model before allowing on export and changesp
