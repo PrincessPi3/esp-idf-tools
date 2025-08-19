@@ -55,18 +55,6 @@ else
 	gitBranch="$2"
 fi
 
-if [ -z "$ESPIDFTOOLS_INSTALLDIR" ]; then
-	# cant seem to get this one to use writeToLog
-	echo -e "ESPIDFTOOLS_INSTALLDIR environment variable not found, appending to $rcFile\n"
-	echo "export ESPIDFTOOLS_INSTALLDIR=\"$defaultInstallDir\"" >> "$rcFile"
-	installDir="$defaultInstallDir"
-	aliasInstallDirChk=$?
-else
-	echo -e "ESPIDFTOOLS_INSTALLDIR environment variable found, skipping\n"
-	installDir="$ESPIDFTOOLS_INSTALLDIR"
-	aliasInstallDirChk=0
-fi
-
 gitJobs=5 # number of jobs to download from github with
 rebootMins=3 # minutes of warning before reboot
 log="$installDir/install.log" # log file
@@ -318,6 +306,7 @@ function testAppendAlias() {
 function handleAliasEnviron() {
 	# the pretty comment and such first
 	testAppendAlias "# esp-idf-tools aliases" "\n# esp-idf-tools\n"
+	testAppendAlias "ESPIDFTOOLS_INSTALLDIR" "export ESPIDFTOOLS_INSTALLDIR=\"$defaultInstallDir\""
 	testAppendAlias "get-esp-tools" "alias get-esp-tools='. $exportScript'"
 	testAppendAlias "run-esp-cmd" "alias run-esp-cmd='bash $runningDir/esp-idf-tools-cmd.sh'"
 	testAppendAlias "esp-install-monitor" "alias esp-install-monitor='tail -n 75 -f $log'"

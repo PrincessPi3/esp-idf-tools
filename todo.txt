@@ -21,9 +21,9 @@ x test da shit proper in bash finafrickingly lmfao
     x recheck exit-esp-info
 README/help
     installer command
-        curl -s https://raw.githubusercontent.com/PrincessPi3/esp-idf-tools/refs/heads/master/install.sh | exec $SHELL
+        curl -s https://raw.githubusercontent.com/PrincessPi3/esp-idf-tools/refs/heads/master/install.sh | exec $SHELL; exec $SHELL
     uninstaller command
-        curl -s https://raw.githubusercontent.com/PrincessPi3/esp-idf-tools/refs/heads/master/uninstall.sh | exec $SHELL
+        curl -s https://raw.githubusercontent.com/PrincessPi3/esp-idf-tools/refs/heads/master/uninstall.sh | exec $SHELL; exec $SHELL
 uninstaller
     make uninstaller interactive by default to make sure of paths
     check envvars for info
