@@ -6,10 +6,10 @@ esp-idf-cools-cmd.sh
     interactive/install/i seems to not work properly. variable scope?
     get update properly workan frong
     some kinda more meaningful status indication instead of endless terminal spam?
-install.sh for curl -s github/install.sh | exec $SHELL installation
-    interactive by default or defaults mode
-test da shit proper in bash finafrickingly lmfao
-    changeport/changeport.sh
+x install.sh for curl -s github/install.sh | exec $SHELL installation
+    m (seems to go noninteractive by default?) interactive by default or defaults mode
+x test da shit proper in bash finafrickingly lmfao
+    x changeport/changeport.sh
     x recheck espinfo
     x recheck changeesp/changeesp.sh
     x recheck changebaud/changebaud.sh

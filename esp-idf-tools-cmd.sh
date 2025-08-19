@@ -301,30 +301,23 @@ function handleSetupEnvironment() {
 }
 
 function testAppendAlias() {
-	echo "Testing alias '$1'"
-	alias $1 2>/dev/null # redirect errrors to keep it lookan clean
+	echo "Testing alias '$1' in $rcFile"
+	grep -q "$1" "$rcFile"
 	ret=$?
 	if [ ! $ret -eq 0 ]; then
-		writeToLog "$1 not found, appending to $rcFile"
+		writeToLog "ailas $1 not found, appending to $rcFile"
 		echo "$2" >> "$rcFile"
 		returnStatus
 	else
-		writeToLog "$1 found: $(alias $1), skipping\n"
+		writeToLog "$1 found in $rcFile, skipping\n"
 	fi
 
 	return $ret	
 }
 
 function handleAliasEnviron() {
-	grep -q '# esp-idf-tools' $rcFile
-	ret=$?
-
-	# add the friendly comment to the rcfile if its not there :3
-	if [ ! $ret -eq 0 ]; then
-		writeToLog "Adding esp-idf-tools aliases to $rcFile"
-		echo -e "\n# esp-idf-tools\n" >> $rcFile
-	fi
-
+	# the pretty comment and such first
+	testAppendAlias "# esp-idf-tools aliases" "\n# esp-idf-tools\n"
 	testAppendAlias "get-esp-tools" "alias get-esp-tools='. $exportScript'"
 	testAppendAlias "run-esp-cmd" "alias run-esp-cmd='bash $runningDir/esp-idf-tools-cmd.sh'"
 	testAppendAlias "esp-install-monitor" "alias esp-install-monitor='tail -n 75 -f $log'"
