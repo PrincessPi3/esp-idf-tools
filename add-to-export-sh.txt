@@ -20,7 +20,7 @@ installDate=installDateTAG
 branchData=branchDataTAG
 
 if [ -z "$ESPIDTOOLS_INSTALLDIR" ]; then
-    echo -e "\nFAIL: ESPIDFTOOLS_INSTALLDIR environment variable not found!\nReinstall via script or manually add to ~/.zshrc\n"
+    echo -e "\nFAIL: ESPIDFTOOLS_INSTALLDIR environment variable not found!\nReinstall via script or manually add to ~/.bashrc\n"
 fi
 
 binDir="$ESPIDFTOOLS_INSTALLDIR/.custom_bin"

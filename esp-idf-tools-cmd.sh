@@ -43,7 +43,7 @@ else
 	exit
 fi
 
-rcFile="$HOME/.zshrc" # absolute path only
+rcFile="$HOME/.bashrc" # absolute path only
 
 # get us our FUCKING ALIASES HOLY FUCK GOD DAMN SHIT FUCK IT\
 source "$rcFile" 2>/dev/null # >2?/dev/null is to redirect any errors
@@ -552,8 +552,8 @@ elif [[ "$arg" == "interactive" || "$arg" == "install" || "$arg" == "i" ]]; then
 	
 	echo "Enter git branch to pull from, default: $gitBranch"
 	read readGitBranch
-	
-	echo "Enter full path to rc file (.bashrc, .zshrc) default: $rcFile"
+
+	echo "Enter full path to rc file (/home/user/.bashrc, /home/user/.zshrc) default: $rcFile"
 	read readRcFile
 
 	echo "Enter numeber of jobs to download from github with, default: $gitJobs"
