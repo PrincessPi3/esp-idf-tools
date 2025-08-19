@@ -1,7 +1,20 @@
 #!/bin/bash
+# settings
+defaultInstallDir="$HOME/esp"
+
+echo "STARTING UNINSTALLATION"
+
+# get the installDir or use default
+if [ ! -z $ESPIDFTOOLS_INSTALLDIR ]; then
+    echo "envvar ESPIDFTOOLS_INSTALLDIR found! setting install dir to $ESPIDFTOOLS_INSTALLDIR"
+    installDir="$ESPIDFTOOLS_INSTALLDIR"
+else
+    echo "envvar ESPIDFTOOLS_INSTALLDIR not found! using default install dir $defaultInstallDir"
+    installDir="$defaultInstallDir"
+fi
+
 # detect shell and act accordingly
 defShell=$(awk -F: -v user="$(whoami)" '$1 == user {print $NF}' /etc/passwd)
-
 if [[ "$defShell" =~ zsh$ ]]; then
 	echo -e "\nSelected zsh shell automatically\n"
 	rcFile="$HOME/.zshrc"
@@ -14,8 +27,6 @@ else
 	echo "unsupported shell $defShell"
 	exit
 fi
-
-echo "STARTING UNINSTALLATION"
 
 # unset any esp-idf/-tools envvars
 echo -e "\tUnsetting environment variables"
@@ -34,15 +45,15 @@ unset ESPTARGET
 
 # nuke dirs and supress errors
 echo -e "\tRemoving directories"
-rm -rf ~/esp/esp-idf 2>/dev/null
-rm -rf ~/esp/esp-dev-kits 2>/dev/null
-rm -rf ~/esp/esp-idf-tools 2>/dev/null
-rm -rf ~/.espressif 2>/dev/null
+rm -rf "$installDir/esp-idf" 2>/dev/null
+rm -rf "$installDir/esp-dev-kits" 2>/dev/null
+rm -rf "$installDir/esp-idf-tools" 2>/dev/null
+rm -rf "$installDir/.espressif" 2>/dev/null
 
 # nuke logs and supress errors
 echo -e "\tRemoving log files"
-rm -f ~/esp/install.log 2>/dev/null
-rm -f ~/esp/version-data.log 2>/dev/null
+rm -f "$installDir/install.log" 2>/dev/null
+rm -f "$installDir/version-data.log" 2>/dev/null
 
 # cleanup $rcFile
 echo -e "\tCleaning up "$rcFile"
@@ -54,4 +65,5 @@ sed -i '/esp-install-monitor/d' "$rcFile"
 sed -i '/esp-install-logs/d' "$rcFile"
 ## remove leading and trailing newlines in $rcFile in place
 printf "%s" "$(cat $rcFile)" > "$rcFile"
+
 echo "DONE UNINSTALLING"
