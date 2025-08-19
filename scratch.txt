@@ -1,0 +1,76 @@
+nuke:
+    no --single-branch
+        Git clone completed in 566 seconds
+        Installer completed in 251 seconds
+        Extra tools installer completed in 138 seconds
+        reinstall completed in 957 seconds
+    with --single-branch
+        Git CLONE completed in 398 seconds # markedly faster
+        Installer completed in 277 seconds # slightly slower
+        Extra tools installer completed in 169 seconds # slighly slower
+        reinstall completed in 846 seconds # still a bit faster
+
+further study is required
+
+
+exportCatChk
+pkgInstallChk # doesnt always runnn
+gitChk # is set by eithr clone or pull
+installChk
+toolsInstallChk # usually errors~
+exportSedReturnChk
+exportSedVersionChk
+exportSedDateChk
+exportSedHashChk
+aliasRunEspReinstallChk
+aliasEspMonitorchk
+aliasEspLogsChk
+aliasInstallDirChk
+
+x warnChk // after loop of warning users
+x logoutChk // after loop of logging out users
+x gitLogChk // after apppending the git log to $versionData
+x gitHashChk // on get git hash 
+x rmIdfDirChk // on delete esp-idf dir
+x rmEspressifChk // on delete .espressif dir
+x mkInstallDirChk // on create install dir
+x restoreExportScriptChk // on restoring the export.sh.bak
+x rmExportScriptCh // on deleting export script
+x backupExportScriptChk // on backing up the new export.sh.bak
+x customBinExecChk // on making custom scripts executable
+x cpCustomBinChk // copying the new custom scripts
+x rmCustomBinChk // on delete custom bins dir
+sleepChk // on wake from sleep\
+
+# default values for retcodes
+exportCatChk=0
+pkgInstallChk=0
+gitChk=0
+installChk=0
+toolsInstallChk=0
+exportSedReturnChk=0
+exportSedVersionChk=0
+exportSedDateChk=0
+exportSedHashChk=0
+aliasRunEspReinstallChk=0
+aliasEspMonitorchk=0
+aliasEspLogsChk=0
+aliasInstallDirChk=0
+warnChk=0
+logoutChk=0
+gitLogChk=0
+gitHashChk=0
+rmIdfDirChk=0
+rmEspressifChk=0
+mkInstallDirChk=0
+restoreExportScriptChk=0
+rmExportScriptChk=0
+backupExportScriptChk=0
+customBinExecChk=0
+cpCustomBinChk=0
+rmCustomBinChk=0
+sleepChk=0
+rmExportBackupChk=0
+
+
+shutdown -k "message" // send out warning and disable logins, but do not shutdown
