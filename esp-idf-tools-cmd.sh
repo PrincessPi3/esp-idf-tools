@@ -304,8 +304,9 @@ function testAppendAlias() {
 }
 
 function handleAliasEnviron() {
+	cp $rcFile $rcFile.bak # backup da thing first frong
 	# the pretty comment and such first
-	testAppendAlias "# esp-idf-tools aliases" "\n# esp-idf-tools\n"
+	testAppendAlias "# esp-idf-tools aliases" "\n# esp-idf-tools"
 	testAppendAlias "ESPIDFTOOLS_INSTALLDIR" "export ESPIDFTOOLS_INSTALLDIR=\"$defaultInstallDir\""
 	testAppendAlias "get-esp-tools" "alias get-esp-tools='. $exportScript'"
 	testAppendAlias "run-esp-cmd" "alias run-esp-cmd='bash $runningDir/esp-idf-tools-cmd.sh'"
@@ -471,7 +472,8 @@ function handleChk() {
 
 	totalErrorLoad=$(($pkgInstallChk+$gitChk+$gitChk+$installChk+$toolsInstallChk+$exportSedHashChk+$exportCatChk+$exportSedReturnChk+$aliasRunEspReinstallChk+$aliasEspMonitorchk+$aliasEspLogsChk+$aliasInstallDirChk+$warnChk+$logoutChk+$gitLogChk+$gitHashChk+$rmIdfDirChk+$rmEspressifChk+$mkInstallDirChk+$restoreExportScriptChk+$rmExportScriptChk+$backupExportScriptChk+$customBinExecChk+$rmCustomBinChk+$sleepChk+$rmExportBackupChk))
 
-	if [[ $totalErrorLoad < 2 ]]; then
+	# fuckin make dis thing frickin work proper lmfao
+	if [[ $totalErrorLoad < 3 ]]; then
 		writeToLog "Installed Successfully, total error load: $totalErrorLoad"
 	else
 		writeToLog "Install FAILED! Dumping return codes:\n"

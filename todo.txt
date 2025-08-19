@@ -7,6 +7,7 @@ esp-idf-cools-cmd.sh
     get update properly workan frong
     some kinda more meaningful status indication instead of endless terminal spam?
     think i brope interaCTIVE lol
+    do not show failure message on python returning 1
 x install.sh for curl -s github/install.sh | exec $SHELL installation
     make it handle shit like
         detecting existing dirs and erroring
