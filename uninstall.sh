@@ -6,10 +6,10 @@ echo "STARTING UNINSTALLATION"
 
 # get the installDir or use default
 if [ ! -z $ESPIDFTOOLS_INSTALLDIR ]; then
-    echo "envvar ESPIDFTOOLS_INSTALLDIR found! setting install dir to $ESPIDFTOOLS_INSTALLDIR"
+    echo -e "\tenvvar ESPIDFTOOLS_INSTALLDIR found! setting install dir to $ESPIDFTOOLS_INSTALLDIR"
     installDir="$ESPIDFTOOLS_INSTALLDIR"
 else
-    echo "envvar ESPIDFTOOLS_INSTALLDIR not found! using default install dir $defaultInstallDir"
+    echo -e "\tenvvar ESPIDFTOOLS_INSTALLDIR not found! using default install dir $defaultInstallDir"
     installDir="$defaultInstallDir"
 fi
 
