@@ -605,6 +605,9 @@ elif [[ "$arg" == "cron" || "$arg" == "c" ]]; then # full install with warn, sle
 	sleepMins=5
 	idfGet="update"
 
+	# make dir structure or fail silently if exists
+	mkdir -p "$installDir" # defaults to $HOME/esp
+
 	handleStart
 	messagePTS "\n\nesp-idf-tools action $action started!\nWill reboot with $sleepMins minutes delay when complete!\n\n"
 	handleClearInstallLog
