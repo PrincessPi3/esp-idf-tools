@@ -11,7 +11,8 @@ rm -f ~/esp/install.log 2>/dev/null
 rm -f ~/esp/version-data.log 2>/dev/null
 
 # cleanup ~/.bashrc
-# with first one, make a backup
+## with first one, make a backup
+## after dat, no backups
 sed -i.bak '/# esp-idf-tools/d' ~/.bashrc
 sed -i '/get-esp-tools/d' ~/.bashrc
 sed -i '/run-esp-cmd/d' ~/.bashrc
