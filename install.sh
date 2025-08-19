@@ -2,7 +2,7 @@
 # settings
 defaultInstallDir="$HOME/esp"
 
-echo -e "\n\nBEGINNING AUTOMATED INSTALL WITH DEFAULTS\n\n"
+echo "\BEGINNING AUTOMATED INSTALL WITH DEFAULTS"
 
 # possible package manager shit for later
 # sudo apt update
@@ -10,10 +10,10 @@ echo -e "\n\nBEGINNING AUTOMATED INSTALL WITH DEFAULTS\n\n"
 
 # get the installDir or use default
 if [ ! -z $ESPIDFTOOLS_INSTALLDIR ]; then
-    echo "envvar ESPIDFTOOLS_INSTALLDIR found! setting install dir to $ESPIDFTOOLS_INSTALLDIR"
+    echo -e "\tenvvar ESPIDFTOOLS_INSTALLDIR found! setting install dir to $ESPIDFTOOLS_INSTALLDIR"
     installDir="$ESPIDFTOOLS_INSTALLDIR"
 else
-    echo "envvar ESPIDFTOOLS_INSTALLDIR not found! using default install dir $defaultInstallDir"
+    echo -e "\tenvvar ESPIDFTOOLS_INSTALLDIR not found! using default install dir $defaultInstallDir"
     installDir="$defaultInstallDir"
 fi
 
@@ -21,19 +21,20 @@ fi
 # detect shell and act accordingly
 defShell=$(awk -F: -v user="$(whoami)" '$1 == user {print $NF}' /etc/passwd)
 if [[ "$defShell" =~ zsh$ ]]; then
-	echo -e "\nSelected zsh shell automatically\n"
+	echo -e "\tSelected zsh shell automatically"
 	rcFile="$HOME/.zshrc"
 elif [[ "$defShell" =~ bash$ ]]; then 
-	echo -e "\nSelected bash shell automatically\n"
+	echo -e "\tSelected bash shell automatically"
 	rcFile="$HOME/.bashrc"
 elif [[ "$defShell" =~ sh$ ]]; then
 	rcFile="" # no need for rcFile var when run as cron
 else
-	echo "unsupported shell $defShell"
-	exit
+	echo -e "\nFAIL: Unsupported shell $defShell\n"
+	exit 1
 fi
 
 # unset any esp-idf/-tools envvars
+echo -e "\tUnsetting any esp-idf/-tools environment variables"
 unset ESPIDFTOOLS_INSTALLDIR
 unset IDF_PATH
 unset ESP_IDF_VERSION
@@ -48,13 +49,16 @@ unset ESPBAUD
 unset ESPTARGET
 
 # make installDir or fail silently if exists
+echo -e "\tCreating $installDir if it does not exist"
 mkdir -p "$installDir"
 
 # download da tools
+echo -e "\tDownloading esp-idf-tools to $installDir/esp-idf-tools"
 git clone --recursive https://github.com/PrincessPi3/esp-idf-tools.git "$installDir/esp-idf-tools"
 
 # do da install
 ## tryan nuke mode for lulz
+echo -e "\n\nRunning install script!\n\n"
 bash -c "$installDir/esp-idf-tools/esp-idf-tools-cmd.sh nuke"
 
 echo -e "\n\nINSTALL COMPLETE\n\n"
