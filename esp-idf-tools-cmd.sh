@@ -526,12 +526,12 @@ if [[ "$arg" == "test" || "$arg" == "t" ]]; then # minimal actions taken, echo t
 	gitUpdateCmd=$updateCmdTemp
 
 	handleStart
+	handleAliasEnviron
 	handleCheckInstallPackages
 	handleCustomBins
 	handleDownloadInstall
 	handleExport
 	handleTestExport
-	handleAliasEnviron
 	handleEnd
 
 	exit
@@ -592,9 +592,9 @@ elif [[ "$arg" == "interactive" || "$arg" == "install" || "$arg" == "i" ]]; then
 	writeToLog "Interactive vars set:\n\tinstallDir: $installDir\n\tgitBranch: $gitBranch\n\trcFile: $rcFile\n\tgitJobs: $gitJobs\n\tidfGet: $idfGet\n"
 
 	handleStart
+	handleAliasEnviron
 	handleCheckInstallPackages
 	handleSetupEnvironment
-	handleAliasEnviron
 	handleCustomBins
 	handleDownloadInstall
 	handleExport
@@ -628,9 +628,9 @@ elif [[ "$arg" == "update" || "$arg" == "u" ]]; then # update without logouts or
 	sleepMins=0
 
 	handleStart
-	handleClearInstallLog
+	handleAliasEnviron # not needed?
+	handleClearInstallLog # no needed?
 	handleSetupEnvironment
-	handleAliasEnviron
 	handleCustomBins
 	handleDownloadInstall
 	handleExport
@@ -648,9 +648,9 @@ elif [[ "$arg" == "nuke" || "$arg" == "n" ]]; then
 	idfGet="download"
 
 	handleStart
+	handleAliasEnviron
 	handleClearInstallLog
 	handleSetupEnvironment
-	handleAliasEnviron
 	handleCustomBins
 	handleDownloadInstall
 	handleExport
@@ -665,9 +665,9 @@ elif [[ "$arg" == "nukereboot" || "$arg" == "nr" || "$arg" == "rebootnuke" || "$
 
 	handleStart
 	messagePTS "\n\nesp-idf-tools action $action started!\nWill reboot with $sleepMins minutes delay when complete!\n\n"
+	handleAliasEnviron
 	handleClearInstallLog
 	handleSetupEnvironment
-	handleAliasEnviron
 	handleCustomBins
 	handleDownloadInstall
 	handleExport
@@ -687,11 +687,11 @@ else # full noninteractive (re)install without logout, reboot, or sleeps
 
 	handleStart
 	handleClearInstallLog
+	handleAliasEnviron
 	handleSetupEnvironment
 	handleCustomBins
 	handleDownloadInstall
 	handleExport
-	handleAliasEnviron
 	handleEnd
 
 	exit
