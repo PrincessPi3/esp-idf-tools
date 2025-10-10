@@ -55,3 +55,8 @@
     set rebuild-interactive to fail on any error
     added rebuild-auto-flashmonitor to quickly fullclean, set up with defaults and $ESPTARGET, then flashmonitor, failing on any error
     more information and better details on espinfo
+
+1.5-dev-0
+    removed .py from esptool.py usage for depreciation
+    added build dir test to menuconfig and if not present, runs setup
+    updated chipinfo to change get_security_info, read_flash_status, flash_id, and chip_id into get-security-info, read-flash-status, flash-id, and chip-id respectively for depreciation
