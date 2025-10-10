@@ -1,4 +1,4 @@
 #!/bin/bash
 echo -e "\nErasing flash on $ESPPORT\n"
-esptool.py --port $ESPPORT --baud $ESPBAUD --chip $ESPTARGET erase_flash
+esptool --port $ESPPORT --baud $ESPBAUD --chip $ESPTARGET erase_flash
 echo -e "\nAll done :3\n"

@@ -3,16 +3,16 @@ echo -e "\nGetting ESP Chip Info...\n"
 # echo -e "Base MAC Address:"
 # esptool.py --port $ESPPORT --baud $ESPBAUD --chip auto read_mac
 echo -e "\nChip ID:"
-esptool.py --port $ESPPORT --baud $ESPBAUD --chip auto chip_id
+esptool --port $ESPPORT --baud $ESPBAUD --chip auto chip_id
 
 echo -e "\nFlash ID:"
-esptool.py --port $ESPPORT --baud $ESPBAUD --chip auto flash_id
+esptool --port $ESPPORT --baud $ESPBAUD --chip auto flash_id
 
 echo -e "\nFlash Status:"
-esptool.py --port $ESPPORT --baud $ESPBAUD --chip auto read_flash_status
+esptool --port $ESPPORT --baud $ESPBAUD --chip auto read_flash_status
 
 echo -e "\nSecurity Info:"
-esptool.py --port $ESPPORT --baud $ESPBAUD --chip auto get_security_info
+esptool --port $ESPPORT --baud $ESPBAUD --chip auto get_security_info
 
 if [ -f "./CMakeLists.txt" ]; then
 	echo -e "\nEfuse Table:"

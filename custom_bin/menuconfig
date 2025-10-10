@@ -1,4 +1,9 @@
 #!/bin/bash
+if [ ! -d build ]; then
+    echo -e "\nNot set up! Setting up for $ESPTARGET on $ESPPORT at $ESPBAUD baud\n"
+    setup
+fi
+
 echo -e "\nRunning Menuconfig\n"
 idf.py --preview menuconfig
 echo -e "\nAll done :3\n"
