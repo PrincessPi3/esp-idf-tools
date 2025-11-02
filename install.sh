@@ -1,4 +1,10 @@
 #!/bin/bash
+# usage
+## install esp-idf-tools but dont install esp-idf
+### curl -s https://raw.githubusercontent.com/PrincessPi3/esp-idf-tools/refs/heads/master/install.sh | exec "$SHELL"
+## install esp-idf all with esp-idf-tools
+### installer=$(curl -s https://raw.githubusercontent.com/PrincessPi3/esp-idf-tools/refs/heads/master/install.sh) && "$SHELL $installer full"
+
 # settings
 defaultInstallDir="$HOME/esp"
 
