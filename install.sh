@@ -57,9 +57,13 @@ echo -e "\tDownloading esp-idf-tools to $installDir/esp-idf-tools"
 git clone --recursive https://github.com/PrincessPi3/esp-idf-tools.git "$installDir/esp-idf-tools"
 
 # do da install
-## tryan nuke mode for lulz
-echo -e "\n\nRunning install script!\n\n"
-chmod +x "$installDir/esp-idf-tools/esp-idf-tools-cmd.sh"
-bash "$installDir/esp-idf-tools/esp-idf-tools-cmd.sh" nuke
+if [[ "$1" == "full" ]]; then
+	## tryan nuke mode for lulz
+	echo -e "\n\nRunning install script!\n\n"
+	chmod +x "$installDir/esp-idf-tools/esp-idf-tools-cmd.sh"
+	bash "$installDir/esp-idf-tools/esp-idf-tools-cmd.sh" nuke
+else
+	echo -e "\nskipping install esp-idf\n"
+fi
 
 echo -e "\n\nINSTALL COMPLETE\n\n"
