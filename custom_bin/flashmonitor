@@ -5,8 +5,7 @@ echo -e "\nFlashing and Monitoring for $ESPTARGET on $ESPPORT\n"
 
 # if tehre is no CMakeLists.txt in cwd, setup to defaults with idf.py set-target and not setup as that goes through menuconfig
 if [ ! -f "./CMakeLists.txt" ]; then
-    # run the setup tool instead
-    setup
+    bash setup
 fi
 
 idf.py --preview flash monitor

@@ -7,31 +7,23 @@ echo -e "\nFully Rebuildan~\n"
 bash fullclean
 
 # use setup script instead
-setup
+bash setup
 
 echo -e "\nErase flash? y/n"
 read wipe
 if [ "$wipe" == "y" ]; then
-	# echo -e "\nExecuting erase-flash\n"
-	# idf.py --preview erase-flash
-	# echo -e "\nFlash wiped\n"
 	bash erase-flash
 fi
 
 echo -e "\nRun menuconfig y/n?\n"
 read menuconfig
 if [ "$menuconfig" == "y" ]; then
-	echo -e "\nExecuting menuconfig\n"
-	idf.py --preview menuconfig
-	echo -e "\nConfig Complete\n"
+	bash menuconfig
 fi
 
 echo -e "\nSave as Default Config? y/n?\n"
 read defconfig
 if [ "$defconfig" == "y" ]; then
-	# echo -e "\nExecuting save-defconfig\n"
-	# idf.py --preview save-defconfig
-	# echo -e "\nDefault Config Saved\n"
 	bash save-defconfig
 fi
 
