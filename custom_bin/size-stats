@@ -1,8 +1,2 @@
 #!/bin/bash
-echo -e "\nSize General:\n"
-idf.py --preview size
-echo -e "\nSize by Componants:\n"
-idf.py --preview size-components
-echo -e "\nSize by Files:\n"
-idf.py --preview size-files
-echo -e "\nALL DONE :3\n"
+bash imagesize
