@@ -3,17 +3,19 @@ set -e # fail on any error
 
 echo -e "\nFully Rebuildan~\n"
 
+# total clean
 bash fullclean
 
-echo -e "\nSetting up project for $ESPTARGET\n"
-idf.py --preview set-target $ESPTARGET
+# use setup script instead
+setup
 
 echo -e "\nErase flash? y/n"
 read wipe
 if [ "$wipe" == "y" ]; then
-	echo -e "\nExecuting erase-flash\n"
-	idf.py --preview erase-flash
-	echo -e "\nFlash wiped\n"
+	# echo -e "\nExecuting erase-flash\n"
+	# idf.py --preview erase-flash
+	# echo -e "\nFlash wiped\n"
+	bash erase-flash
 fi
 
 echo -e "\nRun menuconfig y/n?\n"
@@ -27,9 +29,10 @@ fi
 echo -e "\nSave as Default Config? y/n?\n"
 read defconfig
 if [ "$defconfig" == "y" ]; then
-	echo -e "\nExecuting save-defconfig\n"
-	idf.py --preview save-defconfig
-	echo -e "\nDefault Config Saved\n"
+	# echo -e "\nExecuting save-defconfig\n"
+	# idf.py --preview save-defconfig
+	# echo -e "\nDefault Config Saved\n"
+	bash save-defconfig
 fi
 
 echo -e "\nBuild, Flash, and Monitor Now? y/n"

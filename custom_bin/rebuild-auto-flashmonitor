@@ -4,7 +4,7 @@ echo -e "\nFully Rebuildan~\n"
 echo -e "\nFully cleaninnn\n"
 bash fullclean
 
-echo -e "\nSetting up project for $ESPTARGET\n"
-idf.py --preview set-target $ESPTARGET # using idf.py set-target because it sticks to all defaults and doesnt do menuconfig like setup
+# use setup script instead
+bash setup
 
 bash flashmonitor
