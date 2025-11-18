@@ -15,11 +15,11 @@ if [ "$wipe" == "y" ]; then
 	bash erase-flash
 fi
 
-echo -e "\nRun menuconfig y/n?\n"
-read menuconfig
-if [ "$menuconfig" == "y" ]; then
-	bash menuconfig
-fi
+# echo -e "\nRun menuconfig y/n?\n"
+# read menuconfig
+# if [ "$menuconfig" == "y" ]; then
+# 	bash menuconfig
+# fi
 
 echo -e "\nSave as Default Config? y/n?\n"
 read defconfig
