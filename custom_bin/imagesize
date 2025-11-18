@@ -1,14 +1,17 @@
 #!/bin/bash
+outfile="imagesize-$(date +"%Y-%m-%d-%H%M-%S")-$ESPTARGET-$(git rev-parse HEAD).txt.local"
+
 echo -e "\nProject sizes\n"
+echo -e "\nSaving to $outfile\n"
 
 echo -e "\nGeneral:\n"
-idf.py --preview fullclean
-idf.py --preview size
+idf.py size | tee -a "$outfile"
 
 echo -e "\nComponants:\n"
-idf.py --preview size-components
+idf.py size-components | tee -a "$outfile"
 
 echo -e "\nFiles:\n"
-idf.py --preview size-files
+idf.py size-files | tee -a "$outfile"
 
+echo -e "\nSaved to $outfile\n"
 echo -e "\nAll done :3\n"

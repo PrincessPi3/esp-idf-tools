@@ -1,22 +1,25 @@
 #!/bin/bash
+outfile="chipinfo-$(date +"%Y-%m-%d-%H%M-%S")-$ESPTARGET-$(git rev-parse HEAD).txt.local"
+
 echo -e "\nGetting ESP Chip Info...\n"
-# echo -e "Base MAC Address:"
-# esptool.py --port $ESPPORT --baud $ESPBAUD --chip auto read_mac
+echo -e "\nsaving to $outfile\n"
+
 echo -e "\nChip ID:"
-esptool --port $ESPPORT --baud $ESPBAUD --chip auto chip-id
+esptool --port $ESPPORT --baud $ESPBAUD --chip auto chip-id | tee -a "$outfile"
 
 echo -e "\nFlash ID:"
-esptool --port $ESPPORT --baud $ESPBAUD --chip auto flash-id
+esptool --port $ESPPORT --baud $ESPBAUD --chip auto flash-id | tee -a "$outfile"
 
 echo -e "\nFlash Status:"
-esptool --port $ESPPORT --baud $ESPBAUD --chip auto read-flash-status
+esptool --port $ESPPORT --baud $ESPBAUD --chip auto read-flash-status | tee -a "$outfile"
 
 echo -e "\nSecurity Info:"
-esptool --port $ESPPORT --baud $ESPBAUD --chip auto get-security-info
+esptool --port $ESPPORT --baud $ESPBAUD --chip auto get-security-info | tee -a "$outfile"
 
 if [ -f "./CMakeLists.txt" ]; then
 	echo -e "\nEfuse Table:"
-	idf.py --preview --port $ESPPORT --baud $ESPBAUD efuse-dump
+	idf.py --preview --port $ESPPORT --baud $ESPBAUD efuse-dump | tee -a "$outfile"
 fi
 
+echo -e "\nSaved to $outfile\n"
 echo -e "\nAll donsies~ :3\n"
