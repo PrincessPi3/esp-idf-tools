@@ -19,14 +19,13 @@ function subprocess() {
     fi
 
     sel=$tty+1
-    ret="${devarr[$sel]}"
-    return 0
+    ret="${devarr[$sel]}" # set dat ret global var here
 } 
 
 if [ ! -z "$1" ]; then
     ret="$1"
 else
-    ret=""
+    ret="" # make this a global so it can be updootewd from inside function
     subprocess
 fi
 
