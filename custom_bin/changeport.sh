@@ -5,9 +5,9 @@ function subprocess() {
     COUNTER=0
     devarr=()
     for line in $(dmesg | tail -50 | grep -o -E "tty[A-Z]{3}[0-9]{0,2}" | sort -u); do
-                    echo -e "$COUNTER  /dev/$line"
-                    devarr+=("/dev/$line")
-                    COUNTER=$(($COUNTER+1))
+        echo -e "$COUNTER  /dev/$line"
+        devarr+=("/dev/$line")
+        COUNTER=$(($COUNTER+1))
     done
     
     if [ $COUNTER -gt 0 ]; then
@@ -19,14 +19,14 @@ function subprocess() {
     fi
 
     sel=$tty+1
-    ret="${devarr[$sel]}" # set dat ret global var here
+    eval "$1=${devarr[$sel]}" # set dat ret global var here
 } 
 
 if [ ! -z "$1" ]; then
     ret="$1"
 else
     ret="" # make this a global so it can be updootewd from inside function
-    subprocess
+    subprocess ret
 fi
 
 export ESPPORT="$ret"
