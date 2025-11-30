@@ -22,7 +22,7 @@ done
 if [ $COUNTER -gt 0 ]; then
     echo -e "\nEnter TTY Number You'd Like:"
     read tty
-    ttyselect="${devarr[$(($tty + 1))]}"
+    ttyselect="${devarr[$tty]}"
 else
     echo -e "\nNo Serial Devices Found, Select one later with 'changeport'\n"
 fi
