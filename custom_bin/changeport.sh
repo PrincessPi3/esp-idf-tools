@@ -4,7 +4,7 @@
 if [ ! -z "$1" ]; then
     export ESPPORT="$1"
     echo "ESPPORT set to $ESPPORT"
-    exit 0
+    return 0
 fi
 
 # gloals
@@ -31,7 +31,7 @@ fi
 export ESPPORT="$ttyselect"
 echo "ESPPORT set to $ESPPORT"
 
-exit 0
+return 0
 function subprocess() {
     echo -e "\nChanging ESPPORT\n"
     echo -e "\nChecking for Serial Devices in dmesg\n"
