@@ -16,19 +16,18 @@ function subprocess() {
         ttyselect="${devarr[$tty+1]}"
     else 
         echo -e "\nNo Serial Devices Found, Select one later with 'changeport'\n"
-fi
+    fi
 
     sel=$tty+1
-    eval "$1=${devarr[$sel]}"
-
+    ret="${devarr[$sel]}"
     return 0
 } 
 
 if [ ! -z "$1" ]; then
     ret="$1"
 else
-    ret=''
-    subprocess ret
+    ret=""
+    subprocess
 fi
 
 export ESPPORT="$ret"
