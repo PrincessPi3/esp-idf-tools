@@ -1,2 +1,2 @@
 #!/bin/bash
-cat $ESPIDFTOOLS_INSTALLDIR/.custom_bin/help.txt
+cat $ESPDIR/.custom_bin/help.txt
