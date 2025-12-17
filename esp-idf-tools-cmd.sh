@@ -307,8 +307,6 @@ function testAppendAlias() {
 
 function handleAliasEnviron() {
 	cp $rcFile $rcFile.bak # backup da thing first frong
-	# the pretty comment and such first
-	testAppendAlias "# esp-idf-tools aliases" "\n\n# esp-idf-tools"
 	testAppendAlias "ESPDIR" "export ESPDIR=\"$installDir\""
 	testAppendAlias "ESPIDFTOOLS_INSTALLDIR" "export ESPIDFTOOLS_INSTALLDIR=\"$installDir/esp-idf-tools\""
 	testAppendAlias "get-esp-tools" "alias get-esp-tools='. $exportScript'"
