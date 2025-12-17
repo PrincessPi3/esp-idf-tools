@@ -19,7 +19,7 @@ commitHash=commitTAG
 installDate=installDateTAG
 branchData=branchDataTAG
 
-if [ -z "$ESPIDTOOLS_INSTALLDIR" ]; then
+if [ -z "$ESPIDFTOOLS_INSTALLDIR" ]; then
     echo -e "\nFAIL: ESPIDFTOOLS_INSTALLDIR environment variable not found!\nReinstall via script or manually add to ~/.bashrc\n"
 fi
 
