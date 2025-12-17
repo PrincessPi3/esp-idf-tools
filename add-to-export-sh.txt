@@ -23,7 +23,7 @@ if [ -z "$ESPIDTOOLS_INSTALLDIR" ]; then
     echo -e "\nFAIL: ESPIDFTOOLS_INSTALLDIR environment variable not found!\nReinstall via script or manually add to ~/.bashrc\n"
 fi
 
-binDir="$ESPIDFTOOLS_INSTALLDIR/.custom_bin"
+binDir="$ESPDIR/.custom_bin"
 
 echo -e "\nChecking for Serial Devices in dmesg\n"
 COUNTER=0

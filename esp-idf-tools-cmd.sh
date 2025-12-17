@@ -22,7 +22,7 @@ startTime=$(date '+%s') # to time the (re)install time for the logs
 # always run globals and boilerplate
 # check for help first
 if [[ "$1" == "--help" || "$1" == "help" || "$1" == "-h" || "$1" == "h" ]]; then
-	helpText=$ESPIDFTOOLS_INSTALLDIR/.custom_bin/help.txt
+	helpText=$ESPDIR/.custom_bin/help.txt
 	cat "$helpText"
 
 	exit
@@ -46,10 +46,10 @@ fi
 rcFile="$HOME/.bashrc" # absolute path only
 # get us our FUCKING ALIASES HOLY FUCK GOD DAMN SHIT FUCK IT\
 source "$rcFile" 2>/dev/null # >2?/dev/null is to redirect any errors
-if [ -z $ESPIDFTOOLS_INSTALLDIR ]; then
+if [ -z "$ESPDIR" ]; then
 	installDir="$HOME/esp"
 else
-	installDir="$ESPIDFTOOLS_INSTALLDIR"
+	installDir="$ESPDIR"
 fi
 
 if [ -z "$2" ]; then
@@ -309,7 +309,8 @@ function handleAliasEnviron() {
 	cp $rcFile $rcFile.bak # backup da thing first frong
 	# the pretty comment and such first
 	testAppendAlias "# esp-idf-tools aliases" "\n\n# esp-idf-tools"
-	testAppendAlias "ESPIDFTOOLS_INSTALLDIR" "export ESPIDFTOOLS_INSTALLDIR=\"$installDir\""
+	testAppendAlias "ESPDIR" "export ESPIDFTOOLS_INSTALLDIR=\"$installDir\""
+	testAppendAlias "ESPIDFTOOLS_INSTALLDIR" "export ESPIDFTOOLS_INSTALLDIR=\"$installDir/esp-idf-tools\""
 	testAppendAlias "get-esp-tools" "alias get-esp-tools='. $exportScript'"
 	testAppendAlias "run-esp-cmd" "alias run-esp-cmd='bash $runningDir/esp-idf-tools-cmd.sh'"
 	testAppendAlias "esp-install-monitor" "alias esp-install-monitor='tail -n 75 -f $log'"
