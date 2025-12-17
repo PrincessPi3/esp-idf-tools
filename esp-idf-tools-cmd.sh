@@ -170,7 +170,7 @@ function handleCheckInstallPackages() {
 		fi
 	done
 
-	if [ ! -z $installPackagees ]; then
+	if [ ! -z "$installPackagees" ]; then
 		writeToLog "Missing packages found! Installing: $installPackagees"
 		sudo apt install -y "$installPackagees"
 		returnStatus
