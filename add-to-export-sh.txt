@@ -46,14 +46,14 @@ echo -e "Set esp target:\n\tOne of: $(getTargets)"
 read esp
 
 # echo -e "\nSetting environment variables\n"
-export PATH="$ESPIDFTOOLS_INSTALLDIR/.custom_bin:$PATH"
+export PATH="$ESPDIR/.custom_bin:$PATH"
 export ESPPORT="$ttyselect"
 export ESPBAUD=460800
 export ESPTARGET="$esp"
-export examples="$ESPIDFTOOLS_INSTALLDIR/esp-idf/examples"
+export examples="$ESPDIR/esp-idf/examples"
 
 echo -e "Installation Variables:"
-tail -1 "$ESPIDFTOOLS_INSTALLDIR/version-data.log"
+tail -1 "$ESPDIR/version-data.log"
 echo -e "\tesp-idf-toolsversion: $versionData"
 echo -e "\tesp-idf version: $ESP_IDF_VERSION"
 echo -e "\tcommmit hash: $commitHash"
@@ -65,6 +65,7 @@ echo -e "\nEnvironment Variables:"
 echo -e "\tESPBAUD = $ESPBAUD"
 echo -e "\tESPTARGET = $ESPTARGET"
 echo -e "\tESPPORT = $ESPPORT"
+echo -e "\tESPDIR: $ESPDIR"
 echo -e "\tESPIDFTOOLS_INSTALLDIR = $ESPIDFTOOLS_INSTALLDIR"
 echo -e "\tESP_IDF_VERSION = $ESP_IDF_VERSION"
 echo -e "\tbinDir = $binDir"
@@ -76,8 +77,8 @@ alias changebaud="source $binDir/changebaud.sh"
 alias changeesp="source $binDir/changeesp.sh"
 alias exit-esp-tools="source $binDir/exit-esp-tools.sh"
 
-# echo -e "Changing dir to $ESPIDFTOOLS_INSTALLDIR"
-# cd $ESPIDFTOOLS_INSTALLDIR
+# echo -e "Changing dir to $ESPDIR"
+# cd $ESPDIR
 
 echo -e "\nesp-idf version: $ESP_IDF_VERSION commit $commitHash from branch $branchData"
 
